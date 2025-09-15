@@ -52,15 +52,13 @@ jobs:
               NAME=$(echo "$EVENT_JSON" | jq -r '.release.name // .release.tag_name')
               REL_URL=$(echo "$EVENT_JSON" | jq -r '.release.html_url')
               ACTION=$(echo "$EVENT_JSON" | jq -r '.action')
-              TEXT=" *${REPO}* Release: *${NAME}*\n*by:* ${ACTOR} | *state:* ${ACTION}\n<${REL_URL}|Open Release>"
+              TEXT="️ *${REPO}* Release: *${NAME}*\n*by:* ${ACTOR} | *state:* ${ACTION}\n<${REL_URL}|Open Release>"
               ;;
           esac
 
-          {
-            echo "TEXT<<'EOF'"
-            echo "$TEXT"
-            echo "EOF"
-          } >> "$GITHUB_ENV"
+          echo "TEXT<<EOF" >> $GITHUB_ENV
+          echo "$TEXT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Post to Mattermost
         env:
