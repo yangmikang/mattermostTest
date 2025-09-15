@@ -26,38 +26,38 @@ jobs:
         run: |
           REPO="${{ github.repository }}"
           ACTOR="${{ github.actor }}"
-          TEXT=" *${REPO}* event: ${EVENT_NAME} by ${ACTOR}"
+          TEXT="Repository: ${REPO}\nEvent: ${EVENT_NAME}\nBy: ${ACTOR}"
 
           case "$EVENT_NAME" in
             push)
               BR="${{ github.ref_name }}"
               COMMITS=$(echo "$EVENT_JSON" | jq '.commits | length')
-              TEXT=" *${REPO}* → \`${BR}\`\n*by:* ${ACTOR}\n*commits:* ${COMMITS}"
+              TEXT="Repository: ${REPO}\nBranch: ${BR}\nBy: ${ACTOR}\nCommits: ${COMMITS}"
               ;;
             pull_request)
               NUM=$(echo "$EVENT_JSON" | jq -r '.pull_request.number')
               TITLE=$(echo "$EVENT_JSON" | jq -r '.pull_request.title')
               STATE=$(echo "$EVENT_JSON" | jq -r '.action')
               PR_URL=$(echo "$EVENT_JSON" | jq -r '.pull_request.html_url')
-              TEXT=" *${REPO}* PR #${NUM}: *${TITLE}*\n*by:* ${ACTOR} | *state:* ${STATE}\n<${PR_URL}|Open PR>"
+              TEXT="Repository: ${REPO}\nPull Request #${NUM}: ${TITLE}\nBy: ${ACTOR}\nState: ${STATE}\nLink: ${PR_URL}"
               ;;
             issues)
               NUM=$(echo "$EVENT_JSON" | jq -r '.issue.number')
               TITLE=$(echo "$EVENT_JSON" | jq -r '.issue.title')
               STATE=$(echo "$EVENT_JSON" | jq -r '.action')
               ISSUE_URL="https://github.com/${REPO}/issues/${NUM}"
-              TEXT=" *${REPO}* Issue #${NUM}: *${TITLE}*\n*by:* ${ACTOR} | *state:* ${STATE}\n<${ISSUE_URL}|Open Issue>"
+              TEXT="Repository: ${REPO}\nIssue #${NUM}: ${TITLE}\nBy: ${ACTOR}\nState: ${STATE}\nLink: ${ISSUE_URL}"
               ;;
             release)
               NAME=$(echo "$EVENT_JSON" | jq -r '.release.name // .release.tag_name')
               REL_URL=$(echo "$EVENT_JSON" | jq -r '.release.html_url')
               ACTION=$(echo "$EVENT_JSON" | jq -r '.action')
-              TEXT="️ *${REPO}* Release: *${NAME}*\n*by:* ${ACTOR} | *state:* ${ACTION}\n<${REL_URL}|Open Release>"
+              TEXT="Repository: ${REPO}\nRelease: ${NAME}\nBy: ${ACTOR}\nState: ${ACTION}\nLink: ${REL_URL}"
               ;;
           esac
 
           echo "TEXT<<EOF" >> $GITHUB_ENV
-          echo "$TEXT" >> $GITHUB_ENV
+          echo -e "$TEXT" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
 
       - name: Post to Mattermost
