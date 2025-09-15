@@ -1,4 +1,3 @@
-cat > .github/workflows/mattermost-notify.yml << 'EOF'
 name: Mattermost Notify
 
 on:
@@ -10,7 +9,7 @@ on:
     types: [opened, edited, closed, reopened]
   release:
     types: [published, released, created]
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 jobs:
   notify:
@@ -27,33 +26,33 @@ jobs:
         run: |
           REPO="${{ github.repository }}"
           ACTOR="${{ github.actor }}"
-          TEXT="🔔 *${REPO}* event: ${EVENT_NAME} by ${ACTOR}"
+          TEXT=" *${REPO}* event: ${EVENT_NAME} by ${ACTOR}"
 
           case "$EVENT_NAME" in
             push)
               BR="${{ github.ref_name }}"
               COMMITS=$(echo "$EVENT_JSON" | jq '.commits | length')
-              TEXT="📦 *${REPO}* → \`${BR}\`\n*by:* ${ACTOR}\n*commits:* ${COMMITS}"
+              TEXT=" *${REPO}* → \`${BR}\`\n*by:* ${ACTOR}\n*commits:* ${COMMITS}"
               ;;
             pull_request)
               NUM=$(echo "$EVENT_JSON" | jq -r '.pull_request.number')
               TITLE=$(echo "$EVENT_JSON" | jq -r '.pull_request.title')
               STATE=$(echo "$EVENT_JSON" | jq -r '.action')
               PR_URL=$(echo "$EVENT_JSON" | jq -r '.pull_request.html_url')
-              TEXT="🔀 *${REPO}* PR #${NUM}: *${TITLE}*\n*by:* ${ACTOR} | *state:* ${STATE}\n<${PR_URL}|Open PR>"
+              TEXT=" *${REPO}* PR #${NUM}: *${TITLE}*\n*by:* ${ACTOR} | *state:* ${STATE}\n<${PR_URL}|Open PR>"
               ;;
             issues)
               NUM=$(echo "$EVENT_JSON" | jq -r '.issue.number')
               TITLE=$(echo "$EVENT_JSON" | jq -r '.issue.title')
               STATE=$(echo "$EVENT_JSON" | jq -r '.action')
               ISSUE_URL="https://github.com/${REPO}/issues/${NUM}"
-              TEXT="📝 *${REPO}* Issue #${NUM}: *${TITLE}*\n*by:* ${ACTOR} | *state:* ${STATE}\n<${ISSUE_URL}|Open Issue>"
+              TEXT=" *${REPO}* Issue #${NUM}: *${TITLE}*\n*by:* ${ACTOR} | *state:* ${STATE}\n<${ISSUE_URL}|Open Issue>"
               ;;
             release)
               NAME=$(echo "$EVENT_JSON" | jq -r '.release.name // .release.tag_name')
               REL_URL=$(echo "$EVENT_JSON" | jq -r '.release.html_url')
               ACTION=$(echo "$EVENT_JSON" | jq -r '.action')
-              TEXT="🏷️ *${REPO}* Release: *${NAME}*\n*by:* ${ACTOR} | *state:* ${ACTION}\n<${REL_URL}|Open Release>"
+              TEXT=" *${REPO}* Release: *${NAME}*\n*by:* ${ACTOR} | *state:* ${ACTION}\n<${REL_URL}|Open Release>"
               ;;
           esac
 
@@ -72,4 +71,3 @@ jobs:
             -H 'Content-Type: application/json' \
             -d "$(jq -n --arg t "$TEXT" '{text:$t}')" \
             "$HOOK"
-EOF
