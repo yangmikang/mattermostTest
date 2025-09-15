@@ -1,0 +1,75 @@
+cat > .github/workflows/mattermost-notify.yml << 'EOF'
+name: Mattermost Notify
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+  issues:
+    types: [opened, edited, closed, reopened]
+  release:
+    types: [published, released, created]
+  workflow_dispatch: {}
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install jq
+        run: sudo apt-get update -y && sudo apt-get install -y jq
+
+      - name: Build message
+        id: build
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_JSON: ${{ toJson(github.event) }}
+        run: |
+          REPO="${{ github.repository }}"
+          ACTOR="${{ github.actor }}"
+          TEXT="🔔 *${REPO}* event: ${EVENT_NAME} by ${ACTOR}"
+
+          case "$EVENT_NAME" in
+            push)
+              BR="${{ github.ref_name }}"
+              COMMITS=$(echo "$EVENT_JSON" | jq '.commits | length')
+              TEXT="📦 *${REPO}* → \`${BR}\`\n*by:* ${ACTOR}\n*commits:* ${COMMITS}"
+              ;;
+            pull_request)
+              NUM=$(echo "$EVENT_JSON" | jq -r '.pull_request.number')
+              TITLE=$(echo "$EVENT_JSON" | jq -r '.pull_request.title')
+              STATE=$(echo "$EVENT_JSON" | jq -r '.action')
+              PR_URL=$(echo "$EVENT_JSON" | jq -r '.pull_request.html_url')
+              TEXT="🔀 *${REPO}* PR #${NUM}: *${TITLE}*\n*by:* ${ACTOR} | *state:* ${STATE}\n<${PR_URL}|Open PR>"
+              ;;
+            issues)
+              NUM=$(echo "$EVENT_JSON" | jq -r '.issue.number')
+              TITLE=$(echo "$EVENT_JSON" | jq -r '.issue.title')
+              STATE=$(echo "$EVENT_JSON" | jq -r '.action')
+              ISSUE_URL="https://github.com/${REPO}/issues/${NUM}"
+              TEXT="📝 *${REPO}* Issue #${NUM}: *${TITLE}*\n*by:* ${ACTOR} | *state:* ${STATE}\n<${ISSUE_URL}|Open Issue>"
+              ;;
+            release)
+              NAME=$(echo "$EVENT_JSON" | jq -r '.release.name // .release.tag_name')
+              REL_URL=$(echo "$EVENT_JSON" | jq -r '.release.html_url')
+              ACTION=$(echo "$EVENT_JSON" | jq -r '.action')
+              TEXT="🏷️ *${REPO}* Release: *${NAME}*\n*by:* ${ACTOR} | *state:* ${ACTION}\n<${REL_URL}|Open Release>"
+              ;;
+          esac
+
+          {
+            echo "TEXT<<'EOF'"
+            echo "$TEXT"
+            echo "EOF"
+          } >> "$GITHUB_ENV"
+
+      - name: Post to Mattermost
+        env:
+          HOOK: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
+          TEXT: ${{ env.TEXT }}
+        run: |
+          curl -i -X POST \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n --arg t "$TEXT" '{text:$t}')" \
+            "$HOOK"
+EOF
