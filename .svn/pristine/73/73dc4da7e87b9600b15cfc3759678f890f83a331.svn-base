@@ -1,0 +1,224 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<!-- 컨테이너 영역 -->
+<div id="container" class="sub-cont-bg">
+	<div class="page-title-wrap visual img-members">
+		<div class="visual-filter"></div>
+		<div class="inner">
+			<!-- breadcrumb -->
+			<nav class="breadcrumb-wrap" aria-label="breadcrumb">
+				<ol class="breadcrumb">
+					<li class="home"><a href="#" class="txt">Home</a></li>
+					<li><a href="#" class="txt">About GINI</a></li>
+					<li><a href="#" class="txt">Overview</a></li>
+				</ol>
+			</nav>
+			<!-- breadcrumb -->
+			<div class="visual-area">
+				<h2 class="h-tit">Overview</h2>
+			</div>
+		</div>
+	</div>
+	<!-- 컨텐츠 영역 -->
+	<div class="inner">
+		<!-- 섹션 컨텐츠 -->
+		 <div class="gini-cont-wrap cont-box">
+			<div class="gini-cont-box cont-row bg-cont-gray">
+				<div class="area-group cont50">
+					<h3 class="area-tit">Who We Are</h3>
+					<P>The Global Innopolis Network Initiative (GINI) is an international collaboration platform connecting cities and regions committed to leveraging science and technology to drive sustainable innovation, economic growth, and industrial development.
+						GINI brings together six founding members—Daejeon (Republic of Korea), Montgomery County (MD, USA), Málaga (Spain), Dortmund (Germany), Seattle (USA), and Québec Province (Canada)—to share knowledge, co-develop solutions, and foster meaningful partnerships across borders.
+						GINI operates through three key structures:
+					</P>
+					<ol class="list-bulet bg-list-gray">
+						<li><bold>Leaders Assembly</bold> : the decision-making body</li>
+						<li><bold>Action Groups</bold> : the operational engines of collaboration</li>
+						<li><bold>Secretariat</bold> : the administrative support body</li>
+					</ol>
+				</div>
+				<div class="cont50">
+					<div class="organiz-wrap">
+						<div class="members-box">
+							<div class="mem-head">
+								<p class="mem-tit">Members</p>
+							</div>
+							<div class="mem-body">
+								<ul>
+									<li class="mem-dae" title="City of Daejeon"></li>
+									<li class="mem-dor" title="City of Dortmund"></li>
+									<li class="mem-marl" title="City of Malaga"></li>
+									<li class="mem-mont" title="County of Montgomery, MD"></li>
+									<li class="mem-queb" title="City of Seattle"></li>
+									<li class="mem-seaat" title="Province of Quebec"></li>
+								</ul>
+							</div>
+						</div>
+						<div class="overview-logo-box">
+							<div class="over-logo-gini" title="Global Innopolis Network Initiative">  
+								<img src="${pageContext.request.contextPath}/img/pattern/layout/head_logo.svg" class="logo-im" alt="Global Innopolis Network Initiative">
+							</div>
+							<div class="cont-logo-box" title="Leaders Assembly">
+								<div class="leader-oran">Leaders Assembly</div>
+								<p>President & Vice President</p>
+							</div>
+							<div class="cont-logo-box" title="Secretariat">
+								<div class="secret-gray">Secretariat</div>
+								<p>Administrative Support Unit</p>
+							</div>
+						</div>
+						<div class="role-box">
+							<div class="role-meeting blue" title="High-Level Meeting">High-Level Meeting</div>
+							<div class="role-meeting blue" title="Working-Level Meeting">Working-Level Meeting</div>
+							<div class="role-meeting dark" title="Action Group">Action Group</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="gini-cont-box mgt40">
+				<div class="cont-begin-box">
+					<div class="begin-text-box">
+						<h4 class="area-tit">Our Beginning</h4>
+						<p>GINI was officially launched at the Leaders Assembly held on September 4, 2024, in Daejeon, Republic of Korea. The signing of the GINI Charter by founding members marked the start of a long-term commitment to inclusive, innovation-led urban collaboration.</p>
+					</div>
+				</div>
+			</div>
+		 </div>
+		 <div class="gini-cont-wrap gap-20 cont-box mgt40">
+		 	<div class="cont-text-box center col">
+		 		<h5 class="title-tit xxlg">Our Mission</h5>
+		 		<p class="t-center">We aim to build a global ecosystem where science and technology help solve urban challenges, strengthen local innovation systems, and create shared prosperity.</p>
+		 	</div>
+		 	<div class="cont-mission-box">
+		 		<div class="mission-item sky">
+		 			<b class="title-tit md">Mission</b>
+		 			<ul class="list-bulet">
+		 				<li>Addressing current global challenges and fostering sustainable economic development through the inter-regional cooperation in science and technology</li>
+					</ul>
+		 		</div>
+		 		<div class="mission-item blue">
+		 			<b class="title-tit md">Objectives</b>
+		 			<ul class="list-bulet">
+		 				<li>Enhance scientific and technological capabilities</li>
+		 				<li>Address urban challenges collectively by leveraging science and technology</li>
+		 				<li>Foster shared growth through industrial and economic development</li>
+					</ul>
+		 		</div>
+		 		<div class="mission-item green">
+		 			<b class="title-tit md">Goals</b>
+		 			<ul class="list-bulet">
+		 				<li>Virtuous Shared Economic Growth</li>
+		 				<li>Collaborative Urban Challenge Solution</li>
+		 				<li>Scientific and Technological Capabilities Enhancement</li>
+		 				<li>Global Open Cooperation</li>
+					</ul>
+		 		</div>
+		 	</div>
+			<div class="cont-arrow-box">
+				<b class="arrow-tit">Major Projects</b>
+				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="778" height="105" viewBox="0 0 778 105">
+				  <defs>
+				    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+				      <stop offset="0" stop-color="#d8d8d8"/>
+				      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+				    </linearGradient>
+				  </defs>
+				  <path id="다각형_3" data-name="다각형 3" d="M389,0,778,105H0Z" fill="url(#linear-gradient)"/>
+				</svg>
+			</div>
+		 	<div class="major-pj-box">
+		 		<div class="major-item teal">
+		 			<b class="tit-num-blue">01</b>
+		 			<p class="txt-p t-left">Convene regular meetings of the Leaders Assembly</p>
+		 		</div>
+		 		<div class="major-item blue">
+		 			<b class="tit-num-blue">02</b>
+		 			<p class="txt-p t-left">Host the Global Innopolis Forum on a regular basis</p>
+		 		</div>
+		 		<div class="major-item mint">
+		 			<b class="tit-num-blue">03</b>
+		 			<p class="txt-p t-left">Promote exchanges of knowledge, businesses, industries, and people</p>
+		 		</div>
+		 		<div class="major-item green">
+		 			<b class="tit-num-blue">04</b>
+		 			<p class="txt-p t-left">Implement programs to foster economic development through science and technology</p>
+		 		</div>
+		 	</div>
+		 </div>
+	 	<div class="gini-cont-wrap mgt40">
+	 		<div class="gini-cont-box">
+	 			<div class="cont-text-box col">
+			 		<h5 class="title-tit xxlg">How We Collaborate</h5>
+			 		<p class="">GINI fosters meaningful partnerships through:</p>
+			 	</div>
+	 			<div class="grid cols-4">
+			        <div class="card media">
+			          <div class="overview-ico">
+			          	<img src="${pageContext.request.contextPath}/img/component/common/ico-team-check.svg" alt="pin">
+			          </div>
+			          <div class="txt">Bilateral and multilateral cooperation projects</div>
+			        </div>
+			        <div class="card media">
+			          <div class="overview-ico">
+			          	<img src="${pageContext.request.contextPath}/img/component/common/ico-team-check.svg" alt="">
+			          </div>
+			          <div class="txt">Joint forums, seminars, and business networking events</div>
+			        </div>
+			        <div class="card media">
+			          <div class="overview-ico">
+			          	<img src="${pageContext.request.contextPath}/img/component/common/ico-team-check.svg" alt="">
+		          	 </div>
+			          <div class="txt">Research collaboration and talent exchange</div>
+			        </div>
+			        <div class="card media">
+			          <div class="overview-ico">
+			          	<img src="${pageContext.request.contextPath}/img/component/common/ico-team-check.svg" alt="">
+	          		  </div>
+			          <div class="txt">Co-development of innovation platforms</div>
+			        </div>
+			      </div>
+	 		</div>
+	 	</div>
+		<div class="gini-cont-wrap mgt40">
+	 		<div class="gini-cont-box">
+	 			<div class="cont-text-box col">
+			 		<h5 class="title-tit xxlg">Our Core Activities</h5>
+			 		<!-- <p class="">아이콘 변경 예정</p> -->
+			 	</div>
+	 			<div class="grid cols-4">
+			        <div class="card media">
+			          <div class="overview-ico">
+			          	<img src="${pageContext.request.contextPath}/img/component/common/ico-team-check.svg" alt="">
+			          </div>
+			          <div class="txt">Convening the annual Leaders Assembly</div>
+			        </div>
+			        <div class="card media">
+			          <div class="overview-ico">
+			          	<img src="${pageContext.request.contextPath}/img/component/common/ico-team-check.svg" alt="">
+			          </div>
+			          <div class="txt">Hosting the Global Innopolis Forum</div>
+			        </div>
+			        <div class="card media">
+			          <div class="overview-ico">
+			          	<img src="${pageContext.request.contextPath}/img/component/common/ico-team-check.svg" alt="">
+			          </div>
+			          <div class="txt">Developing science & technology-based programs for sustainable urban development</div>
+			        </div>
+			        <div class="card media">
+			          <div class="overview-ico">
+			          	<img src="${pageContext.request.contextPath}/img/component/common/ico-team-check.svg" alt="">
+			          </div>
+			          <div class="txt">Facilitating exchange of knowledge, people, and businesses</div>
+			        </div>
+			      </div>
+	 		</div>
+	 	</div>
+
+			
+
+	</div>
+	<!-- //컨텐츠 영역 -->
+</div>
+<!-- //컨테이너 영역 -->
+</html>

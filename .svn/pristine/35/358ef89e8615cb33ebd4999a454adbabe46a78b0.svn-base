@@ -1,0 +1,445 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<body>
+		<c:if test="${empty sessionScope.loggedInUser}">
+			<script type="text/javascript">
+				alert("You can use it after logging in.");
+				location.href = "${pageContext.request.contextPath}/login.do";
+			
+			</script>
+		</c:if>
+<div id="wrap">
+		<!-- 컨테이너 영역 -->
+		<div id="container">
+		
+				<!-- breadcrumb -->
+			<div class="page-title-wrap visual img-members">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Programs</a></li>
+							<li><a href="#" class="txt">Events</a></li> 
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<div class="visual-area">
+						<h2 class="h-tit">Schedule registration</h2>
+						<p>Schedule registration</p>
+					</div>
+				</div>
+			</div>
+			<!-- breadcrumb -->
+
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				<!-- 페이지 타이틀 영역 -->
+				<button type="button" onclick="ffefee()" style="display: none;" >dwdwwwd</button>
+				<div class="page-title-wrap">
+				<!-- //페이지 타이틀 영역 -->
+				<!-- 일정등록 폼 -->
+				 <div class="gini-cont-wrap">
+					<div class="gini-cont-box">
+						<div class="row cont100">
+							<!-- 폼그룹 left -->
+							<input type="file" name="uploadFiles" multiple id="uploadFiles"style="display:none;" onchange="handleFileUpload(event)" />
+							<div class="cont-left cont50">
+								<!-- 폼그룹 -->
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="consult_name">Event Title</label>
+									</div>
+									<div class="form-conts">
+										<input type="text" id="consult_name" maxlength="100"  class="form-control" placeholder="Event Title">
+									</div>
+								</div>
+								<input type="file" name="thumbnail" id="thumbnail" style="display:none;" onchange="" >
+								<!-- //폼그룹 -->
+								<!-- 날짜 입력 필드 폼그룹 -->
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="cal">Start Date & Time</label>
+									</div>
+									<div class="form-conts form-row">
+										<div class="form-conts datepicker-conts">
+											<div class="datepicker-input">
+											 <input type="text" class="form-control datepicker startdate" id="startdate" placeholder="Select date">
+    
+											
+											
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- //날짜 입력 필드 폼그룹 -->
+								<!-- 날짜 입력 필드 폼그룹 -->
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="cal">End Date & Time</label>
+									</div>
+									<div class="form-conts form-row">
+										<div class="form-conts datepicker-conts">
+											<div class="datepicker-input">
+												  <input type="text" class="form-control datepicker enddate" id="enddate" placeholder="Select date">
+    
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- //폼그룹 left -->
+							<!-- cont-right -->
+							<div class="cont-right cont50">
+								<!-- 폼그룹 -->
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="consult_name">Event Description</label>
+									</div>
+									<div class="form-conts">
+										<input type="text" id="description" class="form-control" placeholder="Event Description">
+									</div>
+								</div>
+								<!-- //폼그룹 -->
+								<!-- 폼그룹 -->
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="consult_name">Organizer</label>
+									</div>
+									<div class="form-conts">
+										<select class="form-select lg" id="selectOrg" title="선택">
+											<option value="" >Organizer</option>
+											<option value="GINI">GINI</option>
+											<option value="City of Daejeon">City of Daejeon</option>
+											<option value="City of Dortmund">City of Dortmund</option>
+											<option value="City of Málaga">City of Málaga</option>
+											<option value="County of Montgomery, MD">County of Montgomery, MD</option>
+											<option value="City of Seattle">City of Seattle</option>
+											<option value="Province of Québec ">Province of Québec</option>
+										</select>
+									</div>
+								</div>
+									<div class="form-group">
+									<div class="form-tit">
+										<label for="consult_name">External Link</label>
+									</div>
+									<div class="form-conts">
+										<input type="text" id="link" class="form-control" placeholder="https://example.com">
+									</div>
+								</div>
+								<!-- //폼 끝 -->
+							</div>
+							<!-- //cont-right -->
+						</div>
+					</div>
+
+					<div class="gini-cont-box">
+						<div class="row">
+							<!-- 파일업로드 -->
+							<div class="file-upload cont50" ondragover="f_over()"   ondrop="f_drop()">
+								<p class="txt">Click the Choose File button to select a file.</p>
+								<button type="button" class="btn primary ico-before ico-upload md" onclick="document.getElementById('uploadFiles').click()">Choose File</button>
+							</div>
+							<!-- //파일업로드 -->
+							<!-- 파일업로드 -->
+							<div class="file-upload-result cont50">
+								<div class="upload-top">
+									<div class="file-total"><span class="current">0</span> / 6</div>
+								</div>
+								<ul class="upload-list" id="fileListArea">
+								</ul>
+								<div class="upload-delete-btn">
+									<button type="button" class="btn btn-txt ico-before ico-del sm h-auto " onclick="deleteAllFiles()">Delete All Files</button>
+								</div>
+							</div>
+							<!-- //파일업로드 리스트 -->
+						</div>
+						<div class="page-btn-wrap both" >
+							<div>
+							      <!-- Other / Unknown -->
+								<button type="button" class="btn primary" onclick="location.href='${pageContext.request.contextPath}/calendar.do'">Back to List</button>
+							</div>
+							<div>
+							<button type="button" class="btn primary"onclick="registerEvent()">Create Event</button>
+							</div>
+						</div>
+						
+					</div>
+				 </div>
+				<!-- //일정등록 폼 -->
+
+					
+
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 -->
+
+		<!-- 푸터 영역 -->
+		<!-- //푸터 영역 -->
+	</div>
+
+	<!-- //레이어 : 검색필터 -->
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+
+ function citiText(){
+	const citySelect = document.getElementById("selectOrg");
+	const cityValue = citySelect.value;
+	const cityText = citySelect.options[citySelect.selectedIndex].text;
+	const description =  document.getElementById("description").value;
+ }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+flatpickr(".startdate", {
+	  enableTime: true,
+	  dateFormat: "Y-m-d\\TH:i",
+	  time_24hr: false
+	});
+
+	flatpickr(".enddate", {
+	  enableTime: true,
+	  dateFormat: "Y-m-d\\TH:i",
+	  locale: "en",
+	  time_24hr: false
+	});
+
+
+</script>
+	
+<script>
+  // 전역 파일 저장 배열
+  let uploadedFiles = [];
+
+  function formatBytes(bytes) {
+    if (bytes === 0) return '0KB';
+    const k = 1024;
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    const size = parseFloat((bytes / Math.pow(k, i)).toFixed(1));
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    return `\${size} \${sizes[i]}`;
+  }
+
+  function updateFileCount() {
+    const countSpan = document.querySelector('.file-total .current');
+    const validCount = uploadedFiles.length;
+    countSpan.textContent = `\${validCount}`;
+  }
+
+  function deleteAllFiles() {
+    uploadedFiles = [];
+    const fileListArea = document.getElementById('fileListArea');
+    fileListArea.innerHTML = '';
+    updateFileCount();
+  }
+
+  function handleFileUpload(event) {
+    const files = event.target.files;
+    const fileListArea = document.getElementById('fileListArea');
+    const allowedExtensions = [
+    	  'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt',
+    	  'jpg', 'jpeg', 'png', 'gif', 'zip', 'hwp'
+    	];
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const extension = file.name.split('.').pop().toLowerCase();
+
+        if (!allowedExtensions.includes(extension)) {
+          const li = document.createElement('li');
+          li.classList.add('is-error');
+          li.innerHTML = `
+            <div class="in">
+        	  <div class="file-name">\${file.name} [\${file.name.split('.').pop()}, \${formatBytes(file.size)}]</div>
+                  <div class="file-btn">
+                <span class="ico-invalid error"><em class="sr-only">error</em></span>
+                <button type="button" class="btn btn-txt ico-before ico-del sm h-auto" onclick="this.closest('li').remove(); updateFileCount();">Delete</button>
+              </div>
+            </div>
+            <p class="file-hint">Only the following file types can be uploaded:<br>
+            pdf, doc, docx, xls, xlsx, ppt, pptx, txt, jpg, jpeg, png, gif, zip, hwp</p>
+          `;
+          fileListArea.appendChild(li);
+          continue;
+        }
+
+        if (file.size > 20 * 1024 * 1024) {
+          const li = document.createElement('li');
+          li.classList.add('is-error');
+          li.innerHTML = `
+            <div class="in">
+              <div class="file-name">\${file.name} [\${extension}, \${formatBytes(file.size)}]</div>
+              <div class="file-btn">
+                <span class="ico-invalid error"><em class="sr-only">에러</em></span>
+                <button type="button" class="btn btn-txt ico-before ico-del sm h-auto" onclick="this.closest('li').remove(); updateFileCount();">삭제</button>
+              </div>
+            </div>
+            <p class="file-hint">File size exceeds 20MB limit.</p>
+          `;
+          fileListArea.appendChild(li);
+          continue;
+        }
+
+        if (uploadedFiles.length >= 6) {
+          alert("You can register up to 6 files.");
+          break;
+        }
+
+        uploadedFiles.push(file);
+        const currentIndex = uploadedFiles.length - 1;
+
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <div class="in">
+            <div class="file-name">\${file.name} [\${extension}, \${formatBytes(file.size)}]</div>
+            <div class="file-btn">
+              <button type="button" class="btn btn-txt ico-before ico-del sm h-auto"
+                onclick="deleteSingleFile(\${currentIndex}, this)">Delete</button>
+            </div>
+          </div>
+        `;
+        fileListArea.appendChild(li);
+      }
+
+      updateFileCount();
+      event.target.value = '';
+  }
+
+  function deleteSingleFile(index, button) {
+    uploadedFiles.splice(index, 1);
+    button.closest('li').remove();
+    updateFileCount();
+  }
+  function escapeForJs(str) {
+	  return str
+	    .replace(/\\/g, '\\\\') 
+	    .replace(/"/g, '\\"')   
+	    .replace(/'/g, "\\'");  
+	}
+
+  function registerEvent() {
+	  const titleInput = document.getElementById("consult_name");
+	  const start = document.getElementById("startdate").value;
+	  const end = document.getElementById("enddate").value;
+	  const descriptionInput = document.getElementById("description");
+	  const citySelect = document.getElementById("selectOrg");
+	  const link = document.getElementById("link").value;
+
+	  const title = titleInput.value.trim();
+	  const description = descriptionInput.value.trim();
+	  const organizer = citySelect.value;
+    
+	  const errorItems = document.querySelectorAll('#fileListArea li.is-error');
+	  if (errorItems.length > 0) {
+	    alert("There are invalid files in the attachment list. Please remove them before submitting.");
+	    return;
+	  }
+	  // 유효성 검사
+	if (title === "") {
+    	    alert("Please enter a title.");
+    	    return false;
+    	}
+    	if (title.length > 100) {
+    	    alert("The title must be no more than 100 characters.");
+    	    return false;
+    	}
+    	if (title.length < 10) {
+    	    alert("The title must be at least 10 characters long.");
+    	    return false;
+    	}
+    	if (description === "") {
+	        alert("Please enter description.");
+	        return false;
+	    }
+	    if (description.length < 10) {
+	        alert("The description must be at least 10 characters.");
+	        return false;
+	    }
+	    if (description.length > 2000) {
+	        alert("The description must be no more than 2000 characters.");
+	        return false;
+	    }
+
+	  if (!start) {
+	    alert("Select Start Date & Time.");
+	    return;
+	  }
+
+	  if (!end) {
+	    alert("Select End Date & Time.");
+	    return;
+	  }
+
+	  if (new Date(start) > new Date(end)) {
+	    alert("The End Date must be later than the Start Date.");
+	    return;
+	  }
+
+	  if (!organizer) {
+	    alert("Select an organizer.");
+	    citySelect.focus();
+	    return;
+	  }
+	  const forbiddenPattern = /\\/;
+
+	  if (link) {
+	    const urlPattern = /^(https?:\/\/)[^\s/$.?#].[^\s]*$/i;
+	    if (!urlPattern.test(link)) {
+	      alert("Please enter a valid URL starting with http:// or https://.");
+	      document.getElementById("link").focus();
+	      return;
+	    }
+	  }
+	  if (link && forbiddenPattern.test(link)) {
+		  alert("Backslashes (\\) are not allowed in the External Link.");
+		  document.getElementById("link").focus();
+		  return;
+		}
+	  if (uploadedFiles.length > 6) {
+	    alert("Up to 6 files can be registered.");
+	    return;
+	  }
+
+	  const safeTitle = escapeForJs(title);
+      const safedescription = escapeForJs(description);
+
+	  const formData = new FormData();
+	  formData.append("eventTitle", safeTitle);
+	  formData.append("eventDescription", safedescription);
+	  formData.append("startDatetime", start);
+	  formData.append("endDatetime", end);
+	  formData.append("organizer", organizer);
+	  formData.append("externalLink", link);
+
+	  uploadedFiles.forEach(file => {
+	    formData.append("uploadFiles", file);
+	  });
+	  axios.post('${pageContext.request.contextPath}/calendar/register.do', formData, {
+		  headers: { 'Content-Type': 'multipart/form-data' }
+		})
+		.then(res => {
+		  if (res.data.success) {
+		    alert('The schedule has been registered.');
+		    location.href = '${pageContext.request.contextPath}' + res.data.redirectUrl;
+		  } else {
+		    alert(res.data.message || 'Schedule registration failed.');
+		    if (res.data.redirectUrl) {
+		      location.href = '${pageContext.request.contextPath}' + res.data.redirectUrl;
+		    }
+		  }
+		})
+		.catch(error => {
+		  console.error('등록 오류:', error);
+		  alert('Schedule registration failed.');
+		});
+
+	}
+
+</script>
+</body>

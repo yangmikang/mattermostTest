@@ -1,0 +1,58 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+</head>
+<style>
+
+	#content{
+		    width: 80%;
+    		margin: 0 auto;
+			margin-bottom: 5%;
+			margin-top: 2%;
+	}
+</style>
+<body>
+
+<div id="content">
+	<h2>Write Post</h2>
+	<form class="form-horizontal" id="form" name="form" action="/distep/board/boardInsert.do"
+	method="post" enctype="multipart/form-data">
+	<div class="bg-light rounded h-100 contcon">
+		<table class="table cmcrtb table-bordered">
+			<tbody class="contb">
+			<!-- <input type="hidden" class="updtcon" name="entNo"> -->
+			
+				<tr>
+					<th scope="row">1</th>
+					<td><code>*</code>Title</td>
+					<td><input type="text" name="title" class="updtcon" placeholder="Title"></td>
+				</tr>
+				<tr>
+					<th scope="row">3</th>
+					<td><code>*</code>Content</td>
+					<td><textarea rows="3" cols="40" class="updtcon" name="content" placeholder="계약메모"></textarea></td>
+					
+				</tr>
+				<tr>
+					<th scope="row">7</th>
+					<td>Upload File</td>
+					<td>
+						<input type="file" name="uploadFiles">	
+					</td>
+				</tr>
+				<input type="number" id="selectedEpck" name="entNo" value="" style="display:none">
+
+			</tbody>
+		</table>
+</form>	
+
+<button type="submit" class="btn btn-primary btn-user">등록</button>
+<span style="float: left;"> <a href="/distep/board/home.do"
+		class="btn btn-success btn-user"> 목록 </a>
+</span></div>
+</body>
+</html>

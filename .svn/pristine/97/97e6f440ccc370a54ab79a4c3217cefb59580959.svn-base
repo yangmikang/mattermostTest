@@ -1,0 +1,33 @@
+package kr.go.distep.main.service;
+
+import java.util.List;
+import java.util.Map;
+
+import kr.go.distep.main.service.vo.BoardVo;
+import kr.go.distep.main.service.vo.QnaVo;
+
+public interface BoardMasterService {
+	//  리스트
+		public List<BoardVo>list(Map<String, Object> map);
+		
+		public int getTotal(Map<String, Object> map);
+
+		public BoardVo detail(BoardVo boardVo);
+
+		public int boardInsert(BoardVo boardVo);
+
+		public int updateBd(BoardVo boardVo);
+
+		public int deleteBd(BoardVo boardVo);
+
+		public int qnaGetTotal(Map<String, Object> map);
+
+		public List<QnaVo> qnaList(Map<String, Object> map);
+
+		public int qnaInsert(QnaVo qnaVo);
+
+		public int answerInsert(QnaVo qnaVo);
+
+		public int answerDelete(Long qnaId);
+
+}

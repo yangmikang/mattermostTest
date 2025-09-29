@@ -1,0 +1,138 @@
+package kr.go.distep.main.service.impl;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import kr.go.distep.cmmn.file.vo.FileDetailVO;
+import kr.go.distep.cmmn.file.vo.FileGroupVO;
+import kr.go.distep.main.service.UploadService;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+public class UploadServiceImpl implements UploadService {
+
+    @Autowired
+    FileGroupMapper fileGroupMapper;
+
+
+
+    @Override
+    public long multiImageUpload(MultipartFile[] multipartFiles) {
+        long fileGroupNo = 0L;
+        int result = 0;
+        int counter = 0;
+        File uploadPath = new File("C:\\resources\\upload\\", getFolder());
+
+        if (!uploadPath.exists()) {
+            uploadPath.mkdirs();
+        }
+
+        FileGroupVO fileGroupVO = new FileGroupVO();
+        result += fileGroupMapper.insertFileGroup(fileGroupVO);
+        fileGroupNo = fileGroupVO.getFileGroupNo(); // 여기서 그룹번호 저장
+
+        for (MultipartFile multipartFile : multipartFiles) {
+            try {
+                String originalName = multipartFile.getOriginalFilename();
+                String fileName = UUID.randomUUID().toString() + "_" + originalName;
+                File saveFile = new File(uploadPath, fileName);
+                multipartFile.transferTo(saveFile);
+
+                FileDetailVO fileDetailVO = new FileDetailVO();
+                fileDetailVO.setFileSn(++counter);
+                fileDetailVO.setFileGroupNo(fileGroupNo);
+                fileDetailVO.setFileOriginalName(originalName);
+                fileDetailVO.setFileSaveName(fileName);
+                fileDetailVO.setFileSaveLocate("/resources/upload/" +
+                        getFolder().replace("\\", "/") + "/" + fileName);
+                fileDetailVO.setFileSize(multipartFile.getSize());
+                fileDetailVO.setFileExt(fileName.substring(fileName.lastIndexOf(".") + 1));
+                fileDetailVO.setFileMime(multipartFile.getContentType());
+                fileDetailVO.setFileFancySize(makeFancySize(String.valueOf(multipartFile.getSize())));
+                fileDetailVO.setFileSaveDate(null);
+                fileDetailVO.setFileDownCount(0);
+
+                log.info(">> fileName: {}", fileName);
+                log.info(">> originalName: {}", originalName);
+                log.info(">> fileDetailVO: {}", fileDetailVO);
+                log.info(">> inserting to DB...");
+
+                result += fileGroupMapper.insertFileDetail(fileDetailVO);
+                log.info(">> insert result: {}", result);
+
+            } catch (IllegalStateException | IOException e) {
+                log.error("파일 저장 중 오류", e);
+            }
+        }
+
+        return fileGroupNo;
+    }
+
+    @Override
+    public String getFolder() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String str = sdf.format(new Date());
+        return str.replace("-", File.separator);
+    }
+
+    @Override
+    public String makeFancySize(String bytes) {
+    	log.info("bytes : " + bytes);
+  		String retFormat = "0";
+  		//숫자형문자->실수형으로 형변환(1059000)
+  		Double size = Double.parseDouble(bytes);
+  		
+  		String[] s = { "bytes", "KB", "MB", "GB", "TB", "PB" };
+  		
+  		if (bytes != "0") {
+  		  //bytes->KB
+  		  int idx = (int) Math.floor(Math.log(size) / Math.log(1024));
+  		  DecimalFormat df = new DecimalFormat("#,###.##");
+  		  double ret = ((size / Math.pow(1024, Math.floor(idx))));
+  		  retFormat = df.format(ret) + " " + s[idx];
+  		} else {
+  		  retFormat += " " + s[0];
+  		}
+  		
+  		return retFormat;
+    }
+
+    @Override
+    public boolean checkImageType(File file) {
+    	//MIME(Multipurpose Internet Mail Extensions) : 문서, 파일 또는 바이트 집합의 성격과 형식. 표준화
+		//MIME 타입 알아냄. .jpeg / .jpg의 MIME타입 : image/jpeg
+		String contentType;
+		try {
+			contentType = Files.probeContentType(file.toPath());
+			log.info("contentType : " + contentType);
+			//image/jpeg는 image로 시작함->true
+			return contentType.startsWith("image");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		//이 파일이 이미지가 아닐 경우
+		return false;
+    }
+    
+    @Override
+    public FileGroupVO getFileGroupWithDetails(long fileGroupNo) {
+        FileGroupVO group = new FileGroupVO();
+        group.setFileGroupNo(fileGroupNo);
+        
+        // ✅ 여기서 해당 쿼리가 실행됩니다!
+        group.setFileDetailVOList(fileGroupMapper.selectFilesByGroupNo(fileGroupNo));
+        
+        return group;
+    }
+
+}

@@ -1,0 +1,91 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<!-- 컨테이너 영역 -->
+		<div id="container">
+			<div class="page-title-wrap visual img-members">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+				<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+					<ol class="breadcrumb">
+						<li class="home"><a href="#" class="txt">Home</a></li>
+						<li><a href="#" class="txt">About GINI</a></li>
+						<li><a href="#" class="txt">Contact Us</a></li>
+					</ol>
+				</nav>
+				<!-- breadcrumb -->
+				 <!-- 페이지 타이틀 영역 -->
+					<div class="visual-area">
+						<h2 class="h-tit">Contact Us</h2>
+						<!-- <p>GINI Logo Concept</p> -->
+					</div>
+					<!-- //페이지 타이틀 영역 -->
+				</div>
+			</div>
+
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				<!-- 섹션 컨텐츠 -->
+				 <div class="gini-cont-wrap gap20 cont-box cont-map">
+					<div class="gini-cont-box">
+						<h3 class="area-tit">Directions</h3>
+						<div class="cont-address">
+							<p class="desc ico ico-location">(34430) #504, A Building, campus Innovation Park, 70 Hannam-ro, Daedeok-gu, Daejeon, South Korea</p>
+						</div>
+						<ul class="info-list">
+							<li><span class="title ico ico-tel">TEL</span><span class="value">+82-42-865-0550</span></li>
+							<li><span class="title ico ico-fax">FAX</span><span class="value">+82-42-861-4309</span></li>
+						</ul>
+					</div>
+					<div class="gini-cont-box">
+						<h3 class="area-tit" style="margin-top: 20px;">Q&A</h3>  
+						<form action="sendMail.do" method="post" enctype="multipart/form-data">
+							<input type="hidden" name="userId" value="${user.id}">
+						    <input type="hidden" name="userName" value="${user.username}">
+							<input type="hidden" name="toEmail" value="1237@coreit.co.kr">
+							<div class="form-group">
+								<div class="form-tit">
+									<label for="send_mail">Sender Email (Reply-To)</label>
+								</div>
+								<div class="form-conts">
+									<input type="email" name="fromEmail" class="form-control" value="${user.email}" id="send_mail" required>
+								</div>
+							</div>
+							<div class="form-group margin-b">
+								<div class="form-tit">
+									<label for="subject">Subject</label>
+								</div>
+								<div class="form-conts">
+									<input type="text" name="subject" class="form-control" id="subject" required>
+								</div>
+							</div>
+							<div class="form-group margin-b">
+								<div class="form-tit">
+									<label for="msg">Message</label>
+								</div>
+								<div class="form-conts">
+									<textarea name="content" rows="10" class="form-control" cols="50" id="msg" required></textarea>
+								</div> 
+							</div>
+							<div class="form-group margin-b">						
+								<div class="form-tit"> 
+									<label for="msg">Attachments</label>
+								</div>
+								<div class="form-conts">
+									<input type="file" class="" name="attachments" multiple />
+								</div>
+							</div> 
+							<div class="comp-btn-wrap">
+								<button type="submit" class="btn primary">Send Mail</button>  
+							</div>
+						</form>
+					</div>
+				</div>
+			<!-- //섹션 컨텐츠 -->
+		</div>
+		<!-- //컨텐츠 영역 -->
+	</div>
+	<!-- //컨테이너 영역 -->
+</html>

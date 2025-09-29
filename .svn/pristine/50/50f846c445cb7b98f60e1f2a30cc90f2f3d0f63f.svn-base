@@ -1,0 +1,47 @@
+package kr.go.distep.user.service.impl;
+
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import kr.go.distep.user.vo.UserVO;
+
+@Mapper("userMapper")
+public interface UserMapper {
+	
+	public void insertUser(UserVO userVo);
+
+	public int checkUserId(String userId);
+
+	public UserVO selectUserById(String userId);
+
+	public int getUserCount();
+
+	public List<UserVO> selectUserList(@Param("offset") int offset, @Param("size") int size);
+
+	void updateUserRole(@Param("id") String id, @Param("appr_yn") String appr_yn);
+
+	public void grantAdminRole(String id);
+
+	public String findUserIdByNameAndEmail(@Param("name") String name, @Param("email") String email);
+	
+	public UserVO findUserByIdAndEmail(@Param("userId") String userId, @Param("email") String email);
+	
+	void updateUserPassword(@Param("userId") String userId, @Param("encodedPassword") String encodedPassword);
+
+	void updateUser(UserVO userVO);
+
+	public void updateUserType(@Param("id") String id, @Param("role") String role);
+
+	void deleteUser(String id);
+
+	public List<HashMap<String, Object>> getBoardPermissionList();
+
+	void callUpsertBoardAuth(UserVO userVO);
+
+	int updateBoardMasterName(@Param("boardMasterCode") String boardMasterCode, @Param("boardMasterName") String boardMasterName);
+
+	int updateBoardUseYn(@Param("boardMasterCode") String boardMasterCode, @Param("boardUseYn") String boardUseYn);
+}

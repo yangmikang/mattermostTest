@@ -1,0 +1,188 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<!-- 컨테이너 영역 -->
+		<div id="container">
+		<div class="page-title-wrap visual img-members">
+			<div class="visual-filter"></div>
+			<div class="inner">
+				<!-- breadcrumb -->
+				<nav class="breadcrumb-wrap" aria-label="breadcrumb">
+					<ol class="breadcrumb">
+						<li class="home"><a href="#" class="txt">Home</a></li>
+						<li><a href="#" class="txt">Network</a></li>
+						<li><a href="#" class="txt">City of Dortmund</a></li>
+					</ol>
+				</nav>
+				<!-- breadcrumb -->
+				<!-- 페이지 타이틀 영역 -->
+				<div class="visual-area">
+					<h2 class="h-tit">City of Dortmund</h2>
+					<p>Members</p>
+				</div>
+				<!-- //페이지 타이틀 영역 -->
+			</div>
+		</div>
+	
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				<!-- 섹션 컨텐츠 -->
+				 <div class="gini-cont-wrap gap20 cont-box cont-network">
+					<div class="gini-cont-box">
+						<h3 class="area-tit ico ico-location-2">City of Dortmund</h3>
+						<div class="row cont100">
+							<div class="cont-left cont50 memb_view">
+								<div class="city-view-box">
+									<div class="city-view-box-in">
+										<div class="city-view-ico">
+											<i class="item-ico ico-germ"></i>
+										</div>
+										<div class="city-view-img-box">
+											<span class="city-view-img"><img src="${pageContext.request.contextPath}/img/component/common/membe_dort.jpg" alt=""></span>
+										</div>
+									</div>
+								</div>
+								<!-- 해당 도시에 따라 아이디를 넣어주세요 deajeon : .img-deajeon, dortmund : .img-dortmund, malaga : .img-malaga, County of Montgomery, MD : .img-montgomery, City of Seattle : .img-seattle, Quebec Province : .img-quebec, Hisnchu : .img-hisnchu -->
+							</div>
+							<div class="cont-right cont50">
+								<div class="tbl_wrap">
+									<ul class="list-tableType type2">
+										<li><span class="title ico-population">Population</span><span class="value">612,065 (City); 11.3M (Metro, Rhine-Ruhr)</span></li>
+										<li><span class="title ico-grdp">GRDP</span><span class="value">€44,816 per capita (2022, +5.93%)</span></li>
+										<li><span class="title ico-key-industries">Key Industries</span><span class="value">ICT, Micro/Nanotechnology, Biomedicine, Logistics, Robotics, Hydrogen, Productiontechnoloy</span></li>
+										<li><span class="title ico-transport">Transport</span><span class="value">Major rail and road hub, international airport, and port linking to the North Sea</span></li>
+										<li><span class="title ico-education">Education & Research</span><span class="value">50,000 students at 7 universities, 19 research institutes, including Max-Planck, Leibniz, and Fraunhofer Institutes</span></li>
+										<li><span class="title ico-innovative-ecosystem">Innovative Ecosystem</span><span class="value">Home to TZDO with 200 startups and Ruhrvalley tech companies, European Capital of Innovation (iCapital 2021), comprehensive start-up support ecosystem</span></li>
+										<li><span class="title ico-heritage">Heritage</span><span class="value">Rich industrial history in steel, coal, and beer; ranked as one of Germany's most livable cities; cultural hotspot and sports city (BVB soccer club)</span></li>
+									</ul>
+								</div>	
+							</div>
+						</div>
+						
+						<div class="gini-cont-box">
+							<div class="grid cols-4">
+						        <article class="card city">
+						          <div class="icon"><img src="/distep/img/component/common/ico-idea-exchange.svg" alt="Business Exchange"></div>
+						          <div>
+						            <b>IT</b>
+						          </div>
+						        </article>
+						        <article class="card city">
+						          <div class="icon"><img src="/distep/img/component/common/ico-man-scientist.svg" alt="Research Collaboration"></div>
+						          <div>
+						            <b>Biotechnology</b>
+						          </div>
+						        </article>
+						        <article class="card city">
+						          <div class="icon"><img src="/distep/img/component/common/ico-talent-hand.svg" alt="Talent Mobility"></div>
+						          <div>
+						            <b>Hydrogen</b>
+						          </div>
+						        </article>
+						         <article class="card city">
+						          <div class="icon"><img src="/distep/img/component/common/ico-talent-hand.svg" alt="Talent Mobility"></div>
+						          <div>
+						            <b>Production technology</b>
+						          </div>
+						        </article>
+					      	</div>
+				      	</div>
+				      	<div class="gini-cont-box">
+				      		<h3 class="area-tit ico ico-location-2">Competence Centres</h3>
+							<div class="row cont100">
+								<div class="cont-left cont50">
+									<div class="city-media">
+										<img src="${pageContext.request.contextPath}/img/component/common/membe_dortmund.png" alt="dortmund 지도">
+									</div>
+									
+									<div class="grid cols-3">
+										<article class="card">
+											<img src="/distep/img/component/common/stadt-dortmund-logo-rechts.png" alt="Business Exchange">
+							          	</article>
+										<article class="card">
+											<img src="/distep/img/component/common/img-dortmund-th.png" alt="Business Exchange">
+							          	</article>
+							          	<article class="card">
+											<img src="/distep/img/component/common/FHDO-Logo-large.svg" alt="Business Exchange">
+							          	</article>
+									</div>
+								</div>
+								<div class="cont-right cont50">
+									<ul class="list-line">   
+										<li><span class="title">6 Competence Centers: Over 200 Companies, 100,000 Square meters</span></li>
+										<li><span class="title">Technology Centre</span></li>
+										<li><span class="title">Tech Start-up Hub; Biomedice and drug research</span></li>
+										<li><span class="title">BMZ; Software</span></li>
+										<li><span class="title">B1st; Logistics</span></li> 
+										<li><span class="title">e-port Production technology</span></li>
+										<li><span class="title">ZfP; Micro and Nano technology</span></li>
+										<li><span class="title">MST factory</span></li>
+									</ul>
+								</div>
+							</div>
+				      	</div>
+				      	<div class="gini-cont-box">
+					      	<ul class="card-list">
+									<li>
+										<a href="#">
+											<div class="img-wrap">
+												<img src="/distep/img/pattern/content/img-dort-image-1.jpg" alt="Leaders' Assembly">
+												<div class="list-conts" style="height:auto;">
+													<h4 class="card_tit">Phoenix Lake</h4>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<div class="img-wrap">
+												<img src="/distep/img/pattern/content/img-dort-image-2.jpg" alt="Forums &amp; Seminars">
+												<div class="list-conts" style="height:auto;">
+													<h4 class="card_tit">Westfalen park</h4>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<div class="img-wrap">
+												<img src="/distep/img/pattern/content/img-dort-image-3.jpg" alt="Joint Projects">
+												<div class="list-conts" style="height:auto;">
+													<h4 class="card_tit">Signal Iduna Park</h4>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<div class="img-wrap">
+												<img src="/distep/img/pattern/content/img-dort-image-4.jpg" alt="Leaders' Assembly">
+												<div class="list-conts" style="height:auto;">
+													<h4 class="card_tit">Zeche Zollern</h4>
+												</div>
+											</div>
+	
+										</a>
+									</li>
+									<li>
+										<a href="#">
+											<div class="img-wrap">
+												<img src="/distep/img/pattern/content/img-dort-image-5.jpg" alt="Forums &amp; Seminars">
+												<div class="list-conts" style="height:auto;">
+													<h4 class="card_tit">Digital Week Dortmund</h4>
+												</div>
+											</div>
+										</a>
+									</li>
+								</ul>
+				      		</div>
+					</div>
+				 </div>
+				<!-- //섹션 컨텐츠 -->  
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 --> 
+</html>
+ 

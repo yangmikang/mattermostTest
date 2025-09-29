@@ -1,0 +1,389 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles"%>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script> 
+$(function(){
+	$('#checkIdBtn').click(function() { 
+	    var userId = $('#userId').val();
+	    if (userId === '') {
+	    	alert("Please enter your ID.");
+	        return;
+	    }
+	
+	    $.ajax({
+	        url: '${pageContext.request.contextPath}/checkUserId.do',
+	        type: 'POST',
+	        data: { userId: userId },  
+	        success: function(response) {
+	        	if (response === 'Y') {
+	        	    $('#idCheckResult').html('<p class="form-hint info">This username is already in use. Please choose a different one.</p>').css('color', 'red');
+	        	} else {
+	        	    $('#idCheckResult').html('<p class="form-hint info">This username is available.</p>').css('color', 'green');
+	        	    $('#idChkYn').val("Y");
+	        	}
+	        },
+	        error: function() {  
+	        	alert('An error has occurred. Please try again later.');
+	        }
+	    });
+	});
+	
+});
+$(function(){
+	$('#checkEmailBtn').click(function() { 
+	    var email = $('#email').val();
+	    if (email === '') {
+	    	alert("Please enter your Email.");
+	        return;
+	    }
+	
+	    $.ajax({
+	        url: '${pageContext.request.contextPath}/checkEmail.do',
+	        type: 'POST',
+	        data: { email: email },  
+	        success: function(response) {
+	        	if (response === 'Y') {
+	        	    $('#emailCheckResult').html('<p class="form-hint info">This email address is already in use. Please enter a different email address...</p>').css('color', 'red');
+	        	} else {
+	        	    $('#emailCheckResult').html('<p class="form-hint info">This Email is available.</p>').css('color', 'green');
+	        	    $('#emailChkYn').val("Y");
+	        	}
+	        },
+	        error: function() {  
+	        	alert('An error has occurred. Please try again later.');
+	        }
+	    });
+	});
+	
+});
+$(function(){
+	$('#checkusernameBtn').click(function() { 
+	    var username = $('#username').val();
+	    if (username === '') {
+	    	alert("Please enter your Name.");
+	        return;
+	    }
+	
+	    $.ajax({
+	        url: '${pageContext.request.contextPath}/checkUserName.do',
+	        type: 'POST',
+	        data: { username: username },  
+	        success: function(response) {
+	        	if (response === 'Y') {
+	        	    $('#nameCheckResult').html('<p class="form-hint info">This name is already in use. Please enter a different name..</p>').css('color', 'red');
+	        	} else {
+	        	    $('#nameCheckResult').html('<p class="form-hint info">This Name is available.</p>').css('color', 'green');
+	        	    $('#nameChkYn').val("Y");
+	        	}
+	        },
+	        error: function() {  
+	        	alert('An error has occurred. Please try again later.');
+	        }
+	    });
+	});
+	
+});
+
+$(document).ready(function() {
+	
+    $("#togglePassword").on("click", function() {
+        var pwdInput = $("#password");
+        if (pwdInput.attr("type") === "password") {
+            pwdInput.attr("type", "text");
+        } else {
+            pwdInput.attr("type", "password");
+        }    
+    });
+    $("#toggleConfirmPassword").on("click", function() {
+        var pwdInput = $("#confirmPassword");
+        if (pwdInput.attr("type") === "password") {
+            pwdInput.attr("type", "text");
+        } else {
+            pwdInput.attr("type", "password");
+        }
+    });
+    
+	$('#userId').on('input', function() {
+		let val = $(this).val();
+		val = val.replace(/[^a-zA-Z0-9]/g, '');
+	    $(this).val(val);
+	    $('#idChkYn').val('N');
+	    $('#idCheckResult').text('');
+	});
+	
+	$('#confirmPassword').on('input', function () {
+	    const pw = $('#password').val();
+	    const cpw = $(this).val();
+	  
+	    if (pw && cpw) {
+	    	if (pw === cpw) {
+	    	    $('#pwMatchMsg').text('Passwords match.').css('color', 'green');
+	    	} else {
+	    	    $('#pwMatchMsg').text('Passwords do not match.').css('color', 'red');  
+	    	}
+	    } else {
+	        $('#pwMatchMsg').text('');
+	    }
+	});
+	$('#city_code').on('change', function() {
+	    if ($(this).val() === '99') {
+	        $('#otherCityInput').show();
+	    } else {
+	        $('#otherCityInput').hide();
+	    }
+	});
+}); 
+
+
+function validateForm() {
+	
+    const userId = document.getElementById("userId").value.trim();
+    const idChkYn = document.getElementById("idChkYn").value;
+    const emailChkYn = document.getElementById("emailChkYn").value;
+    const nameChkYn = document.getElementById("nameChkYn").value;
+    const password = document.getElementById("password").value.trim();
+    const confirmPassword = document.getElementById("confirmPassword").value.trim();
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const city_code = document.getElementById("city_code").value.trim();
+    const city_etc = document.getElementById("city_etc").value.trim();
+
+    if (userId === "") {
+        alert("Please enter your ID.");
+        return false;
+    }
+    
+    const idRegex = /^[a-zA-Z][a-zA-Z0-9]{3,11}$/;
+    if (!idRegex.test(userId)) {
+        alert("ID must start with a letter and be 4 to 12 characters long, containing only letters and numbers.");
+        return false;
+    }
+    
+    if (city_code === "") {
+        alert("Please select your city.");
+        return false;
+    }
+
+    if (city_code === "99") {
+        if (city_etc === "") {
+            alert("Please enter your other city.");
+            return false;
+        }
+        if (city_etc.length > 50) {
+            alert("Other city name cannot exceed 50 characters.");
+            return false;
+        }
+    }
+
+    if (idChkYn !== "Y") {
+        alert("Please check ID availability.");
+        return false;
+    }
+    if (emailChkYn !== "Y") {
+        alert("Please check Email availability.");
+        return false;
+    }
+    if (nameChkYn !== "Y") {
+        alert("Please check Name availability.");
+        return false;
+    }
+
+    if (password === "") {
+        alert("Please enter your password.");
+        return false;
+    }
+    if (password.length < 8 || password.length > 20) {
+        alert("Password must be between 8 and 20 characters.");
+        return false;
+    }
+
+    const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/;
+    if (!pwRegex.test(password)) {
+        alert("Password must include both letters and numbers.");
+        return false;
+    }
+
+    if (confirmPassword === "") {
+        alert("Please confirm your password.");
+        return false;
+    }
+    if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return false;
+    }
+
+    if (username === "") {
+        alert("Please enter your name.");
+        return false;
+    }
+    if (username.length < 2 || username.length > 20) {
+        alert("Name must be between 2 and 20 characters.");
+        return false;
+    }
+
+    if (email !== "") {
+        if (email.length > 50) {
+            alert("Email cannot exceed 50 characters.");
+            return false;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert("Please enter a valid email address.");
+            return false;
+        }
+    }
+
+    return true;
+}
+</script>   
+<!-- 컨테이너 영역 -->
+		<div id="container">
+			<div class="page-title-wrap visual img-joint">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Sign up</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<!-- 페이지 타이틀 영역 -->
+					<div class="visual-area">
+						<h2 class="h-tit">Sign up</h2>
+<!-- 						<p>This is an informational page summarizing Daejeon&#39;s key facts, strategic industries, major institutions, and contact information.</p> -->
+					</div>  
+				<!-- //페이지 타이틀 영역 -->
+					
+				</div>
+			</div>
+<!-- 로그인 영역 -->
+<div class="inner">
+				<div class="conts-area">
+					<div class="conts-wrap">
+						<div class="conts-wrap log-in-box">
+							<div class="txt-box bg-white-login">
+								<form action="${pageContext.request.contextPath}/register.do" method="post" onsubmit="return validateForm();">
+									<div class="fieldset">
+										<div class="form-group margin-b">
+											<div class="form-tit lg">
+												<label for="">ID</label>
+											</div>
+											<div class="form-conts row">
+												<input name="id" id="userId" type="text" maxlength="16" class="form-control" placeholder="Enter your ID">
+												<button type="button" class="btn lg secondary" id="checkIdBtn"> Check ID </button>
+												<input type="hidden" value="N" id="idChkYn"/>
+											</div>
+											<span id="idCheckResult"></span> 
+										</div>
+										<div class="form-group margin-b">
+											<div class="form-tit">
+												<label for="login_pw">Password</label>
+											</div>
+											<div class="form-conts btn-ico-wrap">
+												<input type="password" id="password" name="password" class="form-control" placeholder="Enter your password">
+												<button type="button" id="togglePassword" class="btn btn-ico ico-pw-visible md">
+													<span class="sr-only">Show entered password</span>
+												</button>
+												
+											</div>
+										</div>
+										<div class="form-group margin-b">
+											<div class="form-tit">
+												<label for="login_pw">Confirm Password</label>
+											</div>
+											<div class="form-conts btn-ico-wrap">
+												<input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Enter your password">
+												<button type="button" id="toggleConfirmPassword" class="btn btn-ico ico-pw-visible md">
+													<span class="sr-only">Show entered password</span>
+												</button>
+											</div> 
+											<span id="pwMatchMsg"></span>      
+										</div>
+										<div class="form-group margin-b">
+											<div class="form-tit">
+												<label for="">User name</label>
+											</div>
+											<div class="form-conts row">
+												<input type="text" name="username" id="username" class="form-control" placeholder="Enter your name">
+												<button type="button" class="btn lg secondary" id="checkusernameBtn"> Check ID </button>
+												<input type="hidden" value="N" id="nameChkYn"/>
+											</div>
+											<span id="nameCheckResult"></span> 
+										</div>
+										<div class="form-group margin-b">
+											<div class="form-tit">
+												<label for="">Email</label>
+											</div>
+											<div class="form-conts row">
+												<input type="email" name="email" id="email" class="form-control" placeholder="Enter your email">
+												<button type="button" class="btn lg secondary" id="checkEmailBtn"> Check ID </button>
+												<input type="hidden" value="N" id="emailChkYn"/>
+											</div>
+												<span id="emailCheckResult"></span> 
+										</div>
+										<div class="form-group margin-b">
+											<div class="form-tit">
+												<label for="">City</label>
+											</div>
+											<div class="form-conts btn-ico-wrap">
+												<select class="form-select md" title="선택" name="city_code" id="city_code"> 
+									        		<option value="">---Select city---</option>
+									        		<option value="01">Daejeon</option>
+									        		<option value="02">Dortmund</option>
+									        		<option value="03">Malaga</option>
+									        		<option value="04">Montgomery County</option>
+									        		<option value="05">Seattle</option>
+									        		<option value="06">Quebec</option>
+									        		<option value="99">Other city</option>
+									        		<option value="07">GINI Secretary</option>
+									        	</select>
+											</div>
+											<div class="form-conts btn-ico-wrap" id="otherCityInput" style="display: none;">   
+											    <input type="text" class="form-control" id="city_etc" name="city_etc" placeholder="Enter Other City">
+											</div>
+										</div>
+										<div class="form-group margin-b">
+											<div class="form-tit">    
+												<label for="">Member Type</label>
+											</div>
+											<div class="form-check">
+										        <input type="radio" name="role" id="gm" value="G" checked>
+										        <label for="gm">General</label>
+										    </div>
+										    <div class="form-check">
+										    	<input type="radio" name=role id="cm" value="C">
+										        <label for="cm">Government</label>
+										    </div>
+										    <div class="form-check">
+										    	<input type="radio" name="role" id="om" value="O">
+										        <label for="om">Institution</label>
+										    </div>
+										</div>
+										<div class="comp-btn-wrap">
+											<button type="submit" class="btn primary">Join us</button>
+										</div>
+									</div>
+								</form>
+								</fieldset>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+			<!-- //컨텐츠 영역 -->
+</body>
+</html>  

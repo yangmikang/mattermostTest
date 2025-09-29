@@ -1,0 +1,157 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<script>
+function validatePasswordForm() {
+    const pw = document.getElementById("newPassword").value;
+    const cpw = document.getElementById("confirmNewPassword").value;
+
+    if (pw.length < 8 || pw.length > 20) {
+        alert("Password must be 8-20 characters.");
+        return false;
+    }
+
+    const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/;
+    if (!pwRegex.test(pw)) {
+        alert("Password must include letters and numbers.");
+        return false;
+    }
+
+    if (pw !== cpw) {
+        alert("Passwords do not match.");
+        return false;
+    }
+
+    return true;
+}
+
+$(document).ready(function() {
+	
+	$("#toggleCurrentPassword").on("click", function() {
+	    var pwdInput = $("#currentPassword");
+	    if (pwdInput.attr("type") === "password") {
+	        pwdInput.attr("type", "text");
+	    } else {
+	        pwdInput.attr("type", "password");
+	    }
+	});
+	$("#toggleNewPassword").on("click", function() {
+	    var pwdInput = $("#newPassword");
+	    if (pwdInput.attr("type") === "password") {
+	        pwdInput.attr("type", "text");
+	    } else {
+	        pwdInput.attr("type", "password");
+	    }
+	});
+	$("#toggleConfirmNewPassword").on("click", function() {
+	    var pwdInput = $("#confirmNewPassword");
+	    if (pwdInput.attr("type") === "password") {
+	        pwdInput.attr("type", "text");
+	    } else {
+	        pwdInput.attr("type", "password");
+	    }  
+	});
+	
+	$('#confirmNewPassword').on('input', function () {
+	    const pw = $('#newPassword').val();
+	    const cpw = $(this).val();
+	      
+	    if (pw && cpw) {
+	    	if (pw === cpw) {
+	    	    $('#pwMatchMsg').text('Passwords match.').css('color', 'green');
+	    	} else {
+	    	    $('#pwMatchMsg').text('Passwords do not match.').css('color', 'red');  
+	    	}
+	    } else {
+	        $('#pwMatchMsg').text('');
+	    }
+	});
+
+});
+</script>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<body>
+<c:if test="${not empty errorMessage}">
+    <script>
+        alert("${errorMessage}");
+    </script>
+</c:if> 
+<!-- 컨테이너 영역 -->
+		<div id="container">
+			<div class="page-title-wrap visual img-joint">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Change Password</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<!-- 페이지 타이틀 영역 -->
+					<div class="visual-area">
+						<h2 class="h-tit">Change Password</h2>
+<!-- 						<p>This is an informational page summarizing Daejeon&#39;s key facts, strategic industries, major institutions, and contact information.</p> -->
+					</div>  
+				<!-- //페이지 타이틀 영역 -->
+					
+				</div>
+			</div>
+<!-- 로그인 영역 -->
+<div class="inner">
+				<div class="conts-area">
+					<div class="conts-wrap">
+						<div class="conts-wrap log-in-box">
+							<div class="txt-box bg-white-login">
+							<div class="find-id-img"></div>
+						<h2 class="section-title">Change Password</h2>
+				<fieldset>
+					<legend>Change Password</legend>
+						<form action="${pageContext.request.contextPath}/changePassword.do" method="post" onsubmit="return validatePasswordForm();">
+						    <div class="form-group margin-b">
+						        <label for="currentPassword">Current Password</label>
+						        <div class="form-conts btn-ico-wrap">
+							        <input type="password" id="currentPassword" name="currentPassword" class="form-control" placeholder="Enter your password" required>
+									<button type="button" id="toggleCurrentPassword" class="btn btn-ico ico-pw-visible md">
+										<span class="sr-only">Show entered password</span>
+									</button>
+								</div>
+						    </div> 
+						
+						    <div class="form-group margin-b"> 
+						        <label for="newPassword">New Password</label>  
+						        <div class="form-conts btn-ico-wrap">
+							        <input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="Enter your password" required>
+									<button type="button" id="toggleNewPassword" class="btn btn-ico ico-pw-visible md">
+										<span class="sr-only">Show entered password</span>
+									</button>
+								</div>
+						    </div>
+						
+						    <div class="form-group margin-b">
+						        <label for="confirmNewPassword">Confirm New Password</label>
+						        <div class="form-conts btn-ico-wrap">
+							        <input type="password" id="confirmNewPassword" name="confirmNewPassword" class="form-control" placeholder="Enter your password" required>
+									<button type="button" id="toggleConfirmNewPassword" class="btn btn-ico ico-pw-visible md">  
+										<span class="sr-only">Show entered password</span>
+									</button>
+								</div> 
+						        <span id="pwMatchMsg"></span> 
+						    </div>
+							<div class="comp-btn-wrap">
+						    	<button type="submit" class="btn primary">Change Password</button>
+						    </div>
+						</form>
+					</fieldset>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div> 
+</div>
+	<!-- //컨텐츠 영역 -->
+
+</body>
+</html>

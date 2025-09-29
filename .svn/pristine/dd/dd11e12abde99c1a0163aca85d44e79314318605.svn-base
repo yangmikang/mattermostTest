@@ -1,0 +1,42 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+	pageEncoding="EUC-KR"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html>
+<html>
+<c:if test="${not empty errorMessage}">
+	<script>
+		alert("${errorMessage}");
+	</script>
+</c:if>
+<body>
+<div class="inner">
+	<div class="login-form-area">
+		<div class="login-wrap">
+			<div class="conts-area">
+				<fieldset>
+					<h2>Reset Your Password</h2>
+			
+					<form action="findPassword.do" method="post">
+						<div class="form-group">
+							<label for="user_name">User ID</label> <input type="text"
+								name="userId" id="user_name" required class="form-control"
+									placeholder="Enter your name"/>
+						</div>
+			
+						<div class="form-group margin-b">
+							<label for="user_email">Email</label> <input type="email"
+								name="email" id="user_email" required class="form-control"
+									placeholder="Enter your email"/>
+						</div>
+						<div class="form-group">
+							<button type="submit" class="btn primary">Reset Password</button>
+						</div>
+					</form>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1212 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<link rel="apple-touch-icon" sizes="180x180" href="../../resources/img/guide/favicon_180.png">
+	<link rel="icon" type="image/png" sizes="512x512" href="../../resources/img/guide/favicon_512.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="../../resources/img/guide/favicon_192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../../resources/img/guide/favicon_32.png">
+	<title>GINI - Global Innopolis Network Initiative</title>
+	<link href="../../resources/css/swiper-bundle.min.css" type="text/css" rel="stylesheet" />
+	<link href="../../resources/css/pattern_css.css" type="text/css" rel="stylesheet" />
+	<link href="../../resources/css/output/p_common.css" type="text/css" rel="stylesheet" />
+	<link href="../../resources/css/output/p_content.css" type="text/css" rel="stylesheet" />
+	<link href="../../resources/css/output/p_layout.css" type="text/css" rel="stylesheet" />
+
+	 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css' rel='stylesheet' />
+	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales/ko.global.min.js"></script>
+<!--     <div id="calendar" style="max-width:900px; margin: 0 auto;"></div> -->
+
+<!--     <h3>Add Event</h3> -->
+<%--     <form action="\${pageContext.request.contextPath}/calendar/addEvent.do" method="post"> --%>
+<!--         Title: <input type="text" name="title" required><br> -->
+<!--         DateTime: <input type="datetime-local" name="eventDatetime" required><br> -->
+<!--         Description: <input type="text" name="description"><br> -->
+<!--         <button type="submit">Add</button> -->
+<!--     </form> -->
+  
+<style>
+
+.gini-cont-wrap{
+    display: flex !important;
+    justify-content: space-around !important;
+
+}
+
+
+</style>
+<div id="container">
+			<!-- breadcrumb -->
+			<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+				<ol class="breadcrumb">
+					<li class="home"><a href="#" class="txt">Home</a></li>
+					<li><a href="#" class="txt">PROGRAM</a></li>
+					<li><a href="#" class="txt">EVENT</a></li>
+				</ol>
+			</nav>
+			<!-- breadcrumb -->
+
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				<!-- 페이지 타이틀 영역 -->
+				<div class="page-title-wrap">
+					<h2 class="h-tit">Schedule of Events</h2>
+					
+					
+				</div>
+				<!-- //페이지 타이틀 영역 -->
+				<!-- 행사 일정 캘린더 영역 시작 -->
+				 <div class="Schedule-wrap">
+					<div id="calendar" class="Schedule-left-box">
+						<div class="calender-top_area"></div>
+						<div class="calender-bottom-area">달력 영역</div>
+					</div>
+					<div class="Schedule-right-box">
+						<div class="today-tit-wrap">
+							<h2><span class="tit">Wed</span> <span class="tit-date">14</span></h2>
+						</div>
+						<div class="event-list-wrap">
+							<div class="gini-cont-wrap">
+								<h4 class="cont-tit-large green-circle text-line">Ongoing</h4>
+								<p class="cont-tit-md green-text">Today</p>
+								<!-- <p class="cont-tit-sm">small txt</p> -->
+								<!-- <div class="cont-desc">Quickly find current and upcoming events.</div> -->
+							</div>
+							
+							<!-- 진행중인 이벤트 -->
+							<div class="event-list-box ongoing" onclick="">
+								<div class="event-list ongoing top">
+									<p class="event-list-tit organizer-gini">GINI</p>
+									<div class="event-icon-box card-btn">
+										<button type="button" class="btn xsm btn-txt ico-down ico-before" title="첨부파일"></button>
+										<button type="button" class="btn xsm btn-txt ico-go ico-before" title="하이퍼링크"></button>
+									</div>
+								</div>
+								<div class="event-list ongoing bottom">
+									<div class="side-bg card-body">
+										<a href="#" class="c-text">
+											<p class="c-tit"><span class="span">행사 제목</span></p>
+											<!-- <p class="c-txt">
+												행사 상세 설명 영역:필요시 사용
+											</p> -->
+											<p class="c-date">
+												<strong class="key">기간</strong>
+												<span class="value">2026.00.00-2026.00.00</span>
+											</p>
+										</a>
+										<!-- <div class="c-btn">
+											<a href="#" class="btn md secondary" title="자세히 보기">자세히 보기</a>
+										</div> -->
+									</div>
+								</div>
+							</div>
+							<!-- //진행중인 이벤트 -->
+
+							<div class="gini-cont-wrap">
+								<h4 class="cont-tit-large light-green-circle text-line">Upcoming</h4>
+								<p class="cont-tit-md light-green-text">Tomorrow</p>
+								<!-- <p class="cont-tit-sm">small txt</p> -->
+								<!-- <div class="cont-desc">Quickly find current and upcoming events.</div> -->
+							</div>
+							<!-- 다가올 이벤트 -->
+							<div class="event-list-box upcoming" onclick="">
+								<div class="event-list upcoming top">
+									<p class="event-list-tit organizer-dortmund">Dortmund</p>
+										<div class="event-icon-box card-btn">
+											<button type="button" class="btn xsm btn-txt ico-down ico-before" title="첨부파일"></button>
+											<button type="button" class="btn xsm btn-txt ico-go ico-before" title="하이퍼링크"></button>
+										</div>
+								</div>
+								<div class="event-list upcoming bottom">
+									<div class="side-bg card-body">
+										<a href="#" class="c-text">
+											<p class="c-tit"><span class="span">행사 제목</span></p>
+											<!-- <p class="c-txt">
+												행사 상세 설명 영역:필요시 사용
+											</p> -->
+											<p class="c-date">
+												<strong class="key">기간</strong>
+												<span class="value">2026.00.00-2026.00.00</span>
+											</p>
+										</a>
+										<!-- <div class="c-btn">
+											<a href="#" class="btn md secondary" title="자세히 보기">자세히 보기</a>
+										</div> -->
+									</div>
+								</div>
+							</div>
+							<!-- //다가올 이벤트 -->
+						</div>
+						<!-- 관리자 등록 버튼 영역 -->
+						<div class="btn-wrap pc-only">
+							<button type="button" class="btn primary" onclick="location.href='/distep/calendarCreate.do'">Register</button>
+						</div>
+						<!-- //관리자 등록 버튼 영역 -->
+					</div>
+				 </div>
+				 <!-- 행사 일정 캘린더 영역 끝 -->
+				<!-- 검색 입력폼 -->
+				<!-- <div class="search-top-box">
+					<div class="sch-form-wrap">
+						<div class="sch-input">
+							<input type="text" class="form-control" placeholder="검색어를 입력해주세요" title="검색어 입력">
+							<button type="button" class="btn btn-ico ico-sch">
+								<span class="sr-only">검색</span>
+							</button>
+						</div>
+						<button type="button" class="btn btn-txt sm ico-sch1 ico-before">고급검색</button>
+					</div>
+					<div class="sch-filter-box">
+						<div class="filter-form">
+							<div>
+								<label class="label" for="appl-sch-sel1">생애 주기</label>
+								<select id="appl-sch-sel1" class="form-select md">
+									<option value="">전체</option>
+									<option value="">항목</option>
+									<option value="">항목</option>
+								</select>
+							</div>
+							<div>
+								<label class="label" for="appl-sch-sel2">가구 상황</label>
+								<select id="appl-sch-sel2" class="form-select md">
+									<option value="">전체</option>
+									<option value="">항목</option>
+									<option value="">항목</option>
+								</select>
+							</div>
+							<div>
+								<label class="label" for="appl-sch-sel3">관심 주제</label>
+								<select id="appl-sch-sel3" class="form-select md">
+									<option value="">전체</option>
+									<option value="">항목</option>
+									<option value="">항목</option>
+								</select>
+							</div>
+						</div>
+						<dl class="filter-chip">
+							<dt>선택된 필터 (<span class="num">2</span>)</dt>
+							<dd>
+								<button type="button" class="btn btn-ico ico-refresh sm-l">
+									<span class="sr-only">새로고침</span>
+								</button>
+								<div class="chip-wrap">
+									<span class="btn-chip-outline md">
+										영유아
+										<button type="button" class="btn-del">
+											<span class="sr-only">삭제</span>
+										</button>
+									</span>
+									<span class="btn-chip-outline md">
+										필터값
+										<button type="button" class="btn-del">
+											<span class="sr-only">삭제</span>
+										</button>
+									</span>
+									<span class="btn-chip-outline md">
+										필터값
+										<button type="button" class="btn-del">
+											<span class="sr-only">삭제</span>
+										</button>
+									</span>
+								</div>
+							</dd>
+						</dl>
+					</div>
+				</div> -->
+				<!-- //검색 입력폼 -->
+
+				<!-- 검색 결과 : 리스트 상단 -->
+				<!-- <div class="search-list-top type1">
+					<div class="sch-info" role="region" aria-live="polite">
+						검색 결과 <span class="keyword">24</span>건
+					</div>
+					<ul class="sch-sort">
+						<li class="li1 m-hide">
+							<strong class="sort-label"><label for="search_result_count">목록 표시 개수</label></strong>
+							<select class="sort-select" id="search_result_count">
+								<option>10개</option>
+								<option>9개</option>
+							</select>
+						</li>
+						<li class="li2">
+							<strong class="sort-label"><label for="sort">정렬기준</label></strong>
+							<div class="w-sort-btn">
+								<button type="button" class="active">관련도순</button>
+								<button type="button">최신순</button>
+								<button type="button">인기순</button>
+							</div>
+							<div class="m-sort-btn">
+								<button type="button" class="btn btn-txt ico-filter"
+								        onclick="common.popupEvent('#popFilterId')">
+									<span class="span">필터</span>
+									<span class="num">2</span>
+								</button>
+								<select class="sort-select" id="sort">
+									<option>관련도순</option>
+									<option>최신순</option>
+									<option>인기순</option>
+								</select>
+							</div>
+						</li>
+					</ul>
+				</div> -->
+				<!-- //검색 결과 : 리스트 상단 -->
+
+				<!-- 한달 전체 행사 리스트  -->
+				<ul class="search-list type1">
+					<li class="li">
+						<div class="in">
+							<!-- 행사 진행상태 -->
+							<div class="card-top">
+								<span class="krds-badge bg3">Ongoing</span>
+								<span class="krds-badge">Upcoming</span>
+								<span class="krds-badge bg2">Completed</span>
+							</div>
+							<!-- //행사 진행상태-->
+							<div class="card-body">
+								<a href="#" class="c-text">
+									<p class="c-tit"><span class="span">행사 제목</span></p>
+									<p class="c-txt">
+										행사 상세 설명 영역입니다.
+									</p>
+									<p class="c-date">
+										<strong class="key">기간</strong>
+										<span class="value">2026.00.00-2026.00.00</span>
+									</p>
+								</a>
+								<div class="c-btn">
+									<a href="#" class="btn md secondary" title="자세히 보기">자세히 보기</a>
+								</div>
+							</div>
+							<!-- 해시태그 키워드 영역 시작-->
+							<div class="card-btm">
+								<span class="tag">대전</span>
+								<span class="tag">도르트문트</span>
+							</div>
+							<!-- //해시태그 키워드 영역 -->
+							<div class="card-btn">
+								<button type="button" class="btn sm btn-txt ico-down ico-before" title="첨부파일">첨부파일</button>
+								<button type="button" class="btn sm btn-txt ico-go ico-before" title="하이퍼링크">하이퍼링크</button>
+							</div>
+						</div>
+					</li>
+				</ul>
+				<!-- //한달 전체 행사 리스트 -->
+
+				<!-- paging : 웹 -->
+			<div class="pagination w-page paging">
+						<div class="row justify-content-center" id="divPagingArea">
+					
+						</div>
+				</div>
+				<!-- //paging : 웹 -->
+
+				<!-- paging : 모바일 -->
+				<div class="pagination m-page">
+					<div class="page-navis">
+						<a class="page-navi prev" href="#">이전</a>
+						<a class="page-navi next" href="#">다음</a>
+					</div>
+					<div class="page-links">
+						<a class="page-link" href="#">1</a>
+						<span class="page-link link-dot"></span>
+						<a class="page-link" href="#">7</a>
+						<a class="page-link active" href="#">8</a>
+						<a class="page-link" href="#">9</a>
+						<span class="page-link link-dot"></span>
+						<a class="page-link" href="#">120</a>
+					</div>
+				</div>
+				<!-- 일정 등록 모달 -->
+			<div id="calendarModal" style="display:none; position:fixed; top:4%; left:50%; transform:translateX(-50%); width:70%; background:#fff; border:1px solid #ccc; padding:20px; z-index:1000;">
+			    <!-- <h3>일정 등록</h3>
+			    <label>제목 <input type="text" id="modalTitle" class="form-control" /></label><br><br>
+			    <label>시작일 <input type="date" id="modalStart" class="form-control" /></label><br><br>
+			    <label>종료일 <input type="date" id="modalEnd" class="form-control" /></label><br><br>
+			    <label>링크 <input type="text" id="modalLink" class="form-control" /></label><br><br>
+			    <label>썸네일 <input type="text" id="modalThumb" class="form-control" /></label><br><br>
+			    <div style="text-align:right;">
+			        <button onclick="registerEvent()" class="btn primary">저장</button>
+			        <button onclick="closeModal()" class="btn">취소</button>
+			    </div> -->
+					<!-- 일정등록 폼 -->
+				 <div class="gini-cont-wrap">
+					<div class="gini-cont-box">
+						<div class="row cont100">
+							<!-- 폼그룹 left -->
+							<div class="cont-left cont50">
+								<!-- 폼그룹 -->
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="consult_name">Event Title</label>
+									</div>
+									<div class="form-conts">
+										<input type="text" id="consult_name" class="form-control" placeholder="Event Title">
+									</div>
+								</div>
+								<!-- //폼그룹 -->
+								<!-- 날짜 입력 필드 폼그룹 -->
+							<div>
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="cal">Start Date & Time</label>
+									</div>
+									<div class="form-conts form-row">
+										<div class="form-conts datepicker-conts">
+											<div class="datepicker-input">
+											 <input type="date" id="modalStart" class="form-control" />
+												<!-- <input type="number" class="form-control  datepicker cal" placeholder="Select date" id="cal"> -->
+												<button type="button" class="form-btn-datepicker">
+													<span class="sr-only">달력 열기</span>
+												</button>
+											</div>
+											<!-- <div class="datepicker-area">
+												<div class="datepicker-wrap bottom" aria-hidden="true" tabindex="-1">
+													<div class="datepicker-head">
+														<button type="button" class="btn-cal-move prev"><span class="sr-only">이전 달</span></button>
+														<div class="datepicker-switch-wrap">
+															<button type="button" class="btn-cal-switch year">2023년</button>
+															<button type="button" class="btn-cal-switch month">12월</button>
+														</div>
+														<button type="button" class="btn-cal-move next"><span class="sr-only">다음 달</span></button>
+													</div>
+													<div class="datepicker-body">
+														<div class="datepicker-conts datepicker-tbl-wrap" aria-hidden="true" tabindex="-1">
+															<table class="datepicker-tbl">
+																<thead>
+																	<tr>
+																		<th>Su</th>
+																		<th>Mo</th>
+																		<th>Tu</th>
+																		<th>We</th>
+																		<th>Th</th>
+																		<th>Fr</th>
+																		<th>Sa</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr>
+																		<td class="old"><button type="button" class="btn-set-date">26</button></td>
+																		<td class="old"><button type="button" class="btn-set-date">27</button></td>
+																		<td class="old"><button type="button" class="btn-set-date">28</button></td>
+																		<td class="old"><button type="button" class="btn-set-date">29</button></td>
+																		<td class="old"><button type="button" class="btn-set-date">30</button></td>
+																		<td><button type="button" class="btn-set-date">1</button></td>
+																		<td><button type="button" class="btn-set-date">2</button></td>
+																	</tr>
+																	<tr>
+																		<td><button type="button" class="btn-set-date">3</button></td>
+																		<td><button type="button" class="btn-set-date">4</button></td>
+																		<td><button type="button" class="btn-set-date">5</button></td>
+																		<td><button type="button" class="btn-set-date">6</button></td>
+																		<td class="period start"><button type="button" class="btn-set-date">7</button>
+																		</td>
+																		<td class="period"><button type="button" class="btn-set-date">8</button></td>
+																		<td class="period"><button type="button" class="btn-set-date">9</button></td>
+																	</tr>
+																	<tr>
+																		<td class="period"><button type="button" class="btn-set-date">10</button></td>
+																		<td class="period"><button type="button" class="btn-set-date">11</button></td>
+																		<td class="period"><button type="button" class="btn-set-date">12</button></td>
+																		<td class="period"><button type="button" class="btn-set-date">13</button></td>
+																		<td class="period"><button type="button" class="btn-set-date">14</button></td>
+																		<td class="period"><button type="button" class="btn-set-date">15</button></td>
+																		<td class="period end"><button type="button" class="btn-set-date">16</button>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td><button type="button" class="btn-set-date">17</button></td>
+																		<td><button type="button" class="btn-set-date">18</button></td>
+																		<td><button type="button" class="btn-set-date">19</button></td>
+																		<td><button type="button" class="btn-set-date">20</button></td>
+																		<td><button type="button" class="btn-set-date">21</button></td>
+																		<td><button type="button" class="btn-set-date">22</button></td>
+																		<td><button type="button" class="btn-set-date">23</button></td>
+																	</tr>
+																	<tr>
+																		<td><button type="button" class="btn-set-date">24</button></td>
+																		<td><button type="button" class="btn-set-date">25</button></td>
+																		<td><button type="button" class="btn-set-date">26</button></td>
+																		<td><button type="button" class="btn-set-date">27</button></td>
+																		<td><button type="button" class="btn-set-date">28</button></td>
+																		<td><button type="button" class="btn-set-date">29</button></td>
+																		<td><button type="button" class="btn-set-date">30</button></td>
+																	</tr>
+																	<tr>
+																		<td><button type="button" class="btn-set-date">31</button></td>
+																		<td class="new"><button type="button" class="btn-set-date">1</button></td>
+																		<td class="new"><button type="button" class="btn-set-date">2</button></td>
+																		<td class="new"><button type="button" class="btn-set-date">3</button></td>
+																		<td class="new"><button type="button" class="btn-set-date">4</button></td>
+																		<td class="new"><button type="button" class="btn-set-date">5</button></td>
+																		<td class="new"><button type="button" class="btn-set-date">6</button></td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+														<div class="datepicker-conts datepicker-year-wrap" aria-hidden="true" tabindex="-1">
+															<ul class="sel year">
+																<li>
+																	<button type="button" class="btn sm">2001</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm active">2002</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2003</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2004</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2005</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2006</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2007</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2008</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2009</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2010</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2011</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2012</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2013</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2014</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2015</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2016</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2017</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2018</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2019</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2020</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2021</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2022</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2023</button>
+																</li>
+															</ul>
+														</div>
+														<div class="datepicker-conts datepicker-mon-wrap" aria-hidden="true" tabindex="-1">
+															<ul class="sel month">
+																<li>
+																	<button type="button" class="btn sm">01월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">02월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">03월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm active">04월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">05월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">06월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">07월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">08월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">09월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">10월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">11월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">12월</button>
+																</li>
+															</ul>
+														</div>
+													</div>
+												</div>
+											</div> -->
+										</div>
+										<!-- <div class="form-conts">
+											<input type="text" id="consult_name" class="form-control" placeholder="Select time">
+										</div> -->
+									</div>
+								</div>
+								<!-- //날짜 입력 필드 폼그룹 -->
+								<!-- 날짜 입력 필드 폼그룹 -->
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="cal">End Date & Time</label>
+									</div>
+									<div class="form-conts form-row">
+										<div class="form-conts datepicker-conts">
+											<div class="datepicker-input">
+											 <input type="date" id="modalEnd" class="form-control" />
+												<!-- <input type="number" class="form-control  datepicker cal" placeholder="Select date" id="cal">
+												<button type="button" class="form-btn-datepicker">
+													<span class="sr-only">달력 열기</span>
+												</button> -->
+											</div>
+											<!-- <div class="datepicker-area">
+												<div class="datepicker-wrap bottom" aria-hidden="true" tabindex="-1">
+													<div class="datepicker-head">
+														<button type="button" class="btn-cal-move prev"><span class="sr-only">이전 달</span></button>
+														<div class="datepicker-switch-wrap">
+															<button type="button" class="btn-cal-switch year">2023년</button>
+															<button type="button" class="btn-cal-switch month">12월</button>
+														</div>
+														<button type="button" class="btn-cal-move next"><span class="sr-only">다음 달</span></button>
+													</div>
+													<div class="datepicker-body">
+														<div class="datepicker-conts datepicker-tbl-wrap" aria-hidden="true" tabindex="-1">
+															<table class="datepicker-tbl">
+																<thead>
+																	<tr>
+																		<th>Su</th>
+																		<th>Mo</th>
+																		<th>Tu</th>
+																		<th>We</th>
+																		<th>Th</th>
+																		<th>Fr</th>
+																		<th>Sa</th>
+																	</tr>
+																</thead>
+																<tbody>
+																		<td class="old"><button type="button" class="btn-set-date">26</button></td>
+																		<td class="old"><button type="button" class="btn-set-date">27</button></td>
+																		<td class="old"><button type="button" class="btn-set-date">28</button></td>
+																		<td class="old"><button type="button" class="btn-set-date">29</button></td>
+																		<td class="old"><button type="button" class="btn-set-date">30</button></td>
+																		<td><button type="button" class="btn-set-date">1</button></td>
+																		<td><button type="button" class="btn-set-date">2</button></td>
+																	</tr>
+																	<tr>
+																		<td><button type="button" class="btn-set-date">3</button></td>
+																		<td><button type="button" class="btn-set-date">4</button></td>
+																		<td><button type="button" class="btn-set-date">5</button></td>
+																		<td><button type="button" class="btn-set-date">6</button></td>
+																		<td class="period start"><button type="button" class="btn-set-date">7</button>
+																		</td>
+																		<td class="period"><button type="button" class="btn-set-date">8</button></td>
+																		<td class="period"><button type="button" class="btn-set-date">9</button></td>
+																	</tr>
+																	<tr>
+																		<td class="period"><button type="button" class="btn-set-date">10</button></td>
+																		<td class="period"><button type="button" class="btn-set-date">11</button></td>
+																		<td class="period"><button type="button" class="btn-set-date">12</button></td>
+																		<td class="period"><button type="button" class="btn-set-date">13</button></td>
+																		<td class="period"><button type="button" class="btn-set-date">14</button></td>
+																		<td class="period"><button type="button" class="btn-set-date">15</button></td>
+																		<td class="period end"><button type="button" class="btn-set-date">16</button>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td><button type="button" class="btn-set-date">17</button></td>
+																		<td><button type="button" class="btn-set-date">18</button></td>
+																		<td><button type="button" class="btn-set-date">19</button></td>
+																		<td><button type="button" class="btn-set-date">20</button></td>
+																		<td><button type="button" class="btn-set-date">21</button></td>
+																		<td><button type="button" class="btn-set-date">22</button></td>
+																		<td><button type="button" class="btn-set-date">23</button></td>
+																	</tr>
+																	<tr>
+																		<td><button type="button" class="btn-set-date">24</button></td>
+																		<td><button type="button" class="btn-set-date">25</button></td>
+																		<td><button type="button" class="btn-set-date">26</button></td>
+																		<td><button type="button" class="btn-set-date">27</button></td>
+																		<td><button type="button" class="btn-set-date">28</button></td>
+																		<td><button type="button" class="btn-set-date">29</button></td>
+																		<td><button type="button" class="btn-set-date">30</button></td>
+																	</tr>
+																	<tr>
+																		<td><button type="button" class="btn-set-date">31</button></td>
+																		<td class="new"><button type="button" class="btn-set-date">1</button></td>
+																		<td class="new"><button type="button" class="btn-set-date">2</button></td>
+																		<td class="new"><button type="button" class="btn-set-date">3</button></td>
+																		<td class="new"><button type="button" class="btn-set-date">4</button></td>
+																		<td class="new"><button type="button" class="btn-set-date">5</button></td>
+																		<td class="new"><button type="button" class="btn-set-date">6</button></td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+														<div class="datepicker-conts datepicker-year-wrap" aria-hidden="true" tabindex="-1">
+															<ul class="sel year">
+																<li>
+																	<button type="button" class="btn sm">2001</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm active">2002</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2003</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2004</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2005</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2006</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2007</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2008</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2009</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2010</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2011</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2012</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2013</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2014</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2015</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2016</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2017</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2018</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2019</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2020</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2021</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2022</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">2023</button>
+																</li>
+															</ul>
+														</div>
+														<div class="datepicker-conts datepicker-mon-wrap" aria-hidden="true" tabindex="-1">
+															<ul class="sel month">
+																<li>
+																	<button type="button" class="btn sm">01월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">02월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">03월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm active">04월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">05월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">06월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">07월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">08월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">09월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">10월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">11월</button>
+																</li>
+																<li>
+																	<button type="button" class="btn sm">12월</button>
+																</li>
+															</ul>
+														</div>
+													</div>
+												</div>
+											</div> -->
+										</div>
+										<!-- <div class="form-conts">
+											<input type="text" id="consult_name" class="form-control" placeholder="Select time">
+										</div> -->
+									</div>
+								</div>
+								<!-- //날짜 입력 필드 폼그룹 -->
+								<!-- 폼그룹 -->
+								<!-- <div class="form-group">
+									<div class="form-tit">
+										<label for="">Contact</label>
+									</div>
+									<div class="form-conts">
+										<input type="tel" id="" class="form-control" placeholder="Contact">
+									</div>
+								</div> -->
+								<!-- //폼그룹 -->
+								<div class="form-group margin-b">
+									<div class="form-tit lg">
+										<label for="">Upload Thumbnail</label>
+									</div>
+									<div class="form-conts row">
+										<input id="userId" type="text" maxlength="16" class="form-control">
+										<button type="button" class="btn lg secondary"> Search </button>
+									</div>
+									<p class="form-hint info"> 00 byte까지 허용 </p>
+								</div>
+							</div>
+							<!-- //폼그룹 left -->
+							<!-- cont-right -->
+							<div class="cont-right cont50">
+								<!-- 폼그룹 -->
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="consult_name">Event Description</label>
+									</div>
+									<div class="form-conts">
+										<input type="text" id="description" value="" class="form-control" placeholder="Event Description">
+									</div>
+								</div>
+								<!-- //폼그룹 -->
+								<!-- 폼그룹 -->
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="consult_name">Organizer</label>
+									</div>
+									<div class="form-conts">
+										<select class="form-select lg" id="citySelect" title="선택" onchange="getcityVal()">
+											<option value="GINI">GINI</option>
+											<option value="City of Daejeon">City of Daejeon</option>
+											<option value="City of Dortmund">City of Dortmund</option>
+											<option value="City of Malaga">City of Malaga</option>
+											<option value="County of Montgomery, MD">County of Montgomery, MD</option>
+											<option value="City of Seattle">City of Seattle</option>
+											<option value="Province of Quebec">Province of Quebec</option>
+										</select>
+									</div>
+								</div>
+								<!-- //폼그룹 -->
+						<!-- 		<div class="form-group">
+									<div class="form-tit">
+										<label for="consult_name">Location</label>
+									</div>
+									<div class="form-conts">
+										<input type="text" id="" class="form-control" placeholder="Location 넣을지 말지 협의 필요">
+									</div>
+								</div> -->
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="consult_name">External Link</label>
+									</div>
+									<div class="form-conts">
+										<input type="text" id="" class="form-control" placeholder="https://example.com">
+									</div>
+								</div>
+								<div class="form-group chk-area">
+									<div class="form-tit">
+										<label for="consult_name">Event Status</label>
+									</div>
+									<div class="form-conts form-row">
+										<div class="form-check lg">
+											<input type="radio" name="" id="" checked>
+											<label for="">Upcoming</label>
+										</div>
+										<div class="form-check lg">
+											<input type="radio" name="" id="">
+											<label for="">Ongoing</label>
+										</div>
+									</div>
+								</div>
+								<!-- //폼 끝 -->
+								</div>
+							</div>
+							<!-- //cont-right -->
+						</div>
+					</div>
+
+					<div class="gini-cont-box">
+						<div class="row">
+							<!-- 파일업로드 -->
+							<div class="file-upload cont50">
+								<p class="txt">첨부할 파일을 여기에 끌어다 놓거나, 파일 선택 버튼을 눌러 파일을 직접 선택해주세요.</p>
+								<button type="button" class="btn primary ico-before ico-upload md" onclick="uploadFiles()">파일선택</button>
+							</div>
+							<!-- //파일업로드 -->
+							<!-- 파일업로드 -->
+							<div class="file-upload-result cont50">
+								<div class="upload-top">
+									<div class="file-total"><span class="current">3개</span> / 6개(몇개로 할지 협의 필요)</div>
+								</div>
+								<ul class="upload-list">
+									<li>
+										<div class="in">
+											<div class="file-name">파일 제목1 [hwp, 17KB]</div>
+											<div class="file-btn">
+												<button type="button" class="btn btn-txt ico-before ico-del sm h-auto">삭제</button>
+											</div>
+										</div>
+									</li>
+									<li class="is-error">
+										<div class="in">
+											<div class="file-name">파일 제목2 [hwp, 17KB]</div>
+											<div class="file-btn">
+												<span class="ico-invalid error">
+													<em class="sr-only">에러</em>
+												</span>
+												<button type="button" class="btn btn-txt ico-before ico-del sm h-auto">삭제</button>
+											</div>
+										</div>
+										<p class="file-hint">
+											등록 가능한 파일 용량을 초과하였습니다.<br>
+											20MB 미만의 파일만 등록할 수 있습니다. 
+										</p>
+									</li>
+									<li>
+										<div class="in">
+											<div class="file-name">파일 제목1 [hwp, 17KB] </div>
+											<div class="file-btn">
+												<span class="spinner"></span>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="in">
+											<div class="file-name">파일 제목2 [hwp, 17KB] </div>
+											<div class="file-btn">
+												<span class="ico-invalid ok">
+													<em class="sr-only">정상</em>
+												</span>
+											</div>
+										</div>
+									</li>
+									<!-- <li>
+										<div class="in">
+											<div class="file-name">파일 제목3 [hwp, 17KB] </div>
+											<div class="file-btn">
+												<button type="button" class="btn btn-txt ico-before ico-del sm h-auto">삭제</button>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="in">
+											<div class="file-name">파일 제목4 [hwp, 17KB] </div>
+											<div class="file-btn">
+												<button type="button" class="btn btn-txt ico-before ico-del sm h-auto">삭제</button>
+											</div>
+										</div>
+									</li> -->
+								</ul>
+								<div class="upload-delete-btn">
+									<button type="button" class="btn btn-txt ico-before ico-del sm h-auto">전체 파일 삭제</button>
+								</div>
+							</div>
+							<!-- //파일업로드 리스트 -->
+				<div style="text-align:right;">
+			        <button onclick="registerEvent()" class="btn primary">저장</button>
+			        <button onclick="closeModal()" class="btn">취소</button>
+			    </div> 
+						</div>
+					</div>
+				 </div>
+				<!-- //일정등록 폼 -->
+			
+			</div>
+			<div id="modalOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000; opacity:0.5; z-index:999;"></div>
+				
+				<!-- //paging : 모바일 -->
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- 일정 수정 모달 -->
+			<div id="calendarUdModal" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%); width:400px; background:#fff; border:1px solid #ccc; padding:20px; z-index:1000;">
+				
+			
+			</div>
+			
+			<div id="modalUdOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#000; opacity:0.5; z-index:999;"></div>
+				
+				<!-- //paging : 모바일 -->
+			</div>
+			<!-- //컨텐츠 영역 -->
+		
+		</div>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+let calendar;
+let allEvents = [];
+let currentMonthStart = null;
+let currentMonthEnd = null;
+
+function formatDateString(dateStr) {
+  const date = new Date(dateStr);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const hour = date.getHours().toString().padStart(2, "0");
+  const minute = date.getMinutes().toString().padStart(2, "0");
+  return `\${year}-\${month}-\${day} \${hour}:\${minute}`;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const calendarEl = document.getElementById('calendar');
+
+  calendar = new FullCalendar.Calendar(calendarEl, {
+    locale: 'en',
+    initialView: 'dayGridMonth',
+    selectable: true,
+    editable: true,
+    headerToolbar: {
+      left: 'title',
+      right: 'prev today next'
+    },
+
+    datesSet: function (info) {
+      currentMonthStart = info.startStr;
+      currentMonthEnd = info.endStr;
+      loadCalendarList(1);
+    },
+
+    dateClick: function (info) {
+      const clickedDate = new Date(info.dateStr);
+      clickedDate.setHours(0, 0, 0, 0);
+      const onlistBox = document.querySelector(".ongoing");
+      const uplistBox = document.querySelector(".upcoming");
+      onlistBox.innerHTML = '';
+      uplistBox.innerHTML = '';
+
+      const matchedEvents = allEvents.filter(ev => {
+        const start = new Date(ev.start);
+        const end = new Date(ev.end || ev.start);
+        start.setHours(0, 0, 0, 0);
+        end.setHours(0, 0, 0, 0);
+        return clickedDate >= start && clickedDate <= end;
+      });
+
+      matchedEvents.forEach(event => {
+        const { title, start, end, extendedProps = {} } = event;
+        const description = extendedProps.eventDescription || event.description || "";
+        const organizer = extendedProps.organizer || event.organizer || "";
+        const status = extendedProps.eventStatus || event.eventStatus || "UPCOMING";
+
+        const template = `
+          <div class="event-list \${status.toLowerCase()} top">
+            <p class="event-list-tit organizer-gini">\${organizer}</p>
+            <div class="event-icon-box card-btn">
+              <button type="button" class="btn xsm btn-txt ico-down ico-before" title="첨부파일"></button>
+              <button type="button" class="btn xsm btn-txt ico-go ico-before" title="하이퍼링크"></button>
+            </div>
+          </div>
+          <div class="event-list \${status.toLowerCase()} bottom">
+            <div class="side-bg card-body">
+              <a href="#" class="c-text">
+                <p class="c-tit"><span class="span">\${title}</span></p>
+                \${description ? '<p class="c-txt">' + description + '</p>' : ''}
+                <p class="c-date">
+                  <strong class="key">기간</strong>
+                  <span class="value">\${formatDateString(start)} ~ \${formatDateString(end)}</span>
+                </p>
+              </a>
+            </div>
+          </div>`;
+
+        if (status === "ONGOING") {
+          onlistBox.insertAdjacentHTML("beforeend", template);
+        } else {
+          uplistBox.insertAdjacentHTML("beforeend", template);
+        }
+      });
+    },
+
+    events: function(info, successCallback) {
+    	  fetch('/distep/calendar/events.do')
+    	    .then(response => response.json())
+    	    .then(data => {
+    	      allEvents = data;
+    	      successCallback(data);
+
+    	      // ↓ 여기를 수정
+    	      const startOfMonth = new Date(info.startStr);
+    	      startOfMonth.setDate(1);
+    	      startOfMonth.setHours(0, 0, 0, 0);
+
+    	      const endOfMonth = new Date(startOfMonth);
+    	      endOfMonth.setMonth(endOfMonth.getMonth() + 1);
+    	      endOfMonth.setDate(0); // 마지막 날
+    	      endOfMonth.setHours(23, 59, 59, 999);
+
+    	      // ISO 형식 문자열로 변환 후 전송
+    	      loadCalendarListByMonth(
+    	        startOfMonth.toISOString(),
+    	        endOfMonth.toISOString()
+    	      );
+    	    });
+    	}
+
+  });
+
+  calendar.render();
+});
+
+function registerEvent() {
+  const title = document.getElementById("consult_name").value;
+  const start = document.getElementById("modalStart").value;
+  const end = document.getElementById("modalEnd").value;
+  const citySelect = document.getElementById("selectOrg");
+  const cityValue = citySelect.value;
+  const description = document.getElementById("description").value;
+
+  if (!title || !start || !end) {
+    alert("모든 항목을 입력하세요.");
+    return;
+  }
+
+  const eventData = {
+    eventTitle: title,
+    startDatetime: start + 'T00:00:00',
+    endDatetime: end + 'T23:59:59',
+    eventDescription: description,
+    organizer: cityValue,
+    location: '',
+    contact: '',
+    uploadThumbnail: '',
+    externalLink: '',
+    eventStatus: 'UPCOMING'
+  };
+
+  axios.post('/distep/calendar/register.do', eventData)
+    .then(response => {
+      const saved = response.data;
+      calendar.addEvent({
+        id: saved.id,
+        title: saved.eventTitle,
+        start: saved.startDatetime,
+        end: saved.endDatetime,
+        allDay: true
+      });
+      closeModal();
+      alert('일정이 등록되었습니다.');
+    })
+    .catch(error => {
+      console.error('등록 오류:', error);
+      alert('일정 등록 실패');
+    });
+}
+
+function loadCalendarList(currentPage = 1) {
+  if (!currentMonthStart || !currentMonthEnd) return;
+  const data = {
+    currentPage: currentPage,
+    startDate: currentMonthStart,
+    endDate: currentMonthEnd
+  };
+
+  axios.post('/distep/calendar/listAjax.do', data)
+    .then(response => {
+      const res = response.data.list || response.data;
+      const list = res.content;
+      const container = document.querySelector(".search-list");
+      container.innerHTML = '';
+
+      if (!Array.isArray(list) || list.length === 0) {
+        container.innerHTML = '<li class="li"><p>등록된 일정이 없습니다.</p></li>';
+        return;
+      }
+
+      list.forEach(event => {
+        const startDate = new Date(event.startDatetime).toLocaleDateString();
+        const endDate = new Date(event.endDatetime).toLocaleDateString();
+
+        const li = document.createElement("li");
+        li.className = "li";
+        li.innerHTML = `
+          <div class="in">
+            <div class="card-top">
+              <span class="krds-badge bg3">\${event.eventStatus}</span>
+            </div>
+            <div class="card-body">
+              <div class="c-text">
+                <p class="c-tit"><span class="span">\${event.eventTitle}</span></p>
+                <p class="c-txt">\${event.eventDescription || ''}</p>
+                <p class="c-date">
+                  <strong class="key">기간</strong>
+                  <span class="value">\${startDate} ~ \${endDate}</span>
+                </p>
+              </div>
+            </div>
+          </div>`;
+        container.appendChild(li);
+      });
+
+      document.querySelector("#divPagingArea").innerHTML = res.pagingArea;
+      bindPagingEvents();
+    })
+    .catch(error => {
+      console.error('일정 목록 불러오기 실패:', error);
+    });
+}
+
+function bindPagingEvents() {
+  document.querySelectorAll(".clsPagingArea").forEach(function (el) {
+    el.addEventListener("click", function (e) {
+      e.preventDefault();
+      const currentPage = parseInt(this.dataset.currentPage);
+      loadCalendarList(currentPage);
+    });
+  });
+}
+</script>
+

@@ -1,0 +1,82 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<!-- 컨테이너 영역 -->
+		<div id="container">
+			<div class="page-title-wrap visual img-members">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Network</a></li>
+							<li><a href="#" class="txt">About</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<div class="visual-area">
+						<h2 class="h-tit">About</h2>
+						<p>Select a member country on the map</p>
+					</div>
+				</div>
+			</div>
+	
+
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				<!-- 섹션 컨텐츠 -->
+				 <div class="gini-cont-wrap gap20 cont-box cont-map">
+					<div class="gini-cont-box">
+						<div class="map-title-box">
+							<h3 class="title">GINI's Network Map</h3>
+							<div class="hint-box">
+								<p class="ico-hint">Select a member country on the map</p>
+							</div>
+						</div>
+						<div class="cont-right cont60 map-area">
+							<img src="${pageContext.request.contextPath}/img/component/common/bg-networkMap.png" alt="Member map">
+						</div>
+						<div class="map-btn-box">
+							<a href="${pageContext.request.contextPath}/daejeon.do" class="btn-daejeon">
+								<span class="city-name">City of Daejeon</span>
+								<span class="city-flag ico-kor"></span>
+							</a>
+							<a href="${pageContext.request.contextPath}/dortmund.do" class="btn-dortmund">
+								<span class="city-name">City of Dortmund</span>
+								<span class="city-flag ico-dortmund"></span>
+							</a>
+							<a href="${pageContext.request.contextPath}/malaga.do" class="btn-malaga">
+								<span class="city-name">City of Malaga</span>
+								<span class="city-flag ico-malaga"></span>
+							</a>
+							<a href="${pageContext.request.contextPath}/montgomery.do" class="btn-montgomery">
+								<span class="city-name">County of Montgomery, MD</span>
+								<span class="city-flag ico-montgomery"></span>
+							</a>
+							<a href="${pageContext.request.contextPath}/seattle.do" class="btn-seattle">
+								<span class="city-name">City of Seattle</span>
+								<span class="city-flag ico-seattle"></span>
+							</a>
+							<a href="${pageContext.request.contextPath}/quebec.do" class="btn-quebec">
+								<span class="city-name">Province of Quebec</span>
+								<span class="city-flag ico-quebec"></span>
+							</a>
+<!-- 							<a href="" class="btn-hinschu"> -->
+<!-- 								<span class="city-name">Hisnchu</span>   -->
+<!-- 								<span class="city-flag ico-hisnchu"></span> -->
+<!-- 							</a> -->
+						</div>
+					</div>
+					
+
+					
+				 </div>
+				<!-- //섹션 컨텐츠 -->
+
+					
+
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 -->

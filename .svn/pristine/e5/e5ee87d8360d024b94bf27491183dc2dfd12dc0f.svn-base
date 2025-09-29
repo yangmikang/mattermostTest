@@ -1,0 +1,58 @@
+============================================================================
+setting.xml에
+
+  <proxies>
+      <proxy>
+      <id>myproxy</id>
+      <active>true</active>
+      <protocol>http</protocol>
+      <host>203.250.203.170</host>
+      <port>3048</port>
+      <nonProxyHosts>*.google.com|ibiblio.org</nonProxyHosts>
+    </proxy>
+    
+    추가
+============================================================================
+[제우스 서버 추가 방법]
+
+JEUS 설정 파일 위치
+/usr/local/tmax/jeus7/bin/jeus.properties
+/usr/local/tmax/jeus7/domains/TEST_WAS_193/config
+
+로그파일위치
+/usr/local/tmax/jeus7/domains/TEST_WAS_193/servers/MS-193_as/logs
+
+
+http.m파일 위치
+/usr/local/tmax/webtob/config
+
+webToB 종료 : wsdown
+
+webToB 시작 : wsboot
+
+webToB 컴파일 : wscfl -i http.m
+
+wsboot, kisti123
+wsdown
+
+was서버 전체 재기동 및 정지
+jdown
+jboot
+
+============================================================================================================
+반영시 삭제 
+ - 로그관련
+		xercesImpl-2.6.2.jar 
+
+
+
+
+
+
+
+
+
+
+
+
+

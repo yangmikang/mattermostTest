@@ -1,0 +1,108 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<script>
+function validatePasswordForm() {
+    const pw = document.getElementById("newPassword").value;
+    const cpw = document.getElementById("confirmNewPassword").value;
+
+    if (pw.length < 8 || pw.length > 20) {
+        alert("Password must be 8-20 characters.");
+        return false;
+    }
+
+    const pwRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/;
+    if (!pwRegex.test(pw)) {
+        alert("Password must include letters and numbers.");
+        return false;
+    }
+
+    if (pw !== cpw) {
+        alert("Passwords do not match.");
+        return false;
+    }
+
+    return true;
+}
+
+$(document).ready(function() {
+	
+	$("#toggleCurrentPassword").on("click", function() {
+	    var pwdInput = $("#currentPassword");
+	    if (pwdInput.attr("type") === "password") {
+	        pwdInput.attr("type", "text");
+	    } else {
+	        pwdInput.attr("type", "password");
+	    }
+	});
+	$("#toggleNewPassword").on("click", function() {
+	    var pwdInput = $("#newPassword");
+	    if (pwdInput.attr("type") === "password") {
+	        pwdInput.attr("type", "text");
+	    } else {
+	        pwdInput.attr("type", "password");
+	    }
+	});
+	$("#toggleConfirmNewPassword").on("click", function() {
+	    var pwdInput = $("#confirmNewPassword");
+	    if (pwdInput.attr("type") === "password") {
+	        pwdInput.attr("type", "text");
+	    } else {
+	        pwdInput.attr("type", "password");
+	    }  
+	});
+
+});
+</script>
+<body>
+<div class="inner">
+	<div class="login-form-area">
+		<div class="login-wrap">
+			<div class="conts-area">
+				<fieldset>
+					<legend>Edit User</legend>
+						<form action="${pageContext.request.contextPath}/changePassword.do" method="post" onsubmit="return validatePasswordForm();">
+						    <div class="form-group margin-b">
+						        <label for="currentPassword">Current Password</label>
+						        <div class="form-conts btn-ico-wrap">
+							        <input type="password" id="currentPassword" name="currentPassword" class="form-control" placeholder="Enter your password" required>
+									<button type="button" id="toggleCurrentPassword" class="btn btn-ico ico-pw-visible md">
+										<span class="sr-only">Show entered password</span>
+									</button>
+								</div>
+						    </div> 
+						
+						    <div class="form-group margin-b"> 
+						        <label for="newPassword">New Password</label>  
+						        <div class="form-conts btn-ico-wrap">
+							        <input type="password" id="newPassword" name="newPassword" class="form-control" placeholder="Enter your password" required>
+									<button type="button" id="toggleNewPassword" class="btn btn-ico ico-pw-visible md">
+										<span class="sr-only">Show entered password</span>
+									</button>
+								</div>
+						    </div>
+						
+						    <div class="form-group margin-b">
+						        <label for="confirmNewPassword">Confirm New Password</label>
+						        <div class="form-conts btn-ico-wrap">
+							        <input type="password" id="confirmNewPassword" name="confirmNewPassword" class="form-control" placeholder="Enter your password" required>
+									<button type="button" id="toggleConfirmNewPassword" class="btn btn-ico ico-pw-visible md">
+										<span class="sr-only">Show entered password</span>
+									</button>
+								</div>
+						        <span id="pwMatchMsg"></span>
+						    </div>
+							<div class="form-group">
+						    	<button type="submit" class="btn primary">Change Password</button>
+						    </div>
+						</form>
+					</fieldset>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- //ÄÁÅÙÃ÷ ¿µ¿ª -->
+
+</body>
+</html>

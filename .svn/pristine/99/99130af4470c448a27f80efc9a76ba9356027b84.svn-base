@@ -1,0 +1,53 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!-- 컨테이너 영역 -->
+		<div id="container">
+			<!-- 비쥬얼 영역 -->
+			<div class="main-vban-wrap bg">
+				<div class="inner">
+					<div class="vb-swiper">
+						<div class="swiper">
+							<ul class="swiper-wrapper">
+								<li class="swiper-slide">
+									<div class="in">
+										<div class="text">
+											<p class="tit">GINI</p>
+											<p class="txt">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding members: Daejeon (South Korea), Dortmund (Germany), Malaga (Spain), Montgomery County (MD, USA), and Seattle (USA).</p>
+											<a href="#" class="btn primary xlg">자세히 보러가기</a>
+										</div>
+										<!-- <div class="im">
+											<img src="../../resources/img/pattern/content/img_main_content_visual.png" alt="">
+										</div> -->
+									</div>
+								</li>
+								<li class="swiper-slide">
+									<div class="in">
+										<div class="text">
+											<p class="tit">GINI222222</p>
+											<p class="txt">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding members: Daejeon (South Korea), Dortmund (Germany), Malaga (Spain), Montgomery County (MD, USA), and Seattle (USA).</p>
+											<a href="#" class="btn primary xlg">자세히 보러가기</a>
+										</div>
+										<!-- <div class="im">
+											<img src="../../resources/img/pattern/content/img_main_content_visual.png" alt="">
+										</div> -->
+									</div>
+								</li>
+							</ul>
+						<span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+						<button type="button" class="swiper-button-prev" tabindex="0" aria-label="Previous slide" aria-controls="swiper-wrapper-8d0d580115f4854d">
+							<span class="sr-only">이전</span>
+						</button>
+						<button type="button" class="swiper-button-next" tabindex="0" aria-label="Next slide" aria-controls="swiper-wrapper-8d0d580115f4854d">
+							<span class="sr-only">다음</span>
+						</button>
+						<div class="swiper-indicator text-center">
+							<div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 1"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 2"></span><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 3" aria-current="true"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 4"></span></div>
+							<a href="#" class="swiper-button-more">
+								<span class="sr-only">더 보기</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- //비쥬얼 영역 -->
+		</div>
+		<!-- //컨테이너 영역 -->

@@ -1,0 +1,131 @@
+package kr.go.distep.user.service.impl;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import kr.go.distep.user.service.UserService;
+import kr.go.distep.user.vo.UserVO;
+
+@Service("userService")
+public class UserServiceImpl implements UserService {
+	@Resource(name = "userMapper")
+	private UserMapper userMapper;
+
+	@Override
+	public void register(UserVO userVO) throws SQLException, IOException{
+		userMapper.insertUser(userVO);
+	}
+	
+	@Override
+    public boolean checkUserId(String userId) throws SQLException, IOException{
+		return userMapper.checkUserId(userId) > 0;
+		
+    }
+	@Override
+	public boolean checkEmail(String email) throws SQLException, IOException {
+		return userMapper.checkEmail(email) > 0;
+	}
+
+	@Override
+	public boolean checkUsername(String username) throws SQLException, IOException {
+		return userMapper.checkUsername(username) > 0;
+	}
+	@Override
+	public UserVO findByUserId(String userId) throws IOException, Exception {
+		return userMapper.selectUserById(userId);
+	}
+
+	@Override
+	public List<UserVO> getUserList(int offset, int size) throws IOException, Exception {
+		return userMapper.selectUserList(offset, size);
+	}
+
+	@Override
+	public int getUserCount() throws IOException, Exception {
+		return userMapper.getUserCount();
+	}
+
+	@Override
+	public void updateUserRole(String id, String appr_yn) {
+	    userMapper.updateUserRole(id, appr_yn);
+	}
+
+	@Override
+	public void grantAdminRole(String id) {
+		userMapper.grantAdminRole(id);
+	}
+	
+	@Override
+	public String findUserIdByNameAndEmail(String name, String email) {
+	    return userMapper.findUserIdByNameAndEmail(name, email);
+	}
+	
+	@Override
+	public UserVO findUserByIdAndEmail(String userId, String email) {
+	    return userMapper.findUserByIdAndEmail(userId, email);
+	}
+
+	@Override
+	public void updateUserPassword(String userId, String encodedPassword) {
+		userMapper.updateUserPassword(userId, encodedPassword);
+	}
+	
+	@Override
+	public void updateUser(UserVO userVO) {
+	    userMapper.updateUser(userVO);
+	}
+
+	@Override
+	public void updateUserType(String id, String role) {
+		userMapper.updateUserType(id, role);
+	}
+
+	@Override
+	public void deleteUser(String id) {
+		userMapper.deleteUser(id);
+	}
+
+	@Override
+	public List<HashMap<String, Object>> getBoardPermissionList() {
+		return userMapper.getBoardPermissionList();
+	}
+	
+	@Override
+    public void upsertBoardAuth(UserVO userVO) {
+		userMapper.callUpsertBoardAuth(userVO);
+    }
+
+	@Override
+	public int updateBoardMasterName(String boardMasterCode, String boardMasterName) {
+		return userMapper.updateBoardMasterName(boardMasterCode, boardMasterName);
+	}
+	
+	@Override
+	public int updateBoardUseYn(String boardMasterCode, String boardUseYn) {
+	    return userMapper.updateBoardUseYn(boardMasterCode, boardUseYn);
+	}
+
+	@Override
+	public void removeAdminRole(String id) {
+		userMapper.removeAdminRole(id);
+	}
+
+	@Override
+	public String getBoardReadAuth(HashMap<String, String> authParam) {
+		return userMapper.getBoardReadAuth(authParam);
+	}
+
+	@Override
+	public String getBoardMasterCodeByLink(String boardLink) {
+		return userMapper.getBoardMasterCodeByLink(boardLink);
+	}
+
+
+}

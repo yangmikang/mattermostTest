@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.go.distep.data.service.impl.EtcDataMapper">
+
+	<insert id="insertAttachFileInfo" parameterType="map">
+		/* EtcDataMapper_insertAttachFileInfo */
+	  	INSERT INTO TAB_ATTACH_FILE (
+			ATTACH_FILE_SN,
+			BLTNBRD_SN,
+			FILE_CD,
+			SN,
+			ATTACH_FILE_NM,
+			ATTACH_FILE_SAVE_NM,
+			ATTACH_FILE_SZ,
+			REGISTER_ID,
+			REGIST_DT,
+			USE_YN
+	  	) VALUES (
+	  		#{attachFileSn},
+			#{bltnbrdSn},
+			#{fileCd},
+			(SELECT IFNULL(MAX(SN), 0) + 1 FROM TAB_ATTACH_FILE WHERE ATTACH_FILE_SN = #{attachFileSn}),
+			#{attachFileNm},
+			#{attachFileSaveNm},
+			#{attachFileSz},
+			#{registerId},
+			NOW(),
+			'N'
+	  	)
+	</insert>
+
+	<select id="selectEtcUserInfo" parameterType="String" resultType="egovMap">
+		/* EtcDataMapper_selectEtcUserInfo */
+		SELECT 
+			USER_ID, PSN_NM, CP_NO,
+			EMAIL, BLNG_ORG_CD,
+			(SELECT ORG_NM 
+			 FROM GLOBAL_REF.ORG_NM_MAPPING 
+			 WHERE HETR_CD = BLNG_ORG_CD
+			) AS ORG_NM,
+			(SELECT REG_NO
+			 FROM HURIMS_MAN.IM_REG_NO
+			 WHERE DI_CD = TH_MEMBER.DUP_JOIN_CD
+			) AS REG_NO,
+			BLNG_ORG_CD,
+			HM_ID
+		WHERE USER_ID = #{userId}
+	</select>
+
+</mapper>

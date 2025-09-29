@@ -1,0 +1,477 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+	pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<style>
+    .tabs {
+        display: flex;
+    }
+
+    .tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        border: 1px solid #ddd;
+        border-bottom: none;
+        background-color: #f9f9f9;
+/*         border-top-left-radius: 5px; */
+/*         border-top-right-radius: 5px; */
+    }
+  
+    .tab.active {
+        background-color: #fff;
+        font-weight: bold;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;  
+    }
+    
+    .tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 11pt;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+/* 헤더 스타일 */
+.tbl thead {
+    background-color: #f9f9f9;
+}
+
+.tbl thead th {
+    padding: 12px;
+    text-align: center;  
+    font-weight: 650;     
+    font-size: 11pt;         
+    color: #555;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 본문 셀 스타일 */
+.tbl td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+}
+
+/* 행 hover 시 연한 회색 */
+.tbl tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* 버튼 스타일 - 탭과 통일된 느낌 */
+.tbl .btn {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.tbl .btn:hover {
+    background-color: #eaeaea;
+}
+
+/* 승인/거절/관리자 부여 버튼 색상 약간만 차이줌 */
+.tbl .btn.approve {
+    background-color: #e3f7e3;
+    color: #2e7d32;
+    border-color: #c4e6c4;
+}
+
+.tbl .btn.reject {
+    background-color: #fdecea;
+    color: #c62828;
+    border-color: #f5c6c6;
+}
+
+.tbl .btn.grant-admin {
+    background-color: #e7f3fa;
+    color: #1565c0;
+    border-color: #c9e2f2;
+}
+
+/* 라디오 정렬 */
+.form-check { 
+    margin: 4px 0;
+    text-align: left;
+}
+  
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin: 20px 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.page-link {
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 13px;
+    transition: background-color 0.2s, color 0.2s; 
+}
+  
+.page-link:hover {
+    background-color: #eaeaea;
+}
+
+.page-link.active {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+    cursor: default;
+    pointer-events: none;
+}  
+
+.section-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin: 30px 0 20px;
+    position: relative;
+}
+
+.section-title::after {
+    content: "";
+    display: block;
+    width: 50px;
+    height: 3px;
+    background-color: #ddd;
+    margin: 8px auto 0;
+    border-radius: 2px;
+}
+</style>  
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>   
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<c:if test="${not empty errorMessage}">
+    <script>
+        alert("${errorMessage}");
+    </script>
+</c:if> 
+<!-- 컨테이너 영역 -->
+<div id="container">
+	<div class="page-title-wrap visual img-joint">
+		<div class="visual-filter"></div>
+			<div class="inner">
+				<!-- breadcrumb -->  
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Board Permission Management</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb --> 
+					<!-- 페이지 타이틀 영역 -->  
+					<div class="visual-area">
+						<h2 class="h-tit">Board Permission Management</h2>
+					</div>  
+				<!-- //페이지 타이틀 영역 -->
+					
+				</div>
+			</div>
+<!-- 로그인 영역 -->
+<div class="inner">
+	<div class="conts-area">
+		<div class="conts-wrap">
+			<div class="box-white">
+				    <h2 class="section-title">Board Permission Management</h2>
+				    <div class="tab-cont-box"> 
+				    	<table class="tbl col data">
+						    <thead>
+						        <tr>  
+						            <th rowspan="2">menu</th>
+						            <th colspan="3">General</th> 
+						            <th colspan="3">Government</th>
+						            <th colspan="3">Institution</th>
+						            <th rowspan="2">Active</th>
+						        </tr>
+						        <tr>
+						            <th>View</th><th>Create/Update/Delete</th><th>Download</th>  
+						            <th>View</th><th>Create/Update/Delete</th><th>Download</th>
+						            <th>View</th><th>Create/Update/Delete</th><th>Download</th>
+						        </tr>
+						    </thead>
+						    <tbody>
+					            <c:forEach items="${boardPermissionList}" var="list">
+								  <tr>
+								    <td>
+									  <span id="name_display_${list.board_master_code}">${list.board_master_name}</span>
+									  <input type="text" id="name_input_${list.board_master_code}" value="${list.board_master_name}" style="display: none; width: 80%;" />
+									  <div class="comp-btn-wrap">
+									  <button type="button" id="btn_edit_${list.board_master_code}" class="btn xsm"
+									          onclick="enableEdit('${list.board_master_code}')" style="margin-left: 5px;">수정</button>
+									  </div>
+									  <div class="comp-btn-wrap">
+									  <button type="button" id="btn_save_${list.board_master_code}" class="btn xsm"
+									          onclick="saveName('${list.board_master_code}')" style="display: none; margin-left: 5px;">저장</button>
+									  </div>
+									</td>
+								
+								    <!-- G_read_auth -->
+								    <td>
+								      <c:if test="${list.G_read_auth eq '-'}">-</c:if>
+								      <c:if test="${list.G_read_auth ne '-'}">
+								        <div class="form-check" style="text-align: center;">
+								          <input type="checkbox" name="G_GINI_view" onclick="updateAuth('${list.board_master_code}', 'G', 'read', this, '${loginUserId}')"
+								                 id="chk_g_read_${list.board_master_code}"
+								                 <c:if test="${list.G_read_auth eq 'Y'}">checked</c:if>>
+								          <label for="chk_g_read_${list.board_master_code}" style="font-size: 10pt;"></label>
+								        </div>
+								      </c:if>
+								    </td>
+								
+								    <!-- G_update_auth -->
+								    <td>
+								      <c:if test="${list.G_update_auth eq '-'}">-</c:if>
+								      <c:if test="${list.G_update_auth ne '-'}">
+								        <div class="form-check" style="text-align: center;">
+								          <input type="checkbox" name="G_GINI_update" onclick="updateAuth('${list.board_master_code}', 'G', 'update', this, '${loginUserId}')"
+								                 id="chk_g_update_${list.board_master_code}"
+								                 <c:if test="${list.G_update_auth eq 'Y'}">checked</c:if>>
+								          <label for="chk_g_update_${list.board_master_code}" style="font-size: 10pt;"></label>
+								        </div>
+								      </c:if>
+								    </td>
+								
+								    <!-- G_file_auth -->
+								    <td>
+								      <c:if test="${list.G_file_auth eq '-'}">-</c:if>
+								      <c:if test="${list.G_file_auth ne '-'}">
+								        <div class="form-check" style="text-align: center;">
+								          <input type="checkbox" name="G_GINI_file" onclick="updateAuth('${list.board_master_code}', 'G', 'file', this, '${loginUserId}')"
+								                 id="chk_g_file_${list.board_master_code}"
+								                 <c:if test="${list.G_file_auth eq 'Y'}">checked</c:if>>
+								          <label for="chk_g_file_${list.board_master_code}" style="font-size: 10pt;"></label>
+								        </div>
+								      </c:if>
+								    </td>
+								
+								    <!-- C_read_auth -->
+								    <td>
+								      <c:if test="${list.C_read_auth eq '-'}">-</c:if>
+								      <c:if test="${list.C_read_auth ne '-'}">
+								        <div class="form-check" style="text-align: center;">
+								          <input type="checkbox" name="C_GINI_view" onclick="updateAuth('${list.board_master_code}', 'C', 'read', this, '${loginUserId}')"
+								                 id="chk_c_read_${list.board_master_code}"
+								                 <c:if test="${list.C_read_auth eq 'Y'}">checked</c:if>>
+								          <label for="chk_c_read_${list.board_master_code}" style="font-size: 10pt;"></label>
+								        </div>
+								      </c:if>
+								    </td>
+								
+								    <!-- C_update_auth -->
+								    <td>
+								      <c:if test="${list.C_update_auth eq '-'}">-</c:if>
+								      <c:if test="${list.C_update_auth ne '-'}">
+								        <div class="form-check" style="text-align: center;">
+								          <input type="checkbox" name="C_GINI_update" onclick="updateAuth('${list.board_master_code}', 'C', 'update', this, '${loginUserId}')"
+								                 id="chk_c_update_${list.board_master_code}"
+								                 <c:if test="${list.C_update_auth eq 'Y'}">checked</c:if>>
+								          <label for="chk_c_update_${list.board_master_code}" style="font-size: 10pt;"></label>
+								        </div>
+								      </c:if>
+								    </td>
+								
+								    <!-- C_file_auth -->
+								    <td>
+								      <c:if test="${list.C_file_auth eq '-'}">-</c:if>
+								      <c:if test="${list.C_file_auth ne '-'}">
+								        <div class="form-check" style="text-align: center;">
+								          <input type="checkbox" name="C_GINI_file" onclick="updateAuth('${list.board_master_code}', 'C', 'file', this, '${loginUserId}')"
+								                 id="chk_c_file_${list.board_master_code}"
+								                 <c:if test="${list.C_file_auth eq 'Y'}">checked</c:if>>
+								          <label for="chk_c_file_${list.board_master_code}" style="font-size: 10pt;"></label>
+								        </div>
+								      </c:if>
+								    </td>
+								
+								    <!-- O_read_auth -->
+								    <td>
+								      <c:if test="${list.O_read_auth eq '-'}">-</c:if>
+								      <c:if test="${list.O_read_auth ne '-'}">
+								        <div class="form-check" style="text-align: center;">
+								          <input type="checkbox" name="O_GINI_view" onclick="updateAuth('${list.board_master_code}', 'O', 'read', this, '${loginUserId}')"
+								                 id="chk_o_read_${list.board_master_code}"
+								                 <c:if test="${list.O_read_auth eq 'Y'}">checked</c:if>>
+								          <label for="chk_o_read_${list.board_master_code}" style="font-size: 10pt;"></label>
+								        </div>
+								      </c:if>
+								    </td>
+								
+								    <!-- O_update_auth -->
+								    <td>
+								      <c:if test="${list.O_update_auth eq '-'}">-</c:if>
+								      <c:if test="${list.O_update_auth ne '-'}">
+								        <div class="form-check" style="text-align: center;">
+								          <input type="checkbox" name="O_GINI_update" onclick="updateAuth('${list.board_master_code}', 'O', 'update', this, '${loginUserId}')"
+								                 id="chk_o_update_${list.board_master_code}"
+								                 <c:if test="${list.O_update_auth eq 'Y'}">checked</c:if>>
+								          <label for="chk_o_update_${list.board_master_code}" style="font-size: 10pt;"></label>
+								        </div>
+								      </c:if>
+								    </td>
+								
+								    <!-- O_file_auth -->
+								    <td>
+								      <c:if test="${list.O_file_auth eq '-'}">-</c:if>
+								      <c:if test="${list.O_file_auth ne '-'}">
+								        <div class="form-check" style="text-align: center;">
+								          <input type="checkbox" name="O_GINI_file" onclick="updateAuth('${list.board_master_code}', 'O', 'file', this, '${loginUserId}')"
+								                 id="chk_o_file_${list.board_master_code}"
+								                 <c:if test="${list.O_file_auth eq 'Y'}">checked</c:if>>
+								          <label for="chk_o_file_${list.board_master_code}" style="font-size: 10pt;"></label>
+								        </div>
+								      </c:if> 
+								    </td>
+								    <td>
+									    <div class="form-check" style="text-align: center;">
+										  <input type="checkbox" id="chk_use_${list.board_master_code}" onclick="updateUseYn('${list.board_master_code}', this)" <c:if test="${list.board_use_yn eq 'Y'}">checked</c:if> />
+										  <label for="chk_use_${list.board_master_code}" style="font-size: 10pt;"></label>
+										</div>
+									</td>
+								  </tr>
+								</c:forEach>
+						    </tbody>
+						</table>  
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+
+function updateAuth(boardId, userType, authType, checkbox, userId) {
+    var authValue = checkbox.checked ? 'Y' : 'N';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "${pageContext.request.contextPath}/admin/updateAuth.do", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    alert("Permission updated successfully.");
+                } else {
+                    alert("Failed to update permission.");
+                }
+            } else {
+            	alert("Server error: " + xhr.status);
+            }
+        }
+    };
+
+    var data = JSON.stringify({
+        boardId: boardId,
+        userType: userType,
+        authType: authType,
+        authValue: authValue,
+        userId: userId
+    });
+
+    xhr.send(data);
+}
+
+function enableEdit(code) {
+	  // 기존 표시 숨기고 input + 저장 버튼 보여주기
+	  document.getElementById('name_display_' + code).style.display = 'none';
+	  document.getElementById('name_input_' + code).style.display = 'inline-block';
+
+	  document.getElementById('btn_edit_' + code).style.display = 'none';
+	  document.getElementById('btn_save_' + code).style.display = 'inline-block';
+	}
+
+function saveName(code) {
+	  var newName = document.getElementById('name_input_' + code).value.trim();
+
+	  // 입력값 검증 (널 또는 공백 체크)
+	  if (!newName) {
+	    alert('Please enter the board name.');
+	    return;
+	  }
+
+	  var xhr = new XMLHttpRequest();
+	  xhr.open('POST', '${pageContext.request.contextPath}/updateBoardMasterName.do', true);
+	  xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+	  xhr.onreadystatechange = function () {
+	    if (xhr.readyState === XMLHttpRequest.DONE) {
+	      if (xhr.status === 200) {
+	        var response = JSON.parse(xhr.responseText);
+	        if (response.success) {
+	          alert('Changes have been saved.');
+	          location.reload(); // UI 변경은 리로드로 처리
+	        } else {
+	          alert('Unable to save changes: ' + (response.message || 'Unknown error'));
+	        }
+	      } else {
+	        alert('Unable to save changes. (HTTP status: ' + xhr.status + ')');
+	      }
+	    }
+	  };
+
+	  var data = {
+	    boardMasterCode: code,
+	    boardMasterName: newName
+	  };
+
+	  xhr.send(JSON.stringify(data));
+	} 
+	
+function updateUseYn(code, checkbox) {
+	  var isChecked = checkbox.checked;
+	  var useYn = isChecked ? 'Y' : 'N';
+
+	  var xhr = new XMLHttpRequest();
+	  xhr.open('POST', '${pageContext.request.contextPath}/updateBoardUseYn.do', true);
+	  xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+	  xhr.onreadystatechange = function () {
+	    if (xhr.readyState === XMLHttpRequest.DONE) {
+	      if (xhr.status === 200) {
+	        var response = JSON.parse(xhr.responseText);
+	        if (response.success) {
+	          alert('Saved successfully.');
+	        } else {
+	          alert('Failed to save. Please try again.');
+	          checkbox.checked = !isChecked; // 되돌림
+	        }
+	      } else {
+	        alert('Server error. Please contact admin.');
+	        checkbox.checked = !isChecked; // 되돌림
+	      }
+	    }
+	  };
+
+	  var data = {
+	    boardMasterCode: code,
+	    boardUseYn: useYn
+	  };
+
+	  xhr.send(JSON.stringify(data));
+	}
+</script>

@@ -1,0 +1,21 @@
+package kr.go.distep.cmmn.file.vo;
+
+import java.util.Date;
+
+import lombok.Data;
+
+@Data
+public class FileDetailVO {
+	private int    fileSn;
+	private long   fileGroupNo;
+	private String fileOriginalName;
+	private String fileSaveName;
+	private String fileSaveLocate;
+	private long   fileSize;
+	private String fileExt;
+	private String fileMime;
+	private String fileFancySize;
+	private Date   fileSaveDate;
+	private int    fileDownCount;
+	private String fileType;
+}

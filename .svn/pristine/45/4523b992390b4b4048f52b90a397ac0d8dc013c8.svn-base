@@ -1,0 +1,40 @@
+package kr.go.distep.statis.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import kr.go.distep.statis.service.StatisService;
+import kr.go.distep.statis.vo.StatisVo;
+
+@Service
+public class StatisServiceImpl implements StatisService {
+
+	@Autowired
+	StatisMapper statisMapper;
+	
+	@Override
+	public List<StatisVo> getMonthlyTotalRequests() {
+		return this.statisMapper.getMonthlyTotalRequests();
+	}
+
+	@Override
+	public List<StatisVo> getDailyTotalRequests() {
+		// TODO Auto-generated method stub
+		return this.statisMapper.getDailyTotalRequests();
+	}
+
+	@Override
+	public List<StatisVo> getDailyRequestsByRole() {
+		// TODO Auto-generated method stub
+		return this.statisMapper.getDailyRequestsByRole();
+	}
+
+	@Override
+	public List<StatisVo> getMonthlyRequestsByRole() {
+		// TODO Auto-generated method stub
+		return this.statisMapper.getMonthlyRequestsByRole();
+	}
+
+}

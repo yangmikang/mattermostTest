@@ -1,0 +1,520 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!-- 컨테이너 영역 -->
+		<div id="container" class="main">
+			<!-- 비쥬얼 영역 -->
+			<div class="main-vban-wrap bg">
+				<div class="vb-swiper">
+					<div class="swiper">
+						<ul class="swiper-wrapper">
+							<li class="swiper-slide">
+								<div class="in">
+									<div class="inner">
+										<div class="text">
+											<h2 class="tit">GINI</h2>
+											<p class="txt">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding members: Daejeon (South Korea), Dortmund (Germany), Malaga (Spain), Montgomery County (MD, USA), and Seattle (USA).</p>
+											<a href="${pageContext.request.contextPath}/overview.do" class="btn primary lg">Learn More</a>
+										</div>
+									</div>
+									<div class="im">
+										<img src="${pageContext.request.contextPath}/img/pattern/content/img_main_content_visual_1.jpg" alt="GINI City01">										
+									</div>
+								</div>
+							</li>
+							<li class="swiper-slide">
+								<div class="in">
+									<div class="inner">
+										<div class="text">
+											<h2 class="tit">GINI</h2>
+											<p class="txt">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding members: Daejeon (South Korea), Dortmund (Germany), Malaga (Spain), Montgomery County (MD, USA), and Seattle (USA).</p>
+											<a href="${pageContext.request.contextPath}/overview.do" class="btn primary lg">Learn More</a>
+										</div>
+									</div>
+									<div class="im">
+										<img src="${pageContext.request.contextPath}/img/pattern/content/img_main_content_visual_2.jpg" alt="GINI City02">										
+									</div>
+								</div>
+							</li>
+							<li class="swiper-slide">
+								<div class="in">
+									<div class="inner">
+										<div class="text">
+											<h2 class="tit">GINI</h2>
+											<p class="txt">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding members: Daejeon (South Korea), Dortmund (Germany), Malaga (Spain), Montgomery County (MD, USA), and Seattle (USA).</p>
+											<a href="${pageContext.request.contextPath}/overview.do" class="btn primary lg">Learn More</a>
+										</div>
+									</div>
+									<div class="im">
+										<img src="${pageContext.request.contextPath}/img/pattern/content/img_main_content_visual_3.jpg" alt="GINI City03">										
+									</div>
+								</div>
+							</li>
+						</ul>
+						<div class="slider-buttonBox">
+							<div class="inner">
+								<span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+								<button type="button" class="swiper-button-prev" tabindex="0" aria-label="Previous slide" aria-controls="swiper-wrapper-8d0d580115f4854d">
+								<span class="sr-only">이전</span>
+								</button>
+								<button type="button" class="swiper-button-next" tabindex="0" aria-label="Next slide" aria-controls="swiper-wrapper-8d0d580115f4854d">
+									<span class="sr-only">다음</span>
+								</button>
+							</div>
+						</div>
+						<div class="swiper-indicator text-center">
+							<div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 1"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 2"></span><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 3" aria-current="true"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 4"></span></div>
+						</div>
+					</div>
+				</div>
+				<!-- 사용자별 바로가기 영역 추가 -->
+				<div></div>
+				<!-- //사용자별 바로가기 영역 추가 -->
+				<!-- 멤버 배너 영역 -->
+				<div class="member-swiper-wrap">
+					<div class="member-swiper">
+						<div class="inner">
+							<div class="swiper">
+								<ul class="swiper-wrapper">
+									<li class="swiper-slide">
+										<div class="left-box">
+											<h2 class="tit ico ico-location-2">Daejeon</h2>
+											<p class="sub-tit">city of Daejeon</p>
+											<p class="desc">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding memb</p>
+										</div>
+										<div class="right-box">
+											<p class="sub-tit01">Daedeok Innopolis</p>
+											<p class="sub-tit02">The Korea's Largest R&D Cluster</p>
+											<div class="member-img-box">
+												<img src="${pageContext.request.contextPath}/img/component/common/main_membe_daejeon01.png" alt="대전클러스터">
+												<img src="${pageContext.request.contextPath}/img/component/common/main_membe_daejeon02.png" alt="대전클러스터">
+											</div>
+										</div>
+									</li>
+									<li class="swiper-slide">
+										<div class="left-box">
+											<h2 class="tit ico ico-location">Dortmund</h2>
+											<p class="sub-tit">city of Dortmund</p>
+											<p class="desc">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding memb</p>
+										</div>
+										<div class="right-box">
+											<p class="sub-tit01">Competence Centres</p>
+											<p class="sub-tit02">6 Competence Centers: Over 200 Companies, 100,000 Square meters Technology Centre</p>
+											<div class="member-img-box">
+												<img src="${pageContext.request.contextPath}/img/component/common/membe_dortmund.png" alt="Competence Centres">
+											</div>
+										</div>
+									</li>
+									<li class="swiper-slide">
+										<div class="left-box">
+											<h2 class="tit ico ico-location">Dortmund222</h2>
+											<p class="sub-tit">city of Dortmund</p>
+											<p class="desc">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding memb</p>
+										</div>
+										<div class="right-box">
+											<p class="sub-tit01">Competence Centres</p>
+											<p class="sub-tit02">6 Competence Centers: Over 200 Companies, 100,000 Square meters Technology Centre</p>
+											<div class="member-img-box">
+												<img src="${pageContext.request.contextPath}/img/component/common/membe_dortmund.png" alt="Competence Centres">
+											</div>
+										</div>
+									</li>
+									<li class="swiper-slide">
+										<div class="left-box">
+											<h2 class="tit ico ico-location">Dortmund333</h2>
+											<p class="sub-tit">city of Dortmund</p>
+											<p class="desc">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding memb</p>
+										</div>
+										<div class="right-box">
+											<p class="sub-tit01">Competence Centres</p>
+											<p class="sub-tit02">6 Competence Centers: Over 200 Companies, 100,000 Square meters Technology Centre</p>
+											<div class="member-img-box">
+												<img src="${pageContext.request.contextPath}/img/component/common/membe_dortmund.png" alt="Competence Centres">
+											</div>
+										</div>
+									</li>
+									<li class="swiper-slide">
+										<div class="left-box">
+											<h2 class="tit ico ico-location">Dortmund444</h2>
+											<p class="sub-tit">city of Dortmund</p>
+											<p class="desc">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding memb</p>
+										</div>
+										<div class="right-box">
+											<p class="sub-tit01">Competence Centres</p>
+											<p class="sub-tit02">6 Competence Centers: Over 200 Companies, 100,000 Square meters Technology Centre</p>
+											<div class="member-img-box">
+												<img src="${pageContext.request.contextPath}/img/component/common/membe_dortmund.png" alt="Competence Centres">
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="swiper-indicator-box">
+								<div class="swiper-indicator text-center">
+									<div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 1"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 2"></span><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 3" aria-current="true"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 4"></span></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //멤버 배너 영역 -->
+			</div>
+			<!-- //비쥬얼 영역 -->
+			<!-- notice 영역 -->
+			<div class="inner notice">
+				<!-- tab-news 영역 -->
+				<div class="left-box">
+					<!-- tab-button 영역 -->
+					<ul class="tab-round">
+						<li><button type="button" class="btn-round btn-news active" onclick="newsOn()"><span>news</span></button></li>
+						<li><button type="button" class="btn-round btn-event" onclick="mediaOn()"><span>media</span></button></li>
+					</ul>
+					<!-- //tab-button 영역 -->
+					<!-- tab-cont 영역 -->
+					<div class="tab-cont">
+						<div class="tab-cont-in01 active">
+							<div class="notice-swiper-wrap">
+								<div class="notice-swiper">
+									<div class="inner">
+										<div class="swiper">
+											<ul class="swiper-wrapper news-cont">
+												<li class="swiper-slide">
+													<a href="">
+														<span class="tab-cont-txt">
+															<span class="cont-date">2025-05-09</span>
+															<span class="cont-txt">Discover the global smart cities of the future...Discover the global smart cities of the future...Discover the global smart cities of the future...Discover the global smart cities of the future...Discover the global smart cities of the future...</span>
+														</span>
+														<span class="tab-cont-img"><img src="${pageContext.request.contextPath}/img/component/common/cont_event.png" alt="지니행사"></span>
+													</a>
+												</li>
+												<li class="swiper-slide">
+													<a href="">
+														<span class="tab-cont-txt">
+															<span class="cont-date">2025-05-09</span>
+															<span class="cont-txt">222</span>
+														</span>
+														<span class="tab-cont-img"><img src="${pageContext.request.contextPath}/img/component/common/cont_event.png" alt="지니행사"></span>
+													</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-cont-in02">
+							<div class="notice-swiper-wrap">
+								<div class="notice-swiper">
+									<div class="inner">
+										<div class="swiper">
+											<ul class="swiper-wrapper">
+												<li class="swiper-slide">
+													<a href="">
+														<span class="tab-cont-txt">
+															<span class="cont-date">2025-05-09</span>
+															<span class="cont-txt">Discover the global smart cities of the future...</span>
+														</span>
+														<span class="tab-cont-img"><img src="${pageContext.request.contextPath}/img/component/common/cont_event.png" alt="지니행사"></span>
+													</a>
+												</li>
+												<li class="swiper-slide">
+													<a href="">
+														<span class="tab-cont-txt">
+															<span class="cont-date">2025-05-09</span>
+															<span class="cont-txt">222</span>
+														</span>
+														<span class="tab-cont-img"><img src="${pageContext.request.contextPath}/img/component/common/cont_event.png" alt="지니행사"></span>
+													</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- //tab-cont 영역 -->
+				</div>
+				<!-- //tab-news 영역 -->
+				<!-- news-list 영역 -->
+				<div class="right-box">
+					<div class="news-box nsTab-contents on">
+						<div class="news-list-wrap">
+							<div class="news-head">
+								<div class="news-head-date">
+									<strong class="date">19</strong>
+									<span class="month">2025.11</span> 
+								</div>	
+								<div class="news-head-txt">
+									<a href="">
+										<strong class="title" title="An update on the Global Innopolis Network Initiative (GINI) event."></strong>
+									</a>
+								</div>
+							</div>
+							<ul class="news-list">
+																
+							</ul>
+						</div>
+						<!-- <a href="" class="news-more"> <span>새소식 더보기</span></a> -->
+					</div>
+				</div>
+				<!-- //news-list 영역 -->
+			</div>
+			<!-- notice 영역 -->
+		</div>
+		
+	</div>
+	<!-- //컨테이너 영역 -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+
+
+		loadCalendarList()
+
+		// 캘린더 날짜 포맷
+		function formatDateToYYYYMMDD(date) {
+		  const yyyy = date.getFullYear();
+		  const mm = (date.getMonth() + 1).toString().padStart(2, '0');
+		  const dd = date.getDate().toString().padStart(2, '0');
+		  return `\${yyyy}-\${mm}-\${dd}`;
+		}
+		
+		// 캘린더 리스트 출력 함수
+		function loadCalendarList() {
+			// 오늘 날짜 
+			  const now = new Date();
+			const todayDay = now.getDate().toString().padStart(2, '0');
+			const todayMonth = `\${now.getFullYear()}.\${(now.getMonth() + 1).toString().padStart(2, '0')}`;
+			
+			document.querySelector(".news-head-date .date").textContent = todayDay;
+			document.querySelector(".news-head-date .month").textContent = todayMonth;
+
+			
+		    const todayStr = formatDateToYYYYMMDD(now);
+		  const startDateObj = new Date(now.getFullYear(), now.getMonth(), 1); 
+		  const endDateObj = new Date(now.getFullYear(), now.getMonth() + 1, 0); 
+		
+		  const startDateStr = formatDateToYYYYMMDD(startDateObj);
+		  const endDateStr = formatDateToYYYYMMDD(endDateObj);
+		
+		  const data=  {
+				  startDate: startDateStr,
+			      endDate: endDateStr
+				  
+				  
+				  
+		  }
+	  
+	  
+	  axios.post(`${pageContext.request.contextPath}/calendar/mainlistAjax.do`,data )
+	  .then(function(response) {
+	    const res = response.data
+	    const container = document.querySelector(".news-list");
+	    container.innerHTML = '';
+	    const todaycont = document.querySelector(".news-head-txt");
+	    todaycont.innerHTML = '';
+	
+	    console.log("res",response)
+	    if (!Array.isArray(res) || res.length === 0) {
+	      container.innerHTML = '<li class="li"><p>There are no registered schedules.</p></li>';
+		  const text = 'There are no ongoing events.';
+    	  const a = document.createElement("a");
+    	  a.className = "a";
+    	  a.innerHTML =
+    	    '<a>' + text + '</a>';
+    	  todaycont.appendChild(a);  
+	      return;
+	    }
+
+
+	    const now = new Date();
+	    const nowStr = formatDateToYYYYMMDD(now);
+
+	    // ongoing 일정 필터
+	    const ongoingEvents = res.filter(function(event) {
+	      const start = new Date(event.startDatetime || event.start);
+	      const end = new Date(event.endDatetime || event.end);
+	      return start <= now && now <= end;
+	    });
+
+	    
+	    if (ongoingEvents.length > 0) {
+	    	  const a = document.createElement("a");
+	    	  a.className = "a";
+	    	  a.innerHTML =
+	    	    '<a onclick="location.href=\'' + `${pageContext.request.contextPath}` + '/calendar/detail.do?id=' + ongoingEvents[0].id + '\'">' +
+	    	    ongoingEvents[0].eventTitle +
+	    	    '</a>';
+	    	  todaycont.appendChild(a);
+	    	} else{
+	    	  const text = 'There are no ongoing events.';
+	    	  const a = document.createElement("a");
+	    	  a.className = "a";
+	    	  a.innerHTML =
+	    	    '<a>' + text + '</a>';
+	    	  todaycont.appendChild(a);  
+	    	}
+	    console.log("res res:", res.length);
+	    
+	    
+	    if(res.length > 0){
+	    	
+		    for (let i = 0; i < res.length && i < 4; i++) {
+		    	  const event = res[i];
+		    	  const li = document.createElement("li");
+		    	  li.className = "li";
+	
+		    	  console.log("event", event);
+		    	  const startDate = new Date(event.startDatetime || event.start).toLocaleDateString();
+		    	  li.innerHTML =
+		    	    '<a onclick="location.href=\'' + '${pageContext.request.contextPath}' + '/calendar/detail.do?id=' + event.id + '\'">' +
+		    	    '<span class="one-line" title="' + event.eventTitle + '">' +
+		    	    event.eventTitle + '</span>' +
+		    	    '<span class="date">' + startDate + '</span>' +
+		    	    '</a>';
+	
+		    	  container.appendChild(li);
+		    	}
+	    	
+	    	
+	    }else{
+	    	 const li = document.createElement("news-list");
+	    	  li.className = "li";
+	    	  const text = 'There is no schedule'
+	    	  li.innerHTML =
+		    	    '<span class="one-line" title="">' +
+		    	    text + '</span>' ;
+	    }
+
+	  })
+	  
+	  .catch(function(error) {
+	    console.error('일정 목록 불러오기 실패:', error);
+	  });
+	}
+
+	
+		
+		
+		// 뉴스 리스트 출력 함수 
+		newsOn();
+		
+		function newsOn(currentPage = 1, keyword = '') {
+			  const boardMasterCode = window.boardMasterCode || 'N01';
+			  const data = { boardMasterCode: boardMasterCode };
+
+			  axios.post(`${pageContext.request.contextPath}/board/listAjax.do`, data)
+			    .then(function (res) {
+			    	
+			      const list = res.data.content;
+			      const contextPath = '${pageContext.request.contextPath}';
+
+			      // 리스트 초기화
+			      const swiperWrapper = document.querySelector(".news-cont"); 
+			      swiperWrapper.innerHTML = ''; 
+
+			      if (list.length === 0) {
+			        swiperWrapper.innerHTML = '<li class="swiper-slide"><p>There are no posts.</p></li>';
+			        return;
+			      }
+
+			      // 슬라이드 갯수 4개 제한
+			      const slicedList = list.slice(0, 4);
+
+			      slicedList.forEach(function(item) {
+			        const title = item.title || '';
+			        const regDate = item.regDate || '';
+			        const detailUrl = contextPath + "/board/detail.do?boardCode=" + item.boardCode;
+
+
+					// 썸네일 경로 
+					let thumbnailPath = '/img/component/common/cont_event.png';
+					if (item.fileGroupVO && item.fileGroupVO.fileDetailVOList) {
+					  const thumb = item.fileGroupVO.fileDetailVOList.find(function(f) {
+					    return f.fileType === 'THUMBNAIL';
+					  });
+					  if (thumb && thumb.fileSaveLocate) {
+					    thumbnailPath = contextPath + thumb.fileSaveLocate.replace(/\\/g, '/');
+					  }
+					}
+
+			        // 슬라이드  생성
+			        const slideHtml =
+			          '<li class="swiper-slide" style="width:576px;">' +
+			            '<a href="' + detailUrl + '">' +
+			              '<span class="tab-cont-txt">' +
+			                '<span class="cont-date">' + regDate + '</span>' +
+			                '<span class="cont-txt">' + title + '</span>' +
+			              '</span>' +
+			              '<span class="tab-cont-img"><img src="' + thumbnailPath + '" alt="지니행사"></span>' +
+			            '</a>' +
+			          '</li>';
+
+			        swiperWrapper.insertAdjacentHTML('beforeend', slideHtml);
+			      });
+
+
+			    });
+			}
+		
+		// 미디어 리스트 출력 함수 
+		function mediaOn(currentPage = 1, keyword = '') {
+			  const boardMasterCode = window.boardMasterCode || 'N03';
+			  
+			  const data = { boardMasterCode: boardMasterCode };
+			  
+			  axios.post(`${pageContext.request.contextPath}/board/listAjax.do`, data)
+			    .then(function (res) {
+			    	
+			      const list = res.data.content;
+			      const contextPath = '${pageContext.request.contextPath}';
+
+			      // 리스트 초기화
+			      const swiperWrapper = document.querySelector(".news-cont");
+			      swiperWrapper.innerHTML = ''; 
+
+			      if (list.length === 0) {
+			        swiperWrapper.innerHTML = '<li class="swiper-slide"><p>There are no posts.</p></li>';
+			        return;
+			      }
+
+			      // 슬라이드 갯수 제한 4개 
+			      const slicedList = list.slice(0, 4);
+
+			      slicedList.forEach(function(item) {
+			        const title = item.title || '';
+			        const regDate = item.regDate || '';
+			        const detailUrl = contextPath + "/board/detail.do?boardCode=" + item.boardCode;
+
+
+					// 썸네일 경로 
+					let thumbnailPath = '/img/component/common/cont_event.png';
+					if (item.fileGroupVO && item.fileGroupVO.fileDetailVOList) {
+					  const thumb = item.fileGroupVO.fileDetailVOList.find(function(f) {
+					    return f.fileType === 'THUMBNAIL';
+					  });
+					  if (thumb && thumb.fileSaveLocate) {
+					    thumbnailPath = contextPath + thumb.fileSaveLocate.replace(/\\/g, '/');
+					  }
+					}
+
+
+			        // 슬라이드 생성
+			        const slideHtml =
+			          '<li class="swiper-slide" style="width:576px;">' +
+			            '<a href="' + detailUrl + '">' +
+			              '<span class="tab-cont-txt">' +
+			                '<span class="cont-date">' + regDate + '</span>' +
+			                '<span class="cont-txt">' + title + '</span>' +
+			              '</span>' +
+			              '<span class="tab-cont-img"><img src="' + thumbnailPath + '" alt="지니행사"></span>' +
+			            '</a>' +
+			          '</li>';
+
+			        swiperWrapper.insertAdjacentHTML('beforeend', slideHtml);
+			      });
+
+
+			    });
+			}
+		
+		
+	</script>

@@ -1,0 +1,297 @@
+package kr.go.distep.main.service.impl;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.UUID;
+
+import javax.annotation.Resource;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import egovframework.rte.psl.dataaccess.util.EgovMap;
+import kr.go.distep.cmmn.util.Util;
+import kr.go.distep.main.service.MainService;
+
+@Service("mainService")
+public class MainServiceImpl implements MainService{
+	
+	/** logger */
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
+	
+	@Resource(name="mainMapper")
+	private MainMapper mainMapper;
+	
+	@Resource(name = "crProperties")
+	Properties fileUploadProperties;
+	
+	@Autowired
+    private JavaMailSender mailSender;
+	
+	
+	@Override
+	public String selectUserNm(String ssoId) throws SQLException, IOException {
+		return mainMapper.selectUserNm(ssoId);
+	}
+	
+	/** 게시판 등록 **/
+	@Override
+	public void insertKabBoard(HashMap<String, Object> map) throws SQLException, IOException {
+		mainMapper.insertKabBoard(map);
+	}
+	
+	/** 게시판 수정 **/
+	@Override
+	public void updateKabBoard(HashMap<String, Object> map) throws SQLException, IOException {
+		mainMapper.updateKabBoard(map);
+	}
+	
+	/** 게시판 삭제 **/
+	@Override
+	public void deleteKabBoard(HashMap<String, Object> map) throws SQLException, IOException {
+		
+		//게시판삭제
+		mainMapper.deleteKabBoard(map);
+		String bbsId = (String) map.get("bbsId");
+		//댓글 삭제
+		mainMapper.updateCommentDeleteAll(bbsId);
+		//첨부파일삭제
+		String path = Util.getDivProValue("attachFile");
+		String delFile = path + (String) map.get("fileSaveName");
+		File file = new File(delFile); //파일경로
+		if( file.exists() ){ 
+			if(file.delete()){logger.debug("파일삭제 성공");}
+		}else{ logger.debug("파일이 존재하지 않습니다."); 
+			
+		}
+		// DB이력 지우기
+		mainMapper.deleteKabAttachFile(map);
+	}
+	
+	/** 게시판 목록 **/
+	@Override
+	public List<EgovMap> selectBoardList(Map param) throws SQLException, IOException {
+		return mainMapper.selectBoardList(param);
+	}
+
+	/** 게시판 COUNT **/
+	@Override
+	public int selectBoardListCount(Map param) throws SQLException, IOException {
+		return mainMapper.selectBoardListCount(param);
+	}
+	
+	/** 조회수 수정 **/
+	@Override
+	public void updateBbsHits(String bbsId) throws SQLException, IOException {
+		mainMapper.updateBbsHits(bbsId);
+	}
+
+	/** 게시글 상세 **/
+	@Override
+	public EgovMap selectBoardDetail(Map param) throws SQLException, IOException {
+		return mainMapper.selectBoardDetail(param);
+	}
+	
+	/** 덧글 목록 **/
+	@Override
+	public List<EgovMap> selectCommentList(Map param) throws SQLException, IOException {
+		return  mainMapper.selectCommentList(param);
+	}
+
+	/** 덧글 등록 **/
+	@Override
+	public void insertComment(Map param) throws SQLException, IOException {
+		mainMapper.insertComment(param);
+	}
+	
+	/** 덧글 삭제 **/
+	@Override
+	public void updateCommentDeleteAt(String commentId) throws SQLException, IOException {
+		mainMapper.updateCommentDeleteAt(commentId);
+	}
+	
+	/** 덧글 수정 **/
+	@Override
+	public void updateComment(Map param) throws SQLException, IOException {
+		mainMapper.updateComment(param);
+	}
+	
+	/** 좋아요 등록 **/
+	@Override
+	public void insertKabLike(Map param) throws SQLException, IOException {
+		mainMapper.insertKabLike(param);
+	}
+	
+	/** 좋아요 삭제 **/
+	@Override
+	public void deleteKabLikeOne(Map param) throws SQLException, IOException {
+		mainMapper.deleteKabLikeOne(param);
+	}
+	
+	/** 게시판 삭제에 따른 좋아요 삭제 **/
+	@Override
+	public void deleteKabLikeAll(HashMap<String, Object> map) throws SQLException, IOException {
+		mainMapper.deleteKabLikeAll(map);
+	}
+	
+	/** 좋아요 체크 **/
+	@Override
+	public int selectChkKabLike(Map param) throws SQLException, IOException {
+		return mainMapper.selectChkKabLike(param);
+	}
+	
+	/** 첨부파일 등록 **/
+	@Override
+	public void insertKabAttachFile(HashMap<String, Object> map, MultipartHttpServletRequest multipartRequest) throws SQLException, IOException {
+		Map<String, List<MultipartFile>> fileMap = multipartRequest.getMultiFileMap();
+		List<MultipartFile> files = fileMap.get("fileUpload");
+		try {
+			fileUpload(files, map);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/** 첨부파일 목록 **/
+	@Override
+	public List<EgovMap> selectKabAttachFileList(String bbsId) throws SQLException, IOException {
+		return  mainMapper.selectKabAttachFileList(bbsId);
+	}
+
+	/** 첨부파일 삭제 **/
+	@Override
+	public void deleteKabAttachFile(HashMap<String, Object> map) throws SQLException, IOException {
+		//첨부파일삭제
+		String path = Util.getDivProValue("attachFile");
+		String delFile = path + (String) map.get("fileSaveName");
+		File file = new File(delFile); //파일경로
+		if( file.exists() ){ 
+			if(file.delete()){logger.debug("파일삭제 성공");}
+		}else{ logger.debug("파일이 존재하지 않습니다."); 
+			
+		}
+		// DB이력 지우기
+		mainMapper.deleteKabAttachFile(map);
+	}
+	
+	void fileUpload(List<MultipartFile> files, HashMap<String, Object> map) throws IOException, Exception {
+		for(int i = 0; files.size() > i; i++) {
+			MultipartFile fileNames = files.get(i);
+
+			String orginFileNm = fileNames.getOriginalFilename();
+			
+			if(orginFileNm == null || orginFileNm == "") continue;
+			
+			// 파일 명 UUID 생성
+			UUID uuid = UUID.randomUUID();
+			String newFileName = uuid.toString();
+			newFileName = UUID.randomUUID().toString() + Util.getFileExtension(orginFileNm);  
+			
+			long fileSize = fileNames.getSize();
+			String path = Util.getDivProValue("attachFile");
+
+			logger.debug("파일경로 : " + path);
+			
+			String saveFile = path + newFileName;
+			System.out.println("orginFileNm : " + orginFileNm + "(" + fileSize + ")");
+			
+		     File dir = new File(path);
+		        
+		     if(!dir.exists()) {
+		    	 dir.mkdirs();
+		     }
+			
+			try {
+				if(map.get("cmd").equals("update")) {
+					String delFile = path + (String) map.get("oldFileSaveNm");
+					
+					//파일지우기
+					File file = new File(delFile); //파일경로
+	    			if( file.exists() ){ 
+	    				if(file.delete()){logger.debug("파일삭제 성공");}
+	    			}else{ logger.debug("파일이 존재하지 않습니다."); 
+		    			
+	    			}
+	    			// DB이력 지우기
+	    			mainMapper.deleteKabAttachFile(map);
+	    			//파일저장
+					fileNames.transferTo(new File(saveFile));
+					logger.debug("saveFile : " + saveFile);
+					
+				}else {
+					//파일지우기
+					File file = new File(saveFile); //파일경로
+	    			if( file.exists() ){ 
+	    				if(file.delete()){logger.debug("파일삭제 성공");}
+	    			}else{ logger.debug("파일이 존재하지 않습니다."); 
+		    			
+	    			}
+	    			//파일저장
+					fileNames.transferTo(new File(saveFile));
+					logger.debug("saveFile : " + saveFile);
+				}
+				
+    			
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			map.put("sn", "1");
+			map.put("attachFileNm", orginFileNm);
+			map.put("attachFileSaveNm", newFileName);
+			map.put("attachFileSz", String.valueOf(fileSize));
+			
+			/* 첨부파일정보 저장 */
+			mainMapper.insertKabAttachFile(map);
+		}
+	}
+
+	@Override
+	public boolean sendMailWithAttachments(String from, String to, String subject, String content, String userName, MultipartFile[] attachments) {
+	    try {
+	        MimeMessage message = mailSender.createMimeMessage();
+	        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+	        helper.setFrom(from, userName);
+	        helper.setTo(to);
+	        helper.setSubject(subject);
+	        helper.setText("user email : "+from+"<br/><br/>"+content, true);  // true: HTML 가능
+
+	        // 여러 첨부파일 처리
+	        if (attachments != null) {
+	            for (MultipartFile file : attachments) {
+	                if (!file.isEmpty()) {
+	                    String fileName = file.getOriginalFilename();
+	                    helper.addAttachment(MimeUtility.encodeText(fileName, "UTF-8", null), file);
+	                }
+	            }
+	        }
+
+	        mailSender.send(message);
+	        return true;
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
+
+	@Override
+	public List<HashMap<String, Object>> getMenuList() {
+		return mainMapper.selectMenuList();
+	}
+}

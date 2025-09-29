@@ -1,0 +1,58 @@
+package kr.go.distep.user.service;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import kr.go.distep.user.vo.UserVO;
+
+public interface UserService {
+	
+	void register(UserVO userVO) throws IOException, Exception;
+
+	boolean checkUserId(String userId) throws IOException, Exception;
+
+	UserVO findByUserId(String userId) throws IOException, Exception;
+
+	List<UserVO> getUserList(int offset,int size) throws IOException, Exception;
+
+	int getUserCount() throws IOException, Exception;
+
+	void updateUserRole(String id, String appr_yn);
+
+	void grantAdminRole(String id);
+
+	String findUserIdByNameAndEmail(String name, String email);
+	
+	UserVO findUserByIdAndEmail(String userId, String email);
+	
+	void updateUserPassword(String userId, String encodedPassword);
+	
+	void updateUser(UserVO userVO);
+
+	void updateUserType(String id, String role);
+
+	void deleteUser(String id);
+
+	List<HashMap<String, Object>> getBoardPermissionList();
+
+    void upsertBoardAuth(UserVO userVO);
+
+	int updateBoardMasterName(String boardMasterCode, String boardMasterName);
+
+	int updateBoardUseYn(String boardMasterCode, String boardUseYn);
+
+	void removeAdminRole(String id);
+
+
+	String getBoardMasterCodeByLink(String boardLink);
+
+
+	String getBoardReadAuth(HashMap<String, String> authParam);
+
+	boolean checkEmail(String email) throws SQLException, IOException;
+
+	boolean checkUsername(String username) throws SQLException, IOException;
+}

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.go.distep.cmmn.service.impl.CmmnMapper">
+
+	<select id="selectUserNm" parameterType="String" resultType="string">
+		SELECT PSN_NM
+		FROM TH_MEMBER
+		WHERE USER_ID = #{userId}
+	</select>
+
+	<!-- 게시판 일련번호 조회 -->
+	<select id="selectSequenceBltnbrdSn" resultType="int">
+		SELECT IFNULL(MAX(bltnbrd_sn), 0) + 1 AS NEXTVAL FROM BLTNB_RD_TABLE
+	</select>
+
+	<!-- 첨부파일 일련번호 조회 -->
+	<select id="selectSequenceAttachFileSn" resultType="int">
+		SELECT IFNULL(MAX(attach_file_sn), 0) + 1 AS NEXTVAL FROM ATTACH_FILE_TABLE
+	</select>
+
+	<!-- 분석데이터 기타 알림 메세지 -->
+	<insert id="insertEtcUserAppldataMsg" parameterType="String">
+		INSERT INTO SMS ( CMP_MSG_ID, CMP_USR_ID, ODR_FG, SMS_GB, USED_CD, MSG_GB, WRT_DTTM, SND_DTTM, SND_PHN_ID, RCV_PHN_ID, CALLBACK, SND_MSG, SMS_ST, USER_ID )
+		SELECT CONCAT('TA', CMP_MSG_ID + 1), CMP_USR_ID, ODR_FG, SMS_GB, USED_CD, MSG_GB, WRT_DTTM, SND_DTTM, SND_PHN_ID, RCV_PHN_ID, CALLBACK, SND_MSG, SMS_ST, USER_ID 
+		FROM (
+			SELECT 
+				IFNULL(MAX(CAST(SUBSTRING(CMP_MSG_ID, 3) AS UNSIGNED)), CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), '0000000000')) AS CMP_MSG_ID,
+				'TA000' AS CMP_USR_ID,
+				'2' AS ODR_FG,
+				'1' AS SMS_GB,
+				'00' AS USED_CD,
+				'M' AS MSG_GB,
+				DATE_FORMAT(NOW(), '%Y%m%d%H%i%s') AS WRT_DTTM,
+				DATE_FORMAT(NOW(), '%Y%m%d%H%i%s') AS SND_DTTM,
+				'042-869-1115' AS SND_PHN_ID,
+				C.CP_NO AS RCV_PHN_ID,
+				'042-869-1115' AS CALLBACK,
+				#{msg} AS SND_MSG,
+				'0' AS SMS_ST,
+				C.USER_ID AS USER_ID
+			FROM TH_MEMBER C
+			WHERE user_id IN ('ntopshogun')
+		) AS SUB
+	</insert>
+
+</mapper>

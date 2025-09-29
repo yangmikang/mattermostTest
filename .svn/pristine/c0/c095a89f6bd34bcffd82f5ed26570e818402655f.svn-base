@@ -1,0 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<head><title>Temporary Password</title></head>
+<body>
+<h2>Your temporary password has been generated</h2>
+<p><strong>Temporary Password:</strong> ${tempPassword}</p>
+<p>Please log in and change your password immediately.</p>
+<a href="login.do">Go to Login</a>
+</body>
+</html>

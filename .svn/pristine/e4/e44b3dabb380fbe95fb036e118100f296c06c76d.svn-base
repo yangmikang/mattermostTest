@@ -1,0 +1,26 @@
+# jdni url
+## tomcat
+#ntis.jndi.url = java:comp/env/jdbc/oracle_KNTIS_cr
+## \uac1c\ubc1c\uc11c\ubc84
+distep.jndi.url = java:comp/env/jdbc/oracle_distep
+## \uc6b4\uc601\uc11c\ubc84
+#ntis.jndi.url = jdbc/oracle_KNTIS_ai
+
+
+# windows NT\uc77c \uacbd\uc6b0  
+file.upload.path=C:\\data1\\upload\\recommand
+
+file.learnd.upload.path=C:\\data1\\upload\\learndata
+ 
+# Unix\uc77c \uacbd\uc6b0
+#file.upload.path=/usr/file/upload
+
+# attachFile.src
+attachFile.real=/data1/home/as/file/
+attachFile.local=C:\\KabUpload\\
+
+
+#*******************************************************************************
+# real,  dev
+#*******************************************************************************
+server.devision=local

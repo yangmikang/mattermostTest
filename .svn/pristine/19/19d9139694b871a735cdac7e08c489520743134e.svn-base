@@ -1,0 +1,13 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/jsp/cmmn/tagLib.jsp" %>
+<script>
+</script> 
+<!-- 로그인 헤드 -->
+<div class="admin_logo">
+	<div class="slogon">header</div>
+	<button type="button" class="" title="로그인" onclick="alert('로그인');"><span>로그인</span></button>
+	<button type="button" class="" title="회원가입" onclick="location.href='/distep/member/join.do'"><span>회원가입</span></button>
+
+</div>
+ 

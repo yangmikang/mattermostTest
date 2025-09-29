@@ -1,0 +1,22 @@
+package kr.go.distep.main.service;
+
+import java.util.List;
+import java.util.Map;
+
+import kr.go.distep.main.service.vo.BoardVo;
+
+public interface BoardMasterService {
+	//  리스트
+		public List<BoardVo>list(Map<String, Object> map);
+		
+		public int getTotal(Map<String, Object> map);
+
+		public BoardVo detail(BoardVo boardVo);
+
+		public int boardInsert(BoardVo boardVo);
+
+		public int updateBd(BoardVo boardVo);
+
+		public int deleteBd(BoardVo boardVo);
+
+}

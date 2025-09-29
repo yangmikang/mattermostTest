@@ -1,0 +1,33 @@
+package kr.go.distep.calendar.service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import kr.go.distep.calendar.vo.CalendarVO;
+
+public interface CalendarService {
+    int registerCalendar(CalendarVO calendar) throws Exception;
+
+    int modifyCalendar(CalendarVO calendar) throws Exception;
+
+    int removeCalendar(CalendarVO calendar) throws Exception;
+
+    CalendarVO getCalendar(int id) throws Exception;
+
+    List<CalendarVO> getCalendarList() throws Exception;
+
+    int getTotal(Map<String, Object> getTotal);
+
+    List<CalendarVO> list(Map<String, Object> map);
+
+    int updateTitle(CalendarVO vo);
+
+    int updateDates(CalendarVO vo);
+
+    CalendarVO detail(CalendarVO calendar);
+
+	List<CalendarVO> mainlist(Map<String, Object> map);
+	
+	public String getBoarUpdateAuth(HashMap<String, String> authParam) ;
+}

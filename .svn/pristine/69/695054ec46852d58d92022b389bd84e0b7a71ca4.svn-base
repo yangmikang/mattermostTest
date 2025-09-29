@@ -1,0 +1,79 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<!-- 컨테이너 영역 -->
+		<div id="container">
+			<div class="page-title-wrap visual img-about">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+				<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+					<ol class="breadcrumb">
+						<li class="home"><a href="#" class="txt">Home</a></li>
+						<li><a href="#" class="txt">About GINI</a></li>
+						<li><a href="#" class="txt">Logo</a></li>
+					</ol>
+				</nav>
+				<!-- breadcrumb -->
+				 <!-- 페이지 타이틀 영역 -->
+					<div class="visual-area">
+						<h2 class="h-tit">Logo</h2>
+						<p>GINI Logo Concept</p>
+					</div>
+					<!-- //페이지 타이틀 영역 -->
+				</div>
+			</div>
+
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+							
+				<!-- 섹션 컨텐츠 -->
+				 <div class="gini-cont-wrap gap20 cont-box cont-logo">
+					<div class="gini-cont-box">
+						<!-- <h3 class="area-tit">GINI Logo</h3> -->
+						<div class="row cont100">
+							<!-- cont-left -->
+							<div class="cont-left cont50">
+								<div class="area-group">
+									<!-- 원본이미지 -->
+									<div class="logo-box">
+										<img src="${pageContext.request.contextPath}/img/component/common/logo-horizontal.png" alt="GINI Logo Horizontal">
+									</div>
+									<div class="logo-box">
+										<img src="${pageContext.request.contextPath}/img/component/common/logo-vertical.png" alt="GINI Logo Vertical">
+									</div>
+									<div class="btn-wrap align-center">
+										<button class="btn md">JEPG Download<i class="ico ico-down"></i></button>
+										<button class="btn md">PNG Download<i class="ico ico-down"></i></button>
+									</div>
+								</div>
+							</div>
+							<!-- //cont-left -->
+							<div class="cont-right cont50">
+								<div class="area-group">
+									<h4 class="sub-tit">Symbol Mark</h4>
+									<p class="desc">The scientific collaboration between cities is expressed in three lines, symbolizing how science and technology travel between cities, creating synergy to accomplish tasks. The colors: Green, Yellow, and Blue are a combination that encompasses the theme colors of each government's symbol.</p>
+									<ul class="list-num">
+										<li><span class="color-box color1"></span><span>C: 0, M: 49, Y: 84, K: 4</span></li>
+										<li><span class="color-box color2"></span><span>C: 97, M: 28, Y: 0, K: 17</span></li>
+										<li><span class="color-box color3"></span><span>C: 47, M: 0, Y: 32, K: 34</span></li>
+									</ul>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					
+
+					
+				 </div>
+				<!-- //섹션 컨텐츠 -->
+
+					
+
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 -->
+</html>

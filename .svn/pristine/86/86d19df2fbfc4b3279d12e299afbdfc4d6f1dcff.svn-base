@@ -1,0 +1,110 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<!-- 컨테이너 영역 -->
+		<div id="container">
+
+			<div class="page-title-wrap visual img-members">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Network</a></li>
+							<li><a href="#" class="txt">City of Seattle</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<!-- 페이지 타이틀 영역 -->
+					<div class="visual-area">
+						<h2 class="h-tit">City of Seattle</h2>
+						<p>Members</p>
+					</div>
+				<!-- //페이지 타이틀 영역 -->
+				</div>
+			</div>  
+			
+
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				
+				<!-- 섹션 컨텐츠 -->
+				 <div class="gini-cont-wrap gap20 cont-box cont-network">
+					<div class="gini-cont-box">
+						<h3 class="area-tit ico ico-location-2"><a href=""></a>City of Seattle</h3>
+						<!-- 독일 : ico-germ, 스페인 : ico-span, 미국 : ico-eng, 프랑스 : .ico-fren, 캐나다 : .ico-canada, 대만 : .ico-taiwan -->
+						<div class="row cont100">
+							<div class="cont-left cont50 memb_view">
+								<div class="city-view-box">
+									<div class="city-view-box-in">
+										<div class="city-view-ico">
+											<i class="item-ico ico-eng"></i>
+										</div>
+										<div class="city-view-img-box">
+											<span class="city-view-img"><img src="${pageContext.request.contextPath}/img/component/common/membe_seattle_view.jpg" alt=""></span>  
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="cont-right cont50">
+								<div class="tbl_wrap">
+									<ul class="list-tableType type2">
+								<li><span class="title">Administration</span><span class="value">City of Seattle, Washington, USA</span></li>
+							    <li><span class="title ico-population">Population</span><span class="value">755,078 (City) / 4,044,837 (Metropolitan Area, 2023)</span></li>
+							    <li><span class="title ico-grdp">GRDP</span><span class="value">$517.8 billion (Metropolitan Area, 2022)</span></li>
+							    <li><span class="title ico-area">Land Area</span><span class="value">83.99 square miles (217.3 km², City) / 6,308.67 square miles (Metropolitan Area)</span></li>
+							    <li><span class="title">Key Industries</span>
+								    <span class="value">
+								      Diversified economy with leading technology (Amazon, Microsoft), aerospace (Boeing), Healthcare & Life Sciences (Fred Hutchinson Cancer Center) and maritime trade industries.
+								    </span>
+							 	 </li>
+							  <li><span class="title ico-education">Education & Research</span>
+							    <span class="value">
+							      University of Washington (top public research university), Allen Institute for AI, Fred Hutchinson Cancer Research Center.
+							    </span>
+							  </li>
+							</ul>
+								</div>
+							</div>	
+						</div>
+						<div class="bg-imgType type02">
+							<div class="txt-box outline">
+									<h4 class="outline-tit">Strategic Industries</h4>
+									<p class="outline-txt">
+										<ol class="list-num">
+									<li>Technology: A hub of cloud computing (AWS, Microsoft Azure), e-commerce (Amazon), and AI (Allen Institute for AI), cleantech (top 10 Metro and #4 emerging cleantech hub), and biotech (top 10 cluster in the US).</li>
+									<li>Aerospace: Home to aircraft production (Boeing), space exploration (Blue Origin), and sustainable aviation R&D.</li>
+									<li>Healthcare and Life Sciences: A center of excellence in global health, biotech, and digital health; anchored by the Gates Foundation, Fred Hutchinson Center, and University of Washington Medical Center. The Nobel Prize was recently awarded to Dr. David Baker of the University of Washington’s Institute of Protein Design.</li>
+								</ol>
+								</p>
+							</div>
+						</div>
+						<div class="bg-imgType type02">
+							<div class="txt-box outline" style="margin-top: 30px; text-align: center;">
+							<h4 class="outline-tit">Seattle Tech Scene</h4>  
+							<img src="${pageContext.request.contextPath}/img/component/common/membe_seattle.png" alt="seattle" style="height: 600px; width: 800px;">
+							</div>
+						</div>
+<!-- 						<div class="bg-color-box">  -->
+<!-- 							<div class="network-align txt-box outline"> -->
+<!-- 							<h4 class="outline-tit-black">Seattle Tech Scene</h4> -->  
+<!-- 							<div class="row cont100"> -->
+<!-- 								<div class="cont-left cont50">  -->
+<!-- 									<div class="img-box member-map"> -->
+<%-- 										<img src="${pageContext.request.contextPath}/img/component/common/membe_seattle.png" alt="seattle"> --%>
+										
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+					</div>
+				 </div>
+				<!-- //섹션 컨텐츠 -->
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 -->
+</html>

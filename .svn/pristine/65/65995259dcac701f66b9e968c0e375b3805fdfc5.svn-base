@@ -1,0 +1,367 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/jsp/cmmn/tagLib.jsp" %>
+<script>
+	$(function(){
+		//비어있는 대댓글창 삭제
+		var arr = $(".Re_re");
+		$.each(arr, function(i, item){
+			if($(this).html().trim() == ""){
+				$(this).remove();
+			}
+		});
+		
+		//글자수 실시간
+		$("#commentArea").keyup(function(e){
+			var cnt = $(this).val().length;
+			$("#commentCnt").html(cnt);
+			
+			if(cnt > 200){
+				$("#commentCnt").css('color','red');
+			}else{
+				$("#commentCnt").css('color','#0099a2');
+			}
+		});
+	});
+	
+	//목록으로
+	function goList(){
+		$("#boardForm").submit();
+	}
+	
+	//답글 버튼 클릭
+	function writeRecomment(node, commentId){
+		$(".reWrite").remove();
+		$(".updateWrite").remove();
+		var userName = "${ssUsr.ssoUserNm}";
+		var html = '<div class="reWrite"><div class="write"><dl><dt>'+userName+'</dt><dd class="textarea"><textarea name="reComment" cols="" rows="" title="댓글입력하는영역" aria-label="댓글입력하는영역" style="outline: none;" onkeyup="reCommentKeyup();" id="reCommentArea"></textarea></dd></dl><p class="TextCount"><strong id="reCommentCnt">0</strong> / <span>200</span></p></div><div class="btn_grp ar"><a href="javascript:writeComment(\'reCommentArea\',\''+commentId+'\');" class="btn Ty01">보내기(Write)</a></div></div>';
+		$(node).parents('dd').parents('dl').append(html);
+	}
+	
+	//리덧글 글자수
+	function reCommentKeyup(){
+		var cnt = $("#reCommentArea").val().length;
+		$("#reCommentCnt").html(cnt);
+		
+		if(cnt > 200){
+			$("#reCommentCnt").css('color','red');
+		}else{
+			$("#reCommentCnt").css('color','#0099a2');
+		}
+	}
+	
+	//덧글 작성
+	function writeComment(id, parentCommentId){
+		var value = $("#"+id).val();
+		
+		if(value.trim() == ""){
+			alert("댓글 내용을 입력하세요.");
+			return false;
+		}
+		
+		if(value.length > 200){
+			alert("댓글은 200자를 넘을 수 없습니다.");
+			return false;
+		}
+		
+		$("#commentCon").val(value);
+		$("#parentCommentId").val(parentCommentId);
+		
+		$("#commentForm").submit();
+	}
+	
+	//게시글 수정
+	function fn_moveUpdate(){
+		var like_cnt = $("#likeCnt").html().trim();
+		if(like_cnt <= 0){
+			$('#boardViewInfoForm').submit();
+		}else{
+			alert("좋아요가 하나 이상 등록된 게시글은 수정할 수 없습니다.");
+			return false;
+		}
+	}
+	
+	function fn_moveDelete(){
+		$('#boardViewInfoForm').attr('action',"<c:url value='/delete.do'/>");
+		$('#boardViewInfoForm').submit();
+	}
+	
+	//덧글 삭제
+	function deleteComment(commentId){
+		if(confirm("댓글을 삭제하시겠습니까?")){
+			$("#commentId").val(commentId);
+			$("#commentForm").attr('action', "<c:url value='/commentDelete.do'/>");
+			$("#commentForm").submit();
+		}else{
+			return false;
+		}
+	}
+	
+	//덧글 수정박스
+	function updateCommentBox(commentId){
+		$(".reWrite").remove();
+		$(".updateWrite").remove();
+		var con = $("#comment_"+commentId).html();
+		var replyHtml = $("#comment_"+commentId).parents('p').parents('dd').html();
+		var userName = "${ssUsr.ssoUserNm}";
+		var html = '<div class="updateWrite" id="updateBox_'+commentId+'"><div class="write"><dl><dt>댓글 수정</dt><dd class="textarea"><textarea name="reComment" cols="" rows="" title="댓글입력하는영역" aria-label="댓글입력하는영역" style="outline: none;" onkeyup="reCommentKeyup();" id="reCommentArea">'+con+'</textarea></dd></dl><p class="TextCount"><strong id="reCommentCnt">'+con.length+'</strong> / <span>200</span></p></div><div class="btn_grp ar"><a href="javascript:updateComment(\'reCommentArea\',\''+commentId+'\');" class="btn Ty01">수정</a><a href="javascript:cancelUpdate('+commentId+');" class="btn Ty02">취소</a></div></div>';
+		$("#comment_"+commentId).parents('p').after(html);
+		
+		var classNm = $("#comment_"+commentId).parents('p').attr('class');
+		if(classNm.indexOf('backColor') >= 0){
+			$("#reCommentArea").css('background', '#fafafa');
+		}
+	}
+	
+	//덧글 수정취소
+	function cancelUpdate(commentId){
+		$(".updateWrite").remove();
+	}
+	
+	//덧글 수정
+	function updateComment(id, commentId){
+		var con = $("#"+id).val();
+		
+		if(con.trim() == ""){
+			alert("수정할 댓글 내용을 입력하세요.");
+			return false;
+		}
+		
+		if(con.length > 200){
+			alert("댓글은 200자를 넘을 수 없습니다.");
+			return false;
+		}
+		
+		if(confirm("댓글을 수정하시겠습니까?")){
+			$("#commentCon").val(con);
+			$("#commentId").val(commentId);
+			$("#commentForm").attr('action', "<c:url value='/commentUpdate.do'/>");
+			
+			$("#commentForm").submit();
+		}else{
+			return false;
+		}
+	}
+	
+	//좋아요 클릭
+	function likeClick(bbsId, state){
+		if(state == 'on'){
+			state = "minus";
+		}else{
+			state = "plus";
+		}
+		$.ajax({
+			url: "/distep/updateLikeCnt.do",
+			type: 'POST',
+			data: {bbsId : bbsId},
+			success: function(result){
+				var num = $("#likeCnt").html().trim();
+				if(state == 'minus'){
+					$(".ic_like").removeClass('on');
+					$(".ic_like").attr("href","javascript:likeClick('"+bbsId+"', '');");
+					$("#likeCnt").html(Number(num)-1);
+					
+				}else{
+					$(".ic_like").addClass('on');
+					$(".ic_like").attr("href","javascript:likeClick('"+bbsId+"', 'on');");
+					$("#likeCnt").html(Number(num)+1);
+				}
+			},
+			error: function(e){
+				alert("좋아요 수정에 실패했습니다.");
+				console.log(e);
+			}
+		});
+	}
+	
+	function downLoad(){
+		$('#downLoadForm').attr('action',"<c:url value='/download.do'/>");
+		$('#downLoadForm').submit();
+	}
+</script>
+<style>
+#likeCnt{padding-left: 4px;font-weight: bold;color: #1a60f4;font-size:1.7rem;}
+</style>
+<form action="<c:out value='${contextPath }'/>/index.do" method="get" name="boardForm" id="boardForm">
+	<input type="hidden" id="pageIndex" name="pageIndex" value="${boardParam.pageIndex }" /> <%-- 페이지인덱스  --%>	
+	<input type="hidden" id="searchKeyword" name="searchKeyword" value="${boardParam.searchKeyword }" /> <%-- 검색어  --%>	
+	<input type="hidden" id="searchType" name="searchType" value="${boardParam.searchType }" /> <%-- 검색타입  --%>
+	<input type="hidden" id="orderSort" name="orderSort" value="${boardParam.orderSort }" /> <%-- 정렬타입 --%>
+	<input type="hidden" id="sort" name="sort" value="${boardParam.sort }" /> <%-- 정렬순서 --%>
+</form>
+<form action="<c:out value='${contextPath }'/>/commentWrite.do" method="post" name="commentForm" id="commentForm">
+	<input type="hidden" id="commentId" name="commentId" value="" /> <%-- 덧글 ID --%>
+	<input type="hidden" id="commentCon" name="commentCon" value="" /> <%-- 덧글 내용 --%>
+	<input type="hidden" id="userId" name="userId" value="${ssUsr.ssoUserId}" /> <%-- 유저ID --%>
+	<input type="hidden" id="userName" name="userName" value="${ssUsr.ssoUserNm}" /> <%-- 유저명 --%>
+	<input type="hidden" id="bbsId" name="bbsId" value="${detail.bbsId }" /> <%-- 게시글 ID --%>
+	<input type="hidden" id="parentCommentId" name="parentCommentId" value="0" /> <%-- 상위 덧글 ID --%>
+	<input type="hidden" id="pageIndex" name="pageIndex" value="${boardParam.pageIndex }" /> <%-- 페이지인덱스  --%>	
+	<input type="hidden" id="searchKeyword" name="searchKeyword" value="${boardParam.searchKeyword }" /> <%-- 검색어  --%>	
+	<input type="hidden" id="searchType" name="searchType" value="${boardParam.searchType }" /> <%-- 검색타입  --%>
+</form>
+
+<form name="downLoadForm" id="downLoadForm">
+	<input type="hidden" id="fileSaveName" name="fileSaveName" value="${fileList[0].attachFileSaveNm}" /> 
+	<input type="hidden" id="fileRealName" name="fileRealName" value="${fileList[0].attachFileNm}" /> 
+</form>
+
+<!-- 테이블영역 -->
+    <div class="board_wrap">
+        <div class="board_title">
+            <strong>공지사항(Notice)</strong>
+        </div>
+        <div class="board_view_wrap">
+            <div class="board_view">
+                <div class="title">
+                    <c:out value="${detail.title }"/>
+                </div>
+                <div class="info">
+<!--                     <dl> -->
+<!--                         <dt>번호</dt> -->
+<%--                         <dd><c:out value="${detail.bbsId }"/></dd> --%>
+<!--                     </dl> -->
+                    <dl>
+                        <dt>글쓴이(Writer)</dt>
+                        <dd><c:out value="${detail.userName }"/></dd>
+                    </dl>
+                    <dl>
+                        <dt>작성일(Date Created)</dt>
+                        <dd><fmt:formatDate value="${detail.bbsDate }" pattern="yyyy-MM-dd"/></dd>
+                    </dl>
+                    <dl>
+                        <dt>조회(Views)</dt>
+                        <dd><c:out value="${detail.hits }"/></dd>
+                    </dl>
+                    <c:if test="${!empty fileList[0].attachFileNm}">
+	                    <dl>
+	                        <dt>첨부파일</dt>
+	                        <dd><a href="javascript:downLoad();"><c:out value="${fileList[0].attachFileNm}"/></a></dd>
+	                    </dl>
+	                 </c:if>
+	                 <dl style="float:right;">
+	                 	<dt style="font-size:1.7rem;">좋아요(Likes)</dt>
+	                 	<dd><a href="javascript:likeClick('<c:out value="${detail.bbsId }"/>', '<c:if test="${detail.userLikeCnt > 0 }">on</c:if>');" class="ic_like <c:if test="${detail.userLikeCnt > 0 }">on</c:if>"><span id="likeCnt"><c:out value="${detail.allLikeCnt }"/></span></a></dd>
+<%-- 		                <p class="like_wrap" style="background:#fff;"><a href="javascript:likeClick('<c:out value="${detail.bbsId }"/>', '<c:if test="${detail.userLikeCnt > 0 }">on</c:if>');" class="ic_like <c:if test="${detail.userLikeCnt > 0 }">on</c:if>">좋아요(Likes) <span id="likeCnt"><c:out value="${detail.allLikeCnt }"/></span></a></p> --%>
+	                 </dl>
+                </div>
+                <div class="cont">
+                    <c:out value="${detail.contents }" escapeXml="false"/>
+                </div>
+            </div>
+            <!-- 댓글/대댓글 -->
+            <div class="comment_wrap">
+                <!--댓글작성-->
+                <div class="commentBody">
+                    <dl class="login_sns">
+                        <dt>댓글작성(Comment)</dt>
+                    </dl>
+                    <div class="write">
+                        <dl>
+                            <dt>댓글을 작성하세요(Write a comment)</dt>
+                            <dd class="textarea">
+                                <textarea name="comment" id="commentArea" cols="" rows="" title="댓글입력하는영역" aria-label="댓글입력하는영역" style="outline:none;background:#fafafa"></textarea>
+                            </dd>
+                        </dl>
+                        <p class="TextCount"><strong id="commentCnt">0</strong> / <span>200</span></p>
+                    </div>
+                    <div class="btn_grp ar">
+                        <a href="javascript:writeComment('commentArea', '0');" class="btn Ty01">보내기(Write)</a>
+                    </div>
+                </div>
+                <!--//댓글작성-->
+                <!--댓글 리스트 - 대댓글-->
+                <div class="ReplyBody">
+                	<c:if test="${fn:length(commentList) > 0}">
+                    <p class="total_re">전체댓글수(Total Comment) <strong>${fn:length(commentList)}</strong></p>
+                    <div class="Reply">
+                        <ul class="Re_list">
+							<c:forEach items="${commentList }" var="comment" varStatus="vs">
+								<c:choose>
+									<c:when test="${vs.index eq 0}">
+										<li>
+										<dl>
+											<dt>
+												<p class="name"><c:out value="${comment.userName }"/></p>
+												<p class="time"><fmt:formatDate value="${comment.commentDate }" pattern="yyyy-MM-dd HH:mm:SS"/></p>
+											</dt>
+											<dd>
+												<p class="ReplyText"><span id="comment_<c:out value='${comment.commentId }'/>"><c:out value="${comment.contents }"/></span>
+												<c:if test="${comment.userId eq ssUsr.ssoUserId }"><a href="javascript:deleteComment('<c:out value="${comment.commentId}"/>');" class="btnDel">삭제</a><a href="javascript:updateCommentBox('<c:out value="${comment.commentId}"/>')" class="btnUpdate">수정</a></p></c:if>
+												<button type="button" class="btnRe" title="답글" onclick="writeRecomment(this,'<c:out value="${comment.commentId}"/>');"><span>답글</span></button>
+											</dd>
+										</dl>
+										<ul class="Re_re">
+									</c:when>
+									<c:otherwise>
+										<c:if test="${comment.parentCommentId > 0 && comment.rnum >= 1}">
+											<li>
+												<dl>
+													<dt>
+														<p class="name"><c:out value="${comment.userName }"/></p>
+														<p class="time"><fmt:formatDate value="${comment.commentDate }" pattern="yyyy-MM-dd HH:mm:SS"/></p>
+													</dt>
+													<dd>
+														<p class="ReplyText backColor"><span id="comment_<c:out value='${comment.commentId }'/>"><c:out value="${comment.contents }"/></span>
+														<c:if test="${comment.userId eq ssUsr.ssoUserId }"><a href="javascript:deleteComment('<c:out value="${comment.commentId}"/>');" class="btnDel">삭제</a><a href="javascript:updateCommentBox('<c:out value="${comment.commentId}"/>')" class="btnUpdate">수정</a></p></c:if>
+													</dd>
+												</dl>
+											</li>
+										</c:if>
+										<%--
+										<c:if test="${comment.parentCommentId > 0 && comment.rnum > 1}">
+											<li>
+												<dl>
+													<dt>
+														<p class="name"><c:out value="${comment.userName }"/></p>
+														<p class="time"><fmt:formatDate value="${comment.commentDate }" pattern="yyyy-MM-dd HH:mm:SS"/></p>
+													</dt>
+													<dd>
+														<p class="ReplyText re"><span id="comment_<c:out value='${comment.commentId }'/>"><c:out value="${comment.contents }"/></span>
+														<c:if test="${comment.userId eq ssUsr.ssoUserId }"><a href="javascript:deleteComment('<c:out value="${comment.commentId}"/>');" class="btnDel">삭제</a><a href="javascript:updateCommentBox('<c:out value="${comment.commentId}"/>')" class="btnUpdate">수정</a></p></c:if>
+													</dd>
+												</dl>
+											</li>
+										</c:if>
+										 --%>
+										<c:if test="${comment.parentCommentId eq 0 }">
+											</ul> <!-- //Re_re -->
+											</li> <!-- //상위 덧글 li -->
+											<li>
+												<dl>
+													<dt>
+														<p class="name"><c:out value="${comment.userName }"/></p>
+														<p class="time"><fmt:formatDate value="${comment.commentDate }" pattern="yyyy-MM-dd HH:mm:SS"/></p>
+													</dt>
+													<dd>
+														<p class="ReplyText"><span id="comment_<c:out value='${comment.commentId }'/>"><c:out value="${comment.contents }"/></span>
+														<c:if test="${comment.userId eq ssUsr.ssoUserId }"><a href="javascript:deleteComment('<c:out value="${comment.commentId}"/>');" class="btnDel">삭제</a><a href="javascript:updateCommentBox('<c:out value="${comment.commentId}"/>')" class="btnUpdate">수정</a></p></c:if>
+														<button type="button" class="btnRe" title="답글"  onclick="writeRecomment(this,'<c:out value="${comment.commentId}"/>');"><span>답글</span></button>
+													</dd>
+												</dl>
+												<ul class="Re_re">
+										</c:if>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>                            
+                        </ul>
+                    </div>
+                    </c:if>
+                </div>
+                <!--// 댓글 리스트 - 대댓글-->
+            </div>
+            <!-- //댓글/대댓글 --> 
+            <form action="<c:url value='/openUpdate.do'/>" method="post" name="boardViewInfoForm" id="boardViewInfoForm">
+            	<input type="hidden" id="bbsId"   name="bbsId"   value="${detail.bbsId}" />	<!-- id  -->
+            	<input type="hidden" id="fileSaveName" name="fileSaveName" value="${fileList[0].attachFileSaveNm}" /> 
+            </form>
+            
+            <div class="bt_wrap">
+                <a href="javascript:goList();" class="on">목록(List)</a>
+                <c:if test="${detail.userId eq ssUsr.ssoUserId ||  ssUsr.ssoUserId == 'kos7541'}">
+                	<a href="javascript:fn_moveUpdate();">수정(Modify)</a>
+                	<a href="javascript:fn_moveDelete();">삭제(Delete)</a>
+                </c:if>
+            </div>
+        </div>
+    </div>
+	<!-- //테이블영역 -->

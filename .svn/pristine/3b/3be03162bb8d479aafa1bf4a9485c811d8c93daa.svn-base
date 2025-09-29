@@ -1,0 +1,360 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+	pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<style>
+    .tabs {
+        display: flex;
+        border-bottom: 2px solid #ddd;
+        margin-bottom: 20px;
+    }
+
+    .tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        border: 1px solid #ddd;
+        border-bottom: none;
+        background-color: #f9f9f9;
+        margin-right: 5px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .tab.active {
+        background-color: #fff;
+        border-bottom: 2px solid #fff;
+        font-weight: bold;
+    }
+
+    .tab-content {
+        border: 1px solid #ddd;
+        padding: 20px;
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+    .approval-btn {
+        padding: 8px 16px;
+        margin-right: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f2f2f2;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s;
+    }
+
+    .approval-btn:hover {
+        background-color: #e0e0e0;
+    }
+
+    .approval-btn.approve {
+        color: #fff;
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .approval-btn.reject {
+        color: #fff;
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+    
+    .approval-btn.admin {
+        color: #fff;
+        background-color: #ffc107;
+        border-color: #ffc107;
+    }
+    
+    table.auth-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    table.auth-table th, table.auth-table td {
+        border: 1px solid #ccc;
+        padding: 5px;
+        text-align: center;
+    }
+    table.auth-table th {
+        background-color: #f2f2f2;
+    }
+</style>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<c:if test="${not empty errorMessage}">
+    <script>
+        alert("${errorMessage}");
+    </script>
+</c:if>
+ 
+<div class="tabs">
+    <div class="tab active" data-tab="tab1">User Role Management</div>
+    <div class="tab" data-tab="tab2">Main Image Settings</div>
+    <div class="tab" data-tab="tab3">Board Permission Management</div>
+</div>
+
+<div id="tab1" class="tab-content active">
+    <h2>User Role Management</h2>
+    <h2>User List</h2> 
+    <div class="tbl-wrap">
+	<table border="1" class="tbl col data">
+		<caption>User List</caption>
+	      <colgroup>
+	         <col style="width: 10%;">
+	         <col style="width: 10%;">
+	         <col style="width: 10%;">
+	         <col style="width: 20%;">
+	         <col style="width: 10%;">
+	         <col style="width: 10%;">
+	         <col style="width: 10%;">
+	         <col style="width: 20%;"> 
+	      </colgroup>  
+	      <thead>
+	      <tr>
+	         <th scope="col">No</th>
+	         <th scope="col">User ID</th>
+	         <th scope="col">Name</th>
+	         <th scope="col">Email</th>
+	         <th scope="col">City</th>
+	         <th scope="col">City etc</th>
+	         <th scope="col">role</th>
+	         <th scope="col">Approve/Reject</th>
+	      </tr>
+	      </thead>
+	      <tbody>
+		<c:forEach var="user" items="${userList}" varStatus="status">
+            <tr>
+				<td>${(offset) + status.index + 1}</td>
+				<td>${user.id}</td>
+				<td>${user.username}</td>
+				<td>${user.email}</td>
+				<td>${user.city_code}</td>
+				<td>${user.city_etc}</td>
+				<td>
+					${user.role_nm }  
+<!-- 				  	<div class="form-check"> -->
+<%-- 				      <input type="radio" name="role${user.id}" id="chk_D_${user.id}" value="D" --%>
+<%-- 				             <c:if test="${user.role eq 'D'}">checked="checked"</c:if> /> --%>
+<%-- 				      <label for="chk_D_${user.id}">General</label> --%>
+				 
+<%-- 				      <input type="radio" name="role${user.id}" id="chk_C_${user.id}" value="C" --%>
+<%-- 				             <c:if test="${user.role eq 'C'}">checked="checked"</c:if> /> --%>
+<%-- 				      <label for="chk_C_${user.id}">Member</label> --%>
+				
+<%-- 				      <input type="radio" name="role${user.id}" id="chk_A_${user.id}" value="A" --%>
+<%-- 				             <c:if test="${user.role eq 'A'}">checked="checked"</c:if> /> --%>
+<%-- 				      <label for="chk_A_${user.id}">Admin</label> --%>
+<!-- 				    </div> -->
+				</td>
+				<td>
+					<c:if test="${user.role ne 'G' and user.role ne 'A'}">
+						<c:if test="${user.appr_yn eq 'N'}">
+							<button type="button" class="approval-btn" data-userid="${user.id}" data-value="Y">Approve</button>
+							<button type="button" class="approval-btn" data-userid="${user.id}" data-value="N">Reject</button>
+							<button type="button" class="approval-btn admin" data-userid="${user.id}" data-value="ADMIN">Grant Admin</button>
+						</c:if>
+						<c:if test="${user.appr_yn eq 'Y'}">
+							The member is already approved. 승인해제 버튼
+						</c:if>
+						<c:if test="${user.appr_yn eq 'R'}">
+							The member has been marked as rejected. 반려해제 버튼
+						</c:if>
+		            </c:if>
+		            <c:if test="${user.role eq 'A'}">
+						-
+		            </c:if>
+		            <c:if test="${user.role eq 'G'}">
+		            General members do not require approval.
+		            </c:if>
+				</td>
+			</tr>
+		</c:forEach>
+		</tbody>
+	</table>
+	
+	<c:set var="totalPages" value="${(totalCount + pageSize - 1) / pageSize}" />
+	<div>
+	    <c:if test="${currentPage > 1}">
+	        <a href="?page=${currentPage - 1}&size=${pageSize}">이전</a>
+	    </c:if>
+	    
+	    <c:forEach begin="1" end="${totalPages}" var="i">
+	        <c:choose>
+	            <c:when test="${i == currentPage}">
+	                <strong>${i}</strong>
+	            </c:when>
+	            <c:otherwise>
+	                <a href="?page=${i}&size=${pageSize}">${i}</a>
+	            </c:otherwise>
+	        </c:choose>
+	    </c:forEach>
+	    
+	    <c:if test="${currentPage < totalPages}">
+	        <a href="?page=${currentPage + 1}&size=${pageSize}">다음</a>
+	    </c:if>
+	</div>
+	</div>
+</div>
+
+<div id="tab2" class="tab-content">
+    <h2>Main Image Settings</h2>
+    <p>Current Main Image:</p>
+	<img id="mainImage" src="./img/pattern/content/img_main_content_visual_1.png?t=${imgVersion }" alt="Main Image" width="300" />
+	  
+	<form action="${pageContext.request.contextPath}/adminImgUpload.do" method="post" enctype="multipart/form-data">
+	    <p>Select new image:</p>
+	    <input type="file" name="imageFile" accept="image/*" required>
+	    <button type="submit">Upload</button>
+	</form>
+</div>
+
+<div id="tab3" class="tab-content">
+    <h2>Board Permission Management</h2>
+    	<table class="auth-table">
+    <thead>
+        <tr>
+            <th rowspan="2">구분</th>
+            <th colspan="5">General member</th>
+            <th colspan="5">City member</th>
+            <th colspan="5">Organization member</th>
+        </tr>
+        <tr>
+            <th>조회</th><th>입력</th><th>수정</th><th>삭제</th><th>다운</th>
+            <th>조회</th><th>입력</th><th>수정</th><th>삭제</th><th>다운</th>
+            <th>조회</th><th>입력</th><th>수정</th><th>삭제</th><th>다운</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>GINI News</td>
+            <td><input type="checkbox" name="G_GINI_view" checked></td>
+            <td><input type="checkbox" name="G_GINI_write"></td>
+            <td><input type="checkbox" name="G_GINI_update"></td>
+            <td><input type="checkbox" name="G_GINI_delete"></td>
+            <td><input type="checkbox" name="G_GINI_download"></td>
+
+            <td><input type="checkbox" name="C_GINI_view" checked></td>
+            <td><input type="checkbox" name="C_GINI_write"></td>
+            <td><input type="checkbox" name="C_GINI_update"></td>
+            <td><input type="checkbox" name="C_GINI_delete"></td>
+            <td><input type="checkbox" name="C_GINI_download"></td>
+
+            <td><input type="checkbox" name="O_GINI_view" checked></td>
+            <td><input type="checkbox" name="O_GINI_write"></td>
+            <td><input type="checkbox" name="O_GINI_update"></td>
+            <td><input type="checkbox" name="O_GINI_delete"></td>
+            <td><input type="checkbox" name="O_GINI_download"></td>
+        </tr>
+
+        <tr>
+            <td>Members' News</td>
+            <td><input type="checkbox" name="G_Mem_view" checked></td>
+            <td><input type="checkbox" name="G_Mem_write"></td>
+            <td><input type="checkbox" name="G_Mem_update"></td>
+            <td><input type="checkbox" name="G_Mem_delete"></td>
+            <td><input type="checkbox" name="G_Mem_download"></td>
+
+            <td><input type="checkbox" name="C_Mem_view" checked></td>
+            <td><input type="checkbox" name="C_Mem_write"></td>
+            <td><input type="checkbox" name="C_Mem_update"></td>
+            <td><input type="checkbox" name="C_Mem_delete"></td>
+            <td><input type="checkbox" name="C_Mem_download"></td>
+
+            <td><input type="checkbox" name="O_Mem_view" checked></td>
+            <td><input type="checkbox" name="O_Mem_write"></td>
+            <td><input type="checkbox" name="O_Mem_update"></td>
+            <td><input type="checkbox" name="O_Mem_delete"></td>
+            <td><input type="checkbox" name="O_Mem_download"></td>
+
+        </tr>
+
+    </tbody>
+</table>
+    
+</div>
+
+		
+<script>
+
+$(document).ready(function() {
+    $(".approval-btn").on('click', function() {
+        var userId = $(this).data('userid');
+        var value = $(this).data('value');
+
+        var url = '${pageContext.request.contextPath}/updateUserRole.do';
+        var params = {
+            id: userId,
+            appr_yn: value
+        };
+
+        if (value === 'ADMIN') {
+            url = '${pageContext.request.contextPath}/grantAdminRole.do';
+            params = { id: userId };
+        }
+
+        var form = $('<form></form>');
+        form.attr("method", "post");
+        form.attr("action", url);
+
+        $.each(params, function(key, val) {
+            var input = $("<input>").attr("type", "hidden").attr("name", key).val(val);
+            form.append(input);
+        });
+
+        $("body").append(form);
+        form.submit();
+    });
+});
+
+function initTabs() {
+    var tabs = document.getElementsByClassName('tab');
+    var contents = document.getElementsByClassName('tab-content');
+
+    for (var i = 0; i < tabs.length; i++) {
+        tabs[i].onclick = (function(index) {
+            return function() {
+                for (var j = 0; j < tabs.length; j++) {
+                    tabs[j].classList.remove('active');
+                    contents[j].classList.remove('active');
+                }
+                tabs[index].classList.add('active');
+                contents[index].classList.add('active');
+            };
+        })(i);
+    }
+}
+
+function activateTab(tabId) {
+    var tabs = document.getElementsByClassName('tab');
+    var contents = document.getElementsByClassName('tab-content');
+
+    for (var i = 0; i < tabs.length; i++) {
+        if (tabs[i].getAttribute('data-tab') === tabId) {
+            tabs[i].click();
+            break;
+        }
+    }
+}
+
+window.onload = function() {
+    initTabs();
+    refreshMainImage();
+    
+    var activeTab = "${activeTab}";
+    if (activeTab) {
+        activateTab(activeTab);
+    } 
+};
+
+function refreshMainImage() {
+    var img = document.getElementById("mainImage");
+    var src = img.src.split('?')[0];
+    var newSrc = src + "?t=" + new Date().getTime();
+    if (img.src !== newSrc) {
+        img.src = newSrc;
+    }
+}
+</script>

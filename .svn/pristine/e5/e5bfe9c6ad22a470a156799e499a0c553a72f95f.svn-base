@@ -1,0 +1,89 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="EUC-KR">
+    <title>Temporary Password</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            width: 600px;
+            margin: 80px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        h2.section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: var(--krds-primary);
+            margin: 10px auto 0;
+            border-radius: 3px;
+        }
+
+        .form-conts {
+            font-weight: bold;
+            color: var(--krds-primary);
+            font-size: 18px;
+        }
+
+        .consult_name {
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .form-hint {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--krds-primary);
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #2c80b4;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <h2 class="section-title">Your Temporary Password</h2>
+
+    <p class="consult_name"><strong class="form-conts">${tempPassword}</strong></p>
+    <p class="form-hint">Please log in and change your password immediately.</p>
+
+    <a href="login.do" class="btn-primary">Go to Login</a>
+</div>
+
+</body>
+</html>

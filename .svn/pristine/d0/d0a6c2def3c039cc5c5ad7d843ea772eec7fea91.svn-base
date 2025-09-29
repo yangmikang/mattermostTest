@@ -1,0 +1,340 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>GINI - Global Innopolis Network Initiative</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="../../resources/img/guide/favicon_180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../resources/img/guide/favicon_512.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="../../resources/img/guide/favicon_192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../resources/img/guide/favicon_32.png">
+  <link href="../../resources/css/swiper-bundle.min.css" rel="stylesheet" />
+  <link href="../../resources/css/pattern_css.css" rel="stylesheet" />
+  <link href="../../resources/css/output/p_common.css" rel="stylesheet" />
+  <link href="../../resources/css/output/p_content.css" rel="stylesheet" />
+  <link href="../../resources/css/output/p_layout.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales/ko.global.min.js"></script>
+</head>
+<style>
+ .search-list .card-body .c-text:hover{
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  text-decoration: none !important;
+  cursor: default !important;
+}
+
+
+/* 썸네일 리스트에만 적용 */
+.thumbnail-list .card-body {
+	display: flex;
+	align-items: normal !important;
+	justify-content: flex-start;
+	flex-direction: column !important;
+	gap: var(--krds-spacer-6);
+}
+
+.thumbnail-list .li {
+	position: relative;
+	display: flex;
+	align-items: normal !important;
+	justify-content: flex-start;
+	flex-direction: column !important;
+	gap: var(--krds-spacer-6) 0;
+	padding: var(--krds-spacer-6) !important;
+	overflow-x: auto;
+	box-sizing: border-box;
+	border-radius: var(--krds-rd-12);
+	border: 0.1rem solid var(--krds-gray-40);
+}
+
+</style>
+<body>
+  <c:set var="boardMasterCode" value="${param.boardMasterCode}" />
+  <script>const boardMasterCode = '${boardMasterCode}';</script>
+  <div id="container">
+  
+ <!--  <button onclick="changeSort()">AJAX 호출 테스트</button> -->
+  
+    <div class="page-title-wrap visual img-members">
+      <div class="visual-filter"></div>
+      <div class="inner">
+        <nav class="breadcrumb-wrap" aria-label="브레드크럼">
+          <ol class="breadcrumb">
+            <li class="home"><a href="#" class="txt">Home</a></li>
+            <li><a href="#" class="txt breadcrumb-menu">BOARD</a></li>
+          </ol>
+        </nav>
+        <div class="visual-area">
+          <h2 class="h-tit board-title">Board</h2>
+          <p class="board-desc">Board description</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="inner">
+      <div class="board-box">
+        <div class="search-top-box">
+          <div class="sch-form-wrap flex">
+            <div class="sch-input">
+              <input type="text" class="form-control searchKeyword" id="searchKeyword" placeholder="Enter Keyword" title="Enter Keyword">
+              <button type="button" class="btn btn-ico ico-sch" id="search"><span class="sr-only">검색</span></button>
+            </div>
+            <button type="button" class="btn btn-txt primary" style="width: 150px;" onclick="location.href='${pageContext.request.contextPath}/board/boardPage.do?boardMasterCode=${boardMasterCode}'">Write Post</button>
+          </div>
+        </div>
+
+        <div class="search-list-top type1">
+          <div class="sch-info" role="region" aria-live="polite">
+            전체 <span class="keyword">00</span>건
+          </div>
+        </div>
+
+        <ul class="search-list type1  stb-list"></ul>
+
+<!-- 썸네일 게시판 리스트 -->
+<ul class="search-list type2 thumbnail-list" style="display:none;"></ul>
+        <div class="pagination w-page paging">
+          <div class="row justify-content-center" id="divPagingArea"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../resources/js/pattern/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="../../resources/js/pattern/ui-pattern-script.js"></script>
+  <script src="../../resources/js/component/ui-script.js"></script>
+<script>
+  window.boardMasterCode = '${boardMasterCode}';
+</script>
+
+ <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const titleEl = document.querySelector(".board-title");
+    const descEl = document.querySelector(".board-desc");
+    const breadcrumbMenuEl = document.querySelector(".breadcrumb-menu");
+
+    // boardMasterCode 처리
+    const boardMasterCode = window.boardMasterCode || 'N01'; // fallback
+
+    // 타이틀/브레드크럼/설명 설정
+    switch (boardMasterCode) {
+      case "N01":
+        titleEl.innerText = breadcrumbMenuEl.innerText = "GINI News";
+        descEl.innerText = "Stay updated with the latest announcements from GINI.";
+        break;
+      case "N02":
+        titleEl.innerText = breadcrumbMenuEl.innerText = "Members News";
+        descEl.innerText = "Get the latest updates and news from our members.";
+        break;
+      case "N03":
+        titleEl.innerText = breadcrumbMenuEl.innerText = "Media Release";
+        descEl.innerText = "Browse official media releases and announcements.";
+        break;
+      case "N04":
+        titleEl.innerText = breadcrumbMenuEl.innerText = "Q&A";
+        descEl.innerText = "Find answers to frequently asked questions.";
+        break;
+      case "N05":
+        titleEl.innerText = breadcrumbMenuEl.innerText = "Members";
+        descEl.innerText = "Explore member profiles and collaboration details.";
+        break;
+      case "N06":
+        titleEl.innerText = breadcrumbMenuEl.innerText = "Action Group";
+        descEl.innerText = "Discover events and initiatives from action groups.";
+        break;
+      case "A01":
+        titleEl.innerText = breadcrumbMenuEl.innerText = "Publications";
+        descEl.innerText = "Discover events and initiatives from action groups.";
+        break;
+    /*   case "N03":
+        titleEl.innerText = breadcrumbMenuEl.innerText = "뉴스";
+        descEl.innerText = "최신 뉴스를 확인하세요.";
+        break; */
+      default:
+        titleEl.innerText = breadcrumbMenuEl.innerText = "GINI News";
+        descEl.innerText = "게시글을 확인하세요.";
+    }
+
+    // 썸네일 뷰모드 유지
+    const savedMode = localStorage.getItem("viewMode");
+    if (savedMode === "thumbnail") thumOn();
+
+    // 초기 리스트 로딩
+    changeSort();
+
+    // 검색 이벤트 바인딩
+    document.getElementById("search").addEventListener("click", function () {
+      const keyword = document.getElementById("searchKeyword").value;
+      changeSort(1, keyword);
+    });
+  });
+
+  // 게시글 리스트 조회 (AJAX)
+function changeSort(currentPage = 1, keyword = '') {
+  const boardMasterCode = window.boardMasterCode || 'N01';
+  const data = { currentPage, keyword, boardMasterCode };
+
+  axios.post(`${pageContext.request.contextPath}/board/listAjax.do`, data)
+    .then(function (res) {
+      const list = res.data.content;
+      document.querySelector(".keyword").innerText = res.data.total;
+      const contextPath = '${pageContext.request.contextPath}';
+
+      // 두 리스트 초기화
+      const type1List = document.querySelector(".stb-list");
+      const type2List = document.querySelector(".thumbnail-list");
+      type1List.innerHTML = '';
+      type2List.innerHTML = '';
+      type1List.style.display = 'none';
+      type2List.style.display = 'none';
+      if (list.length === 0) {
+    	  const targetList = ["N01", "N02", "N03","A01"].includes(boardMasterCode)
+    	    ? document.querySelector(".thumbnail-list")
+    	    : document.querySelector(".stb-list");
+
+    	  targetList.innerHTML = '<li class="li"><p>게시글이 없습니다.</p></li>';
+    	  targetList.style.display = ["N01", "N02", "N03","A01"].includes(boardMasterCode) ? 'grid' : 'block';
+    	  document.querySelector("#divPagingArea").innerHTML = '';
+    	  return;
+    	}
+
+      let html = '';
+
+      for (const item of list) {
+        const content = item.content.length > 100 ? item.content.slice(0, 100) + '...' : item.content;
+        var detailUrl = contextPath + "/board/detail.do?boardCode=" + item.boardCode; 
+
+        const flagIcon = getFlagIcon(item.cityCode);
+        const username = item.username || '';
+        const regDate = item.regDate || '';
+        const title = item.title || '';
+
+        if (["N01", "N02", "N03","A01"].includes(boardMasterCode)) {
+        	var fileList = item.fileGroupVO && item.fileGroupVO.fileDetailVOList ? item.fileGroupVO.fileDetailVOList : [];
+        	var thumbnailFiles = [];
+
+        	for (var j = 0; j < fileList.length; j++) {
+        		if (fileList[j].fileType === 'THUMBNAIL') {
+        			thumbnailFiles.push(fileList[j]);
+        		}
+        	}
+        	var firstFile = thumbnailFiles.length > 0 ? thumbnailFiles[0] : null;
+        	var baseContextPath = contextPath.endsWith('/') ? contextPath.slice(0, -1) : contextPath;
+
+			var thumbnailPath = (firstFile && firstFile.fileSaveLocate) 
+			    ? baseContextPath + firstFile.fileSaveLocate.replace(/\\/g, '/') 
+			    : baseContextPath + '/upload/img-no-image_en.png';  
+
+        	html += '<li class="li">'
+        		+ '<div class="card-img" style="background-image:url(\'' + thumbnailPath + '\')" onclick="location.href=\'' + detailUrl + '\'"></div>'
+        		+ '<div class="card-body" onclick="location.href=\'' + detailUrl + '\'">'
+        		+ '<a href="#" class="c-text">'
+        		+ '<p class="c-tit"><span class="span">' + title + '</span></p>'
+        		+ '<p class="c-txt">' + content + '</p>'
+        		  + '<p style="display:flex; align-items:center;">'
+        		     + '<strong class="key"></strong>'
+        		     + '<span class="value" style="display:flex; align-items:center;">'
+        		     + '<img src="' + contextPath + '/img/component/common/' + flagIcon + '" />'
+        		     + username
+        		     + '</span>'
+        		     + '</p>'
+        		+ '<p class="c-date">'
+        		+ '<strong class="key" style="display: flex;justify-content: flex-end;">'+ regDate +'</strong>'
+        		+ '</p>'
+        		+ '</a>'
+        		+ '<div class="c-btn">'
+        		+ '<a href="' + detailUrl + '" class="btn md secondary" title="View Details">View Details</a>'
+        		+ '</div>'
+        		+ '</div>'
+        		+ '</li>';
+        }
+else {
+          // 일반 리스트 게시판
+	html += '<li class="li">'
+	     + '<div class="in">'
+	     + '<div class="card-body" onclick="location.href=\'' + detailUrl + '\'">'
+	     + '<a href="#" class="c-text">'
+	     + '<p class="c-tit"><span class="span">' + title + '</span></p>'
+	     + '<p class="c-txt">' + content + '</p>'
+	     + '<p style="display:flex; align-items:center;">'
+	     + '<strong class="key"></strong>'
+	     + '<span class="value" style="display:flex; align-items:center;">'
+	     + '<img src="' + contextPath + '/img/component/common/' + flagIcon + '" />'
+	     + username
+	     + '</span>'
+	     + '</p>'
+	     + '<p class="c-date">'
+	     + '<strong class="key">' + regDate + '</strong>'
+	     + '</p>'
+	     + '</a>'
+	     + '<div class="c-btn">'
+	     + '<a href="' + detailUrl + '" class="btn md secondary">View Details</a>'
+	     + '</div>'
+	     + '</div>'
+	     + '</div>'
+	     + '</li>';
+        }
+      }
+
+      if (["N01", "N02", "N03","A01"].includes(boardMasterCode)) {
+        type2List.innerHTML = html;
+        type2List.style.display = 'grid';
+        type2List.style.gridTemplateColumns = '1fr 1fr 1fr';
+        type2List.style.gridGap = 'var(--krds-spacer-6)';
+      } else {
+        type1List.innerHTML = html;
+        type1List.style.display = 'block';
+      }
+
+      document.querySelector("#divPagingArea").innerHTML = res.data.pagingArea;
+      bindPagingEvents();
+    });
+}
+
+function getFlagIcon(cityCode) {
+  switch (cityCode) {
+    case "01": return 'ico_korea.svg';
+    case "02": return 'ico_germany.svg';
+    case "03": return 'ico_spain.svg';
+    case "04":
+    case "05": return 'ico_usa.svg';
+    default: return '';
+  }
+}
+function thumOn() {
+	  const type2 = document.querySelector(".thumbnail-list");
+	  const stb = document.querySelector(".stb-list");
+	  if (!type2 || !stb) return;
+	  type2.style.display = 'grid';
+	  type2.style.gridTemplateColumns = '1fr 1fr 1fr';
+	  type2.style.gridGap = 'var(--krds-spacer-6)';
+	  stb.style.display = 'none';
+	}
+
+  // 페이징 이벤트 재바인딩
+  function bindPagingEvents() {
+    document.querySelectorAll(".clsPagingArea").forEach(function (el) {
+      el.addEventListener("click", function (e) {
+        e.preventDefault();
+        const currentPage = parseInt(this.dataset.currentPage);
+        const keyword = this.dataset.keyword || '';
+        changeSort(currentPage, keyword);
+      });
+    });
+  }
+  function thumOff() {
+	  document.querySelector(".thumbnail-list").style.display = 'none';
+	  document.querySelector(".stb-list").style.display = 'block';
+	}
+
+ 
+</script>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<html>
+<c:if test="${not empty errorMessage}">
+    <script>
+        alert("${errorMessage}");
+    </script>
+</c:if>
+<head><title>Find ID</title></head>
+<body>
+<div id="container">
+	<div class="inner">
+		<div class="page-title-wrap">
+			<h2>Find Your ID</h2>
+		</div>
+		<div class="gini-cont-wrap">
+			<c:if test="${not empty errorMessage}">
+			    <p style="color:red">${errorMessage}</p>
+			</c:if>
+			<div class="gini-cont-box al_center">
+				<div class="cont50">
+					<form action="findId.do" method="post">
+						<div class="form-group">
+							<div class="form-tit">
+							    <label for="user_name">Name</label>
+						    </div>
+						    <div class="form-conts">
+						    	<input type="text" name="name" id="user_name" class="form-control" required />
+						    </div>
+							<div class="form-tit">
+						    	<label for="user_email">Email</label>
+					    	</div>
+					    	<div class="form-conts">
+							    <input type="email" name="email" id="user_email" class="form-control" required /><br/>
+							</div>
+							<div class="btn-wrap pc-only">
+						   		<input type="submit" value="Find ID" class="btn primary"/>
+						    </div>
+					    </div>
+					</form>	
+				</div>	
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

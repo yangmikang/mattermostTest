@@ -1,0 +1,146 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>GINI - Global Innopolis Network Initiative</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="../../resources/img/guide/favicon_180.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../resources/img/guide/favicon_512.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="../../resources/img/guide/favicon_192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../resources/img/guide/favicon_32.png">
+  <link href="../../resources/css/swiper-bundle.min.css" rel="stylesheet" />
+  <link href="../../resources/css/pattern_css.css" rel="stylesheet" />
+  <link href="../../resources/css/output/p_common.css" rel="stylesheet" />
+  <link href="../../resources/css/output/p_content.css" rel="stylesheet" />
+  <link href="../../resources/css/output/p_layout.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales/ko.global.min.js"></script>
+</head>
+<body>
+	<div id="wrap">
+		<!-- 컨테이너 영역 -->
+		<div id="container">
+			<div class="page-title-wrap visual img-members">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Board</a></li>
+							<li><a href="#" class="txt">Q&A</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<!-- 페이지 타이틀 영역 -->
+					<div class="visual-area">
+						<h2 class="h-tit">Q&A Registered</h2>
+						<p>Q&A registered</p>
+					</div>
+				<!-- //페이지 타이틀 영역 -->
+				</div>
+			</div>
+			<!-- breadcrumb -->
+			<!-- <nav class="breadcrumb-wrap" aria-label="브레드크럼">
+				<ol class="breadcrumb">
+					<li class="home"><a href="#" class="txt">Home</a></li>
+					<li><a href="#" class="txt">Board</a></li>
+					<li><a href="#" class="txt">News</a></li>
+					<li><a href="#" class="txt">Detail</a></li>
+				</ol>
+			</nav> -->
+			<!-- breadcrumb -->
+		<form class="form-horizontal" id="form" name="form" action="${pageContext.request.contextPath}/board/qnaInsert.do"
+				method="post" enctype="multipart/form-data">
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				<!-- //페이지 타이틀 영역 -->
+				<!-- 상세보기 영역 -->
+				<div class="conts-area">
+					<div class="conts-detail-wrap txt-box bg-white board-insert">
+						<!-- real contents -->
+						<div class="conts-wrap scroll-check">
+							<div class="conts-wrap section-link" id="section_01">
+								<!-- table list -->
+								<div class="tbl-wrap">
+									<dl class="tbl def-list">
+										<dt class="form-tit">
+											<label for="edit_title">Title</label>
+										</dt>
+										<dd>
+											<div class="form-conts">
+												<input type="text" id="edit_title" class="form-control" autocomplete="on" placeholder="title" name="title">
+											</div>
+										</dd>
+										<dt class="form-tit">
+											<label for="edit_content">Content</label>
+										</dt>
+										<dd>
+											<div class="form-conts">
+												<input type="textarea" id="edit_content" class="form-control" name="content">
+											</div>
+										</dd>
+										<dt class="form-tit">
+											<label for="edit_content">Secret Message
+</label>
+										</dt>
+										<dd>
+											<div class="form-group chk-area">
+											  <div class="form-tit">
+											    <label for="consult_name">Secret Message</label>
+											  </div>
+											  <div class="form-conts form-row">
+											    <div class="form-check lg">
+											      <input type="radio" name="isSecret" id="isSecret" value="Y" checked>
+											      <label for="upcoming">Public</label>
+											    </div>
+											    <div class="form-check lg">
+											      <input type="radio" name="isSecret" id="isSecret" value="N">
+											      <label for="ongoing">Private</label>
+											    </div>
+											  </div>
+											</div> 
+											</div>
+										</dd>
+										<!-- <dt class="form-tit">
+											<label for="edit_upload">Upload File</label>
+										</dt>
+										<dd>
+											<div class="file-upload cont50">
+												<p class="txt">첨부할 파일을 여기에 끌어다 놓거나, 파일 선택 버튼을 눌러 파일을 직접 선택해주세요.</p>
+												<button type="button" class="btn primary ico-before ico-upload md">파일선택</button>
+											</div>
+										</dd> -->
+									</dl>
+								</div>
+								<!-- //table list -->
+							</div>
+							
+						 <div class="page-btn-wrap both">
+							<div>
+								<button type="button" class="btn xlg">List</button>
+							</div>
+							<div>
+								<button type="submit" class="btn xlg tertiary">Registered</button>
+							</div>
+						</div>
+						</div>
+						<!-- //real contents -->
+					</div>
+				</div>
+
+
+
+				<!-- //상세보기 영역 -->
+			</div>
+		<!-- //컨테이너 영역 -->
+
+		
+	</div>
+</form>
+	
+</body>
+
+</html>

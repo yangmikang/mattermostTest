@@ -1,0 +1,305 @@
+package kr.go.distep.main.service.impl;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.servlet.ServletContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import kr.go.distep.cmmn.file.vo.FileDetailVO;
+import kr.go.distep.cmmn.file.vo.FileGroupVO;
+import kr.go.distep.main.service.UploadService;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+public class UploadServiceImpl implements UploadService {
+
+    @Autowired
+    private ServletContext servletContext;
+
+    @Autowired
+    FileGroupMapper fileGroupMapper;
+
+    @Value("${upload.path}")
+    private String baseDir;
+
+    // yyyy/MM/dd 형식, 슬래시 고정
+    @Override
+    public String getFolder() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        return sdf.format(new Date());
+    }
+
+    // 바이트 단위 숫자를 보기 좋은 단위로 변환
+    @Override
+    public String makeFancySize(String bytes) {
+        log.info("bytes : " + bytes);
+        String retFormat = "0";
+        Double size = Double.parseDouble(bytes);
+
+        String[] s = { "bytes", "KB", "MB", "GB", "TB", "PB" };
+
+        if (!"0".equals(bytes)) {
+            int idx = (int) Math.floor(Math.log(size) / Math.log(1024));
+            DecimalFormat df = new DecimalFormat("#,###.##");
+            double ret = ((size / Math.pow(1024, Math.floor(idx))));
+            retFormat = df.format(ret) + " " + s[idx];
+        } else {
+            retFormat += " " + s[0];
+        }
+
+        return retFormat;
+    }
+
+    @Override
+    public boolean checkImageType(File file) {
+        try {
+            String contentType = Files.probeContentType(file.toPath());
+            log.info("contentType : " + contentType);
+            return contentType != null && contentType.startsWith("image");
+        } catch (IOException e) {
+            log.error("이미지 타입 체크 오류", e);
+        }
+        return false;
+    }
+
+    // 다중 파일 업로드 - 신규 파일 그룹 생성
+    @Override
+    public long multiImageUpload(MultipartFile[] multipartFiles,String fileType) {
+        long fileGroupNo = 0L;
+        int result = 0;
+        String folder = getFolder();  // yyyy/MM/dd
+
+        // 실제 저장 경로는 OS별 구분자로 변환
+        String realPath = baseDir;
+        if (!realPath.endsWith(File.separator)) {
+            realPath += File.separator;
+        }
+        realPath += folder.replace("/", File.separator);
+
+        File uploadPath = new File(realPath);
+        if (!uploadPath.exists()) {
+            uploadPath.mkdirs();
+        }
+
+        FileGroupVO fileGroupVO = new FileGroupVO();
+        result += fileGroupMapper.insertFileGroup(fileGroupVO);
+        fileGroupNo = fileGroupVO.getFileGroupNo();
+
+        for (MultipartFile multipartFile : multipartFiles) {
+            try {
+                String originalName = multipartFile.getOriginalFilename();
+                String fileName = originalName;
+
+                File saveFile = new File(uploadPath, fileName);
+                multipartFile.transferTo(saveFile);
+
+                FileDetailVO fileDetailVO = new FileDetailVO();
+                fileDetailVO.setFileGroupNo(fileGroupNo);
+                fileDetailVO.setFileOriginalName(originalName);
+                fileDetailVO.setFileSaveName(fileName);
+                // DB에 저장하는 경로는 웹 URL용 슬래시(/) 고정
+                fileDetailVO.setFileSaveLocate("/upload/" + folder + "/" + fileName);
+                fileDetailVO.setFileSize(multipartFile.getSize());
+                fileDetailVO.setFileExt(fileName.substring(fileName.lastIndexOf(".") + 1));
+                fileDetailVO.setFileMime(multipartFile.getContentType());
+                fileDetailVO.setFileFancySize(makeFancySize(String.valueOf(multipartFile.getSize())));
+                fileDetailVO.setFileSaveDate(null);
+                fileDetailVO.setFileDownCount(0);
+                fileDetailVO.setFileType(fileType);
+
+                result += fileGroupMapper.insertFileDetail(fileDetailVO);
+
+                log.info("파일 저장 위치 realPath: {}, 파일명: {}", realPath, fileName);
+
+            } catch (IllegalStateException | IOException e) {
+                log.error("파일 저장 중 오류", e);
+            }
+        }
+
+        return fileGroupNo;
+    }
+
+    // 다중 파일 업로드 - 기존 파일 그룹에 추가
+    @Override
+    public void appendFilesToGroup(long fileGroupNo, MultipartFile[] multipartFiles,String fileType) {
+        String folder = getFolder();  // yyyy/MM/dd
+
+        String realPath = baseDir;
+        if (!realPath.endsWith(File.separator)) {
+            realPath += File.separator;
+        }
+        realPath += folder.replace("/", File.separator);
+
+        File uploadPath = new File(realPath);
+        if (!uploadPath.exists()) {
+            uploadPath.mkdirs();
+        }
+
+        for (MultipartFile multipartFile : multipartFiles) {
+            try {
+                String originalName = multipartFile.getOriginalFilename();
+                String fileName = originalName;
+
+                File saveFile = new File(uploadPath, fileName);
+                multipartFile.transferTo(saveFile);
+
+                FileDetailVO fileDetailVO = new FileDetailVO();
+                fileDetailVO.setFileGroupNo(fileGroupNo);
+                fileDetailVO.setFileOriginalName(originalName);
+                fileDetailVO.setFileSaveName(fileName);
+                fileDetailVO.setFileSaveLocate("/upload/" + folder + "/" + fileName);
+                fileDetailVO.setFileSize(multipartFile.getSize());
+                fileDetailVO.setFileExt(fileName.substring(fileName.lastIndexOf(".") + 1));
+                fileDetailVO.setFileMime(multipartFile.getContentType());
+                fileDetailVO.setFileFancySize(makeFancySize(String.valueOf(multipartFile.getSize())));
+                fileDetailVO.setFileSaveDate(null);
+                fileDetailVO.setFileDownCount(0);
+                fileDetailVO.setFileType(fileType);
+
+                fileGroupMapper.insertFileDetail(fileDetailVO);
+
+                log.info("파일 추가 저장 위치 realPath: {}, 파일명: {}", realPath, fileName);
+
+            } catch (IllegalStateException | IOException e) {
+                log.error("파일 추가 저장 중 오류", e);
+            }
+        }
+    }
+
+    // 단일 파일 업로드 - 신규 파일 그룹 생성
+    @Override
+    public long uploadSingleFile(MultipartFile file, String fileType) {
+        long fileGroupNo = 0L;
+
+        String folder = getFolder();  // yyyy/MM/dd
+        String realPath = baseDir;
+        if (!realPath.endsWith(File.separator)) {
+            realPath += File.separator;
+        }
+        realPath += folder.replace("/", File.separator);
+
+        File uploadPath = new File(realPath);
+        if (!uploadPath.exists()) {
+            uploadPath.mkdirs();
+        }
+
+        FileGroupVO fileGroupVO = new FileGroupVO();
+        fileGroupMapper.insertFileGroup(fileGroupVO);
+        fileGroupNo = fileGroupVO.getFileGroupNo();
+
+        try {
+            String originalName = file.getOriginalFilename();
+            String fileName = originalName;
+
+            File saveFile = new File(uploadPath, fileName);
+            file.transferTo(saveFile);
+
+            FileDetailVO fileDetailVO = new FileDetailVO();
+            fileDetailVO.setFileGroupNo(fileGroupNo);
+            fileDetailVO.setFileOriginalName(originalName);
+            fileDetailVO.setFileSaveName(fileName);
+            fileDetailVO.setFileSaveLocate("/upload/" + folder + "/" + fileName);
+            fileDetailVO.setFileSize(file.getSize());
+            fileDetailVO.setFileExt(fileName.substring(fileName.lastIndexOf(".") + 1));
+            fileDetailVO.setFileMime(file.getContentType());
+            fileDetailVO.setFileFancySize(makeFancySize(String.valueOf(file.getSize())));
+            fileDetailVO.setFileSaveDate(null);
+            fileDetailVO.setFileDownCount(0);
+            fileDetailVO.setFileType(fileType);
+
+            fileGroupMapper.insertFileDetail(fileDetailVO);
+
+            log.info("단일 파일 저장 위치 realPath: {}, 파일명: {}", realPath, fileName);
+
+        } catch (IllegalStateException | IOException e) {
+            log.error("단일 파일 업로드 중 오류", e);
+        }
+
+        return fileGroupNo;
+    }
+
+    // 단일 파일 업로드 - 기존 파일 그룹에 추가
+    @Override
+    public void appendSingleFileToGroup(long groupNo, MultipartFile file, String fileType) {
+        String folder = getFolder();  // yyyy/MM/dd
+        String realPath = baseDir;
+        if (!realPath.endsWith(File.separator)) {
+            realPath += File.separator;
+        }
+        realPath += folder.replace("/", File.separator);
+
+        File uploadPath = new File(realPath);
+        if (!uploadPath.exists()) {
+            uploadPath.mkdirs();
+        }
+
+        try {
+            String originalName = file.getOriginalFilename();
+            String fileName = originalName;
+
+            File saveFile = new File(uploadPath, fileName);
+            file.transferTo(saveFile);
+
+            FileDetailVO fileDetailVO = new FileDetailVO();
+            fileDetailVO.setFileGroupNo(groupNo);
+            fileDetailVO.setFileOriginalName(originalName);
+            fileDetailVO.setFileSaveName(fileName);
+            fileDetailVO.setFileSaveLocate("/upload/" + folder + "/" + fileName);
+            fileDetailVO.setFileSize(file.getSize());
+            fileDetailVO.setFileExt(fileName.substring(fileName.lastIndexOf(".") + 1));
+            fileDetailVO.setFileMime(file.getContentType());
+            fileDetailVO.setFileFancySize(makeFancySize(String.valueOf(file.getSize())));
+            fileDetailVO.setFileSaveDate(null);
+            fileDetailVO.setFileDownCount(0);
+            fileDetailVO.setFileType(fileType);
+
+            fileGroupMapper.insertFileDetail(fileDetailVO);
+
+            log.info("단일 파일 추가 저장 위치 realPath: {}, 파일명: {}", realPath, fileName);
+
+        } catch (IllegalStateException | IOException e) {
+            log.error("단일 파일 추가 저장 중 오류", e);
+        }
+    }
+
+    // 파일 삭제
+    @Override
+    public void deleteFileById(long fileId) {
+        FileDetailVO file = fileGroupMapper.selectFileById(fileId);
+        if (file != null) {
+            // 실제 저장 경로: baseDir + (fileSaveLocate에서 /upload 제거) - OS 구분자로 변경
+            String relativeFilePath = file.getFileSaveLocate().replaceFirst("^/upload", "").replace("/", File.separator);
+            File diskFile = new File(baseDir + relativeFilePath);
+            if (diskFile.exists()) {
+                boolean deleted = diskFile.delete();
+                if (deleted) {
+                    log.info("파일 삭제 성공: {}", diskFile.getAbsolutePath());
+                } else {
+                    log.warn("파일 삭제 실패: {}", diskFile.getAbsolutePath());
+                }
+            } else {
+                log.warn("삭제 대상 파일 없음: {}", diskFile.getAbsolutePath());
+            }
+            fileGroupMapper.deleteFileById(fileId);
+        }
+    }
+
+    // 파일 그룹과 상세 파일 목록 조회
+    @Override
+    public FileGroupVO getFileGroupWithDetails(long fileGroupNo) {
+        FileGroupVO group = new FileGroupVO();
+        group.setFileGroupNo(fileGroupNo);
+        group.setFileDetailVOList(fileGroupMapper.selectFilesByGroupNo(fileGroupNo));
+        return group;
+    }
+}

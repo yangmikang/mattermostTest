@@ -1,0 +1,624 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Insert title here</title>
+</head>
+<style>
+#content {
+	width: 80%;
+	margin: 0 auto;
+	margin-bottom: 5%;
+	margin-top: 2%;
+}
+
+.subBt, .fileIp {
+	display: none;
+}
+
+td>.ip {
+	width: 50%;
+}
+
+form  button {
+	border: 1px solid black;
+	width: 80px;
+	height: 30px;
+}
+</style>
+
+
+
+<body>
+	<!-- 컨테이너 영역 -->
+	<div id="container">
+		<!-- breadcrumb -->
+		<!-- 컨테이너 영역 -->
+
+		<div class="page-title-wrap visual img-members">
+			<div class="visual-filter"></div>
+			<div class="inner">
+				<!-- breadcrumb -->
+				<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+					<ol class="breadcrumb">
+						<li class="home"><a href="#" class="txt">Home</a></li>
+						<li><a href="#" class="txt">Board</a></li>
+
+						<c:choose>
+							<c:when test="${boardVo.boardMasterCode eq 'N01'}">
+								<li><a href="#" class="txt">GINI News</a></li>
+							</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'N02'}">
+								<li><a href="#" class="txt">Members News</a></li>
+							</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'N03'}">
+								<li><a href="#" class="txt">Media Release</a></li>
+							</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'N04'}">
+								<li><a href="#" class="txt">Q&A</a></li>
+							</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'N05'}">
+								<li><a href="#" class="txt">Members</a></li>
+							</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'N06'}">
+								<li><a href="#" class="txt">Action Group</a></li>
+							</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'A01'}">
+								<li><a href="#" class="txt">Publications</a></li>
+							</c:when>
+							<c:otherwise>
+								<li><a href="#" class="txt">Board</a></li>
+							</c:otherwise>
+						</c:choose>
+
+					</ol>
+				</nav>
+
+				<!-- 제목 영역 -->
+				<div class="visual-area">
+					<h2 class="h-tit">
+						<c:choose>
+							<c:when test="${boardVo.boardMasterCode eq 'N01'}">GINI News Detail</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'N02'}">Members News Detail</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'N03'}">Media Release Detail</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'N04'}">Q&A Detail</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'N05'}">Members Detail</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'N06'}">Action Group Detail</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'A01'}">Publications Detail</c:when>
+							<c:otherwise>Board</c:otherwise>
+						</c:choose>
+					</h2>
+
+					<p>
+						<c:choose>
+							<c:when test="${boardVo.boardMasterCode eq 'N01'}">Stay updated with the latest announcements from GINI.</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'N02'}">Get the latest updates and news from our members.</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'N03'}">Browse official media releases and announcements.</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'N04'}">Find answers to frequently asked questions.</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'N05'}">Explore member profiles and collaboration details.</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'N06'}">Discover events and initiatives from action groups.</c:when>
+							<c:when test="${boardVo.boardMasterCode eq 'A01'}">Discover events and initiatives from action groups.</c:when>
+							<c:otherwise>Check the details of the post below.</c:otherwise>
+						</c:choose>
+					</p>
+
+				</div>
+			</div>
+		</div>
+		<!-- breadcrumb -->
+
+		<form class="form-horizontal" id="form" action="/contract/create"
+			method="post" enctype="multipart/form-data">
+
+			<input type="hidden" name="fileGroupNo"
+				value="${boardVo.fileGroupNo}" /> <input type="hidden"
+				class="boardCode" id="boardCode" name="boardCode"
+				value="${boardVo.boardCode}" id="" readonly> <input
+				type="hidden" class="ip" name="" value="${boardVo.cityCode}" id=""
+				readonly>
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				<!-- 페이지 타이틀 영역 -->
+				<!-- //페이지 타이틀 영역 -->
+				<!-- 상세보기 영역 -->
+				<div class="conts-area">
+					<div class="conts-detail-wrap txt-box bg-white">
+						<!-- real contents -->
+						<div class="conts-wrap scroll-check">
+							<div class="conts-wrap section-link" id="section_01">
+								<h3 class="sec-tit">${boardVo.title}</h3>
+								<input type="text" id="Bdtitle" name="title"
+									style="width: 1200px; border: none; display: none;"
+									class="updtcon ip title" value="${boardVo.title}" readonly>
+								</h3>
+								<!-- table list -->
+								<div class="tbl-wrap">
+									<dl class="tbl def-list">
+										<!-- <dt>Title</dt>
+										<dd><h3 class="sec-tit">제목입력해주세요</h3></dd> -->
+										<dt>Author</dt>
+
+										<dd style="display: flex; align-items: center;">
+											<c:choose>
+												<c:when test="${boardVo.cityCode == '01'}">
+													<!-- Daejeon / South Korea -->
+													<img
+														src="${pageContext.request.contextPath}/img/component/common/ico_korea.svg"
+														alt="Korea Flag" />
+												</c:when>
+												<c:when test="${boardVo.cityCode == '02'}">
+													<!-- Dortmund / Germany -->
+													<img
+														src="${pageContext.request.contextPath}/img/component/common/ico_germany.svg"
+														alt="Germany Flag" />
+												</c:when>
+												<c:when test="${boardVo.cityCode == '03'}">
+													<!-- Malaga / Spain -->
+													<img
+														src="${pageContext.request.contextPath}/img/component/common/ico_spain.svg"
+														alt="Spain Flag" />
+												</c:when>
+												<c:when
+													test="${boardVo.cityCode == '04' || boardVo.cityCode == '05'}">
+													<!-- Montgomery County / Seattle => USA -->
+													<img
+														src="${pageContext.request.contextPath}/img/component/common/ico_usa.svg"
+														alt="USA Flag" />
+												</c:when>
+												<c:when test="${boardVo.cityCode == '06'}">
+													<!-- Quebec / Canada -->
+													<img
+														src="${pageContext.request.contextPath}/img/component/common/ico_canada.svg"
+														alt="Canada Flag" />
+												</c:when>
+												<c:otherwise>
+													<!-- Other / Unknown -->
+													<img
+														src="${pageContext.request.contextPath}/img/component/common/ico_global.svg"
+														alt="Global Flag" />
+												</c:otherwise>
+											</c:choose>
+											${boardVo.username}
+										</dd>
+										<dt>Reg Date</dt>
+										<dd>${boardVo.regDate}</dd>
+										<dt>Content</dt>
+										<dd> <span class="Recont">${boardVo.content}</span>
+											<textarea rows="10" cols="100" name="content"
+												class="updtcon content" readonly style="border: none; display: none;">${boardVo.content}</textarea>
+										<dt>Thumbnail</dt>
+										<dd>
+											<c:if test="${boardVo.fileGroupVO != null}">
+												<c:forEach var="fileDetailVO"
+													items="${boardVo.fileGroupVO.fileDetailVOList}"
+													varStatus="stat">
+													<c:if test="${fileDetailVO.fileType == 'THUMBNAIL'}">
+														<tr>
+															<td colspan="2"><img
+																class="img-fluid imgFileSaveLocate thumbnail-preview"
+																style="cursor: pointer; display: block;"
+																src="${pageContext.request.contextPath}${fileDetailVO.fileSaveLocate}"
+																data-file-original-name="${fileDetailVO.fileOriginalName}"
+																data-file-save-locate="${fileDetailVO.fileSaveLocate}" />
+															</td>
+														</tr>
+
+													</c:if>
+												</c:forEach>
+											</c:if>
+										</dd>
+										<dt id="thumbnailTT" style="display: none;">Upload
+											Thumbnail</dt>
+										<div id="thumbCont" style="display: none">
+											<dd class="thumbnail-field">
+												<div class="form-group margin-b">
+													<div class="form-tit lg"></div>
+													<div class="form-conts row">
+														<input id="fileNm" type="text" maxlength="16"
+															class="form-control" placeholder="Thumbnail file name"
+															readonly>
+														<button type="button" class="btn lg secondary"
+															onclick="document.getElementById('thumbnail').click()">
+															Search</button>
+													</div>
+													<p class="form-hint info">Allow up to 00 bytes</p>
+													<input type="file" name="thumbnailFile" id="thumbnail"
+														style="display: none;" onchange="setThumbnailFileName(); previewThumbnail(event)" />
+												</div>
+											</dd>
+										</div>
+										<c:if test="${boardVo.fileGroupVO != null}">
+											<dt style="display: block; width: 100%;">Upload File</dt>
+											<div class="gini-cont-box" style="display: none;">
+									<div class="row">
+										<!-- 파일업로드 -->
+										<div class="file-upload cont50" ondragover="f_over()"
+											ondrop="f_drop()">
+											<p class="txt">Please drag and drop the file you wish to
+												attach here, or click the Select File button to select the
+												file directly.</p>
+											<button type="button"
+												class="btn primary ico-before ico-upload md"
+												onclick="document.getElementById('uploadFiles').click()">
+												Select file</button>
+
+											<input type="file" multiple
+												id="uploadFiles" style="display: none;"
+												onchange="handleFileUpload(event)" />
+										</div>
+										<!-- //파일업로드 -->
+										<!-- 파일업로드 -->
+										<div class="file-upload-result cont50">
+											<div class="upload-top">
+												<div class="file-total">
+													<span class="current">0</span> / 6
+												</div>
+											</div>
+											<ul class="upload-list" id="fileListArea">
+											</ul>
+											<div class="upload-delete-btn">
+											<!-- 	<button type="button"
+													class="btn btn-txt ico-before ico-del sm h-auto "
+													onclick="deleteAllFiles()">delete all</button> -->
+											</div>
+										</div>
+										<!-- //파일업로드 리스트 -->
+									</div>
+
+							</div>
+								<ul class="box-group-area upload-list" style="width: 90%;">
+											<c:forEach var="fileDetailVO"
+												items="${boardVo.fileGroupVO.fileDetailVOList}"
+												varStatus="stat">
+												<c:if test="${fileDetailVO.fileType eq 'GENERAL'}">
+															<li>
+													<img
+														class="img-fluid imgFileSaveLocate" style="display: none;"
+														src="<c:url value='${fileDetailVO.fileSaveLocate}' />"
+														data-file-original-name="${fileDetailVO.fileOriginalName}"
+														data-file-save-locate="${fileDetailVO.fileSaveLocate}" />
+																<p class="tit"  onclick="fn_dw(this)"  style="cursor: pointer;">${fileDetailVO.fileOriginalName}
+																	[${fileDetailVO.fileExt},
+																	${fileDetailVO.fileFancySize}]</p>
+																<div class="btn-wrap">
+																</div>
+															<button type="button" class="del ico-del" style="display:none; border:none;"
+							  							onclick="deleteSingleFile(null, this, '${fileDetailVO.fileSn}')">Delete</button>
+															</li>
+														<input type="hidden" name="existingFileIds"
+															value="${fileDetailVO.fileSn}" />
+												</c:if>
+											</c:forEach>
+
+										</c:if>
+														</ul>
+								</div>
+								
+
+
+
+								<!-- //table list -->
+							</div>
+
+						</div>
+						<!-- //real contents -->
+						<div class="page-btn-wrap both">
+							<div>
+
+								<c:choose>
+									<c:when test="${boardVo.boardMasterCode == 'N01'}">
+										<!-- Daejeon / South Korea -->
+										<button type="button" class="btn xlg"
+											onclick="location.href='${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=N01'">Go
+											to list</button>
+									</c:when>
+									<c:when test="${boardVo.boardMasterCode == 'N02'}">
+										<!-- Dortmund / Germany -->
+										<button type="button" class="btn xlg"
+											onclick="location.href='${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=N02'">Go
+											to list</button>
+									</c:when>
+									<c:when test="${boardVo.boardMasterCode == 'N03'}">
+										<!-- Malaga / Spain -->
+										<button type="button" class="btn xlg"
+											onclick="location.href='${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=N03'">Go
+											to list</button>
+									</c:when>
+									<c:when test="${boardVo.boardMasterCode == 'N04'}">
+										<!-- Malaga / Spain -->
+										<button type="button" class="btn xlg"
+											onclick="location.href='${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=N04'">Go
+											to list</button>
+									</c:when>
+									<c:when test="${boardVo.boardMasterCode == 'N05'}">
+										<!-- Malaga / Spain -->
+										<button type="button" class="btn xlg"
+											onclick="location.href='${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=N05'">Go
+											to list</button>
+									</c:when>
+									<c:when test="${boardVo.boardMasterCode == 'N06'}">
+										<!-- Malaga / Spain -->
+										<button type="button" class="btn xlg"
+											onclick="location.href='${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=N06'">Go
+											to list</button>
+									</c:when>
+									<c:when test="${boardVo.boardMasterCode == 'A01'}">
+										<!-- Malaga / Spain -->
+										<button type="button" class="btn xlg"
+											onclick="location.href='${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=A01'">Go
+											to list</button>
+									</c:when>
+									<c:otherwise>
+										<!-- Other / Unknown -->
+										<button type="button" class="btn xlg"
+											onclick="location.href='${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=N01'">Go
+											to list</button>
+									</c:otherwise>
+								</c:choose>
+							</div>
+							<div>
+								<input type="hidden" name="boardMasterCode" value="..." /> <input
+									type="checkbox" name="deleteFileIds"
+									value="${fileDetailVO.fileNo}" />
+								<button type="button" class="btn xlg edit" onclick="updateBd()">Edit</button>
+								<button type="submit" class="btn xlg subBt">Submit</button>
+								<button type="button" class="btn xlg tertiary delete"
+									onclick="deleteBd()">Delete</button>
+							</div>
+						</div>
+					</div>
+					<input type="hidden" name="boardMasterCode" id="boardMasterCode"
+						value="${boardVo.boardMasterCode}" />
+
+				</div>
+
+
+
+				<!-- //상세보기 영역 -->
+			</div>
+			<!-- //컨테이너 영역 -->
+	</div>
+	</form>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script type="text/javascript">
+	function previewThumbnail(event) {
+		  const input = event.target;
+		  const previewImg = document.querySelector('.imgFileSaveLocate.thumbnail-preview');
+
+		  if (input.files && input.files[0]) {
+		    const reader = new FileReader();
+		    reader.onload = function (e) {
+		      if (previewImg) {
+		        previewImg.src = e.target.result;
+		        previewImg.style.display = 'block';
+		      }
+		    };
+		    reader.readAsDataURL(input.files[0]);
+		  }
+		}
+
+//location.href = encodeURI(`${fileDetailVO.fileSaveLocate}`);
+document.addEventListener("DOMContentLoaded", function () {
+  updateFileCount();
+});
+
+//전역 파일 저장 배열
+let uploadedFiles = [];
+let deletedFileIds = []
+function setThumbnailFileName() {
+    const fileInput = document.getElementById("thumbnail");
+    const fileNameInput = document.getElementById("fileNm");
+
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const fileName = file.name;
+        const extension = fileName.split('.').pop().toLowerCase();
+        const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+        if (!allowedExtensions.includes(extension)) {
+            alert("Only image files (JPG, JPEG, PNG) are allowed as thumbnails.");
+            fileInput.value = ''; 
+            fileNameInput.value = '';
+            return;
+        }
+
+        fileNameInput.value = fileName;
+    } else {
+        fileNameInput.value = "";
+    }
+}
+
+
+function formatBytes(bytes) {
+  if (bytes === 0) return '0KB';
+  const k = 1024;
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const size = parseFloat((bytes / Math.pow(k, i)).toFixed(1));
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  return `\${size} \${sizes[i]}`;
+}
+
+function updateFileCount() {
+	  const countSpan = document.querySelector('.file-total .current');
+	  const existingCount = document.querySelectorAll('input[name="existingFileIds"]').length;
+	  const validExistingCount = existingCount - deletedFileIds.length;
+	  const totalCount = validExistingCount + uploadedFiles.length;
+	  countSpan.textContent = `\${totalCount}`;
+}
+
+function deleteAllFiles() {
+  uploadedFiles = [];
+  const fileListArea = document.getElementById('fileListArea');
+  fileListArea.innerHTML = '';
+  updateFileCount();
+}
+function handleFileUpload(event) {
+	  const files = event.target.files;
+	  const fileListArea = document.getElementById('fileListArea');
+
+	  const existingCount = document.querySelectorAll('input[name="existingFileIds"]').length;
+	  const validExistingCount = existingCount - deletedFileIds.length;
+
+	  for (let i = 0; i < files.length; i++) {
+	    const file = files[i];
+
+	    if (file.size > 20 * 1024 * 1024) {
+	    	const li = document.createElement('li');
+	    	uploadedFiles.push(file);
+	    	const index = uploadedFiles.length;
+
+	    	li.innerHTML = `
+	    	  <div class="in">
+	    	    <div class="file-name">\${file.name} [\${file.name.split('.').pop()}, \${formatBytes(file.size)}]</div>
+	    	    <div class="file-btn">
+	    	      <button type="button" class="del ico-del" style="border:none;"
+	    	        onclick="deleteSingleFile(\${index}, this)">Delete</button>
+	    	    </div>
+	    	  </div>
+	    	`;
+	    	fileListArea.appendChild(li);
+
+	      continue;
+	    }
+
+	    if (uploadedFiles.length + validExistingCount >= 6) {
+	      alert("You can register up to 6 files.");
+	      break;
+	    }
+
+	    uploadedFiles.push(file);
+	    const index = uploadedFiles.length;
+
+	    const li = document.createElement('li');
+	    li.innerHTML = `
+	      <div class="in">
+	        <div class="file-name">\${file.name} [\${file.name.split('.').pop()}, \${formatBytes(file.size)}]</div>
+	        <div class="file-btn">
+			</div>
+			<button type="button" class="del ico-del" style="border:none;"
+			onclick="deleteSingleFile(\${index}, this)">Delete</button>
+	        </div>
+	      </div>
+	    `;
+	    fileListArea.appendChild(li);
+	  }
+
+	  updateFileCount();
+	  event.target.value = '';
+	}
+
+function deleteSingleFile(index, button, fileId = null) {
+  if (fileId) {
+    deletedFileIds.push(Number(fileId));
+    const hiddenInput = document.querySelector(`input[name="existingFileIds"][value="${fileId}"]`);
+    if (hiddenInput) hiddenInput.remove();
+  } else {
+    const fileName = button.closest('li').querySelector('.file-name').textContent.split(' [')[0];
+    const fileIndex = uploadedFiles.findIndex(file => file.name === fileName);
+    if (fileIndex > -1) uploadedFiles.splice(fileIndex, 1);
+  }
+  button.closest('li').remove();
+  updateFileCount();
+}
+
+
+  function updateBd() {
+	  document.querySelector(".edit").style.display = 'none';
+	  document.querySelector(".subBt").style.display = 'inline-flex';
+	  document.querySelector(".gini-cont-box").style.display = 'block';
+	  document.querySelector("#thumbCont").style.display = 'block';
+	  document.querySelector("#thumbnailTT").style.display = 'block';
+	  document.querySelector("#Bdtitle").style.display = 'block';
+	  document.querySelector(".content").style.display = 'block';
+	  document.querySelectorAll(".del").forEach(el => el.style.display = 'block');
+
+	  document.querySelector(".sec-tit").style.display = 'none';
+	  document.querySelector(".Recont").style.display = 'none';
+
+	  document.querySelectorAll(".updtcon").forEach(function (el) {
+	    el.removeAttribute("readonly");
+	    el.style.border = "1px solid gray";
+	  });
+
+	  const form = document.getElementById("form");
+	  form.setAttribute("action", "${pageContext.request.contextPath}/board/update.do");
+	  form.setAttribute("method", "post");
+  }
+  document.querySelector('.subBt').addEventListener('click', function (e) {
+	  e.preventDefault();
+
+	  const form = document.getElementById('form');
+	  const formData = new FormData(form);
+
+	  // uploadedFiles 배열에 있는 파일들 추가
+	  uploadedFiles.forEach(file => {
+	    formData.append('uploadFiles', file);
+	  });
+
+	  // 삭제할 파일 ID도 추가
+	  
+	  deletedFileIds.forEach(fileId => {
+	    formData.append('deletedFileIds', fileId);
+	  });
+
+	  axios.post(`${pageContext.request.contextPath}/board/update.do`, formData, {
+	    headers: {
+	      'Content-Type': 'multipart/form-data'
+	    }
+	  })
+	  .then(res => {
+	    alert("Updated successfully.");
+	    location.href = `${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=${document.getElementById('boardMasterCode').value}`;
+	  })
+	  .catch(error => {
+	    console.error("업데이트 실패:", error);
+	    alert("Update failed.");
+	  });
+	});
+
+  function deleteBd() {
+	  const result = confirm("Are you sure you want to delete it?");
+	  if (!result) {
+	    alert("Deletion has been undone.");
+	    return;
+	  }
+
+	  const boardCode = document.getElementById("boardCode").value;
+	  const boardMasterCode = document.getElementById("boardMasterCode").value;
+
+	  axios.post(`${pageContext.request.contextPath}/board/delete.do`, {
+	    boardCode: boardCode,
+	    boardMasterCode: boardMasterCode
+	  })
+	  .then(res => {
+	    const redirectUrl = res.data;
+	    alert("It has been deleted.");
+	    
+	    
+	    location.href = `${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=\${boardMasterCode}`;
+	  })
+	  .catch(error => {
+	    console.error("삭제 오류:", error);
+	    alert("Deletion failed.");
+	  });
+	}
+
+
+ function fn_dw() {
+      const target = document.querySelector(".imgFileSaveLocate");
+
+      if (target) {
+        const fileSaveLocate = target.dataset.fileSaveLocate;
+        console.log("fileSaveLocate : " + fileSaveLocate);
+        location.href = "${pageContext.request.contextPath}/download.do?fileName=" + encodeURIComponent(fileSaveLocate);
+      } else {
+        console.warn(".imgFileSaveLocate 요소를 찾을 수 없습니다.");
+      }
+    
+  };
+</script>
+</body>
+</html>

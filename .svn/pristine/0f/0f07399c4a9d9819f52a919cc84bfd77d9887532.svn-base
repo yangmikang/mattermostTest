@@ -1,0 +1,28 @@
+package kr.go.distep.user.service.impl;
+
+import java.io.IOException;
+import java.sql.SQLException;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import kr.go.distep.user.service.UserService;
+import kr.go.distep.user.vo.UserVO;
+
+@Service("userService")
+public class UserServiceImpl implements UserService {
+	@Resource(name = "userMapper")
+	private UserMapper userMapper;
+
+	@Override
+	public void register(UserVO userVO) throws SQLException, IOException{
+		userMapper.insertUser(userVO);
+	}
+	
+	@Override
+    public boolean checkUserId(String userId) throws SQLException, IOException{
+		return userMapper.checkUserId(userId) > 0;
+		
+    }
+}

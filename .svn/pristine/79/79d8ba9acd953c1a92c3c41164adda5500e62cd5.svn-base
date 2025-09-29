@@ -1,0 +1,419 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<style>
+.flag-icon::before,
+.organizer-daejeon::before,
+.organizer-dortmund::before,
+.organizer-malaga::before,
+.organizer-montgomery::before,
+.organizer-seattle::before,
+.organizer-quebec::before,
+.gini::before,
+.organizer-default::before {
+  content: "";
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  margin-right: 3px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+/* 각 도시별 국기 이미지 경로 매핑 */
+.organizer-daejeon::before    { 
+	background-image: url('../../img/component/common/ico_korea.svg'); 
+}
+.organizer-dortmund::before    {
+	background-image: url('../../img/component/common/ico_germany.svg');
+}
+.organizer-malaga::before      { 
+	background-image: url('../../img/component/common/ico_spain.svg'); 
+}
+.organizer-montgomery::before  {
+	background-image: url('../../img/component/common/ico_usa.svg'); 
+}
+.organizer-seattle::before     { 
+	background-image: url('../../img/component/common/ico_usa.svg'); 
+}
+.organizer-quebec::before      { 
+	background-image: url('../../img/component/common/ico_canada.svg'); 
+}
+.gini::before                  { 
+	background-image: url('../../img/component/common/ginilogo.png'); 
+}
+.organizer-default::before     { 
+	background-image: url('../../img/component/common/ico_default.svg'); 
+}
+.search-list .card-body .c-text:hover {
+	  background-color: transparent !important;
+	  box-shadow: none !important;
+	  border: none !important;
+	  outline: none !important;
+	  text-decoration: none !important;
+	  cursor: default !important;
+}
+.thumbnail-list .card-body {
+	display: flex;
+	align-items: normal !important;
+	justify-content: flex-start;
+	flex-direction: column !important;
+	gap: var(--krds-spacer-6);
+}
+
+.thumbnail-list .li {
+	position: relative;
+	display: flex;
+	align-items: normal !important;
+	justify-content: flex-start;
+	flex-direction: column !important;
+	gap: var(--krds-spacer-6) 0;
+	padding: var(--krds-spacer-6) !important;
+	overflow-x: auto;
+	box-sizing: border-box;
+	border-radius: var(--krds-rd-12);
+	border: 0.1rem solid var(--krds-gray-40);
+}
+.thumtxt{
+height: 50px;
+}
+.card-img {
+  background-color: #f4f4f4;
+  background-image: url('../../img/component/common/no-image-aa.png');
+  background-size: cover;
+  background-position: center;
+}
+.no-data{
+	  width: 70vw;
+	display: block;
+	flex-direction: row;
+    padding: 24px 32px;
+    column-gap: var(--krds-spacer-6);
+    background-color: var(--krds-white);
+    border-radius: 10px;
+    border: 1px solid #c8c8c8;
+}
+</style>
+<body>
+  <c:set var="boardMasterCode" value="${param.boardMasterCode}" />
+  <script>const boardMasterCode = '${boardMasterCode}';</script>
+  <div id="container">
+    <div class="page-title-wrap visual img-members">
+      <div class="visual-filter"></div>
+      <div class="inner">
+        <nav class="breadcrumb-wrap" aria-label="브레드크럼">
+          <ol class="breadcrumb">
+            <li class="home"><a href="${pageContext.request.contextPath}/index.do" class="txt">Home</a></li>
+            <li><a href="${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=N01" id="" class="txt md breadcrumbLink">BOARD</a></li>
+            <li><a href="#" class="txt breadcrumb-menu breadcrumbLink" id="">BOARD</a></li>
+          </ol>
+        </nav>
+        <div class="visual-area">
+          <h2 class="h-tit board-title">Board</h2>
+          <p class="board-desc">Board description</p>
+        </div>
+      </div>
+    </div>
+    <div class="inner">
+      <div class="board-box">
+        <div class="search-top-box">
+          <div class="sch-form-wrap flex">
+            <div class="sch-input">
+              <input type="text" class="form-control searchKeyword" id="searchKeyword" placeholder="Enter Search keyword" title="Enter Search keyword">
+              <button type="button" class="btn btn-ico ico-sch" id="search"><span class="sr-only">검색</span></button>
+            </div>
+            
+            <c:if test="${userYn == 'Y' or userType == 'A'}">
+          	 	 <button type="button" class="btn btn-txt primary" style="width: 150px;" onclick="location.href='${pageContext.request.contextPath}/board/boardPage.do?boardMasterCode=${boardMasterCode}'">Create Post</button>
+			</c:if>
+          </div>
+        </div>
+        <div class="search-list-top type1">
+          <div class="sch-info" role="region" aria-live="polite">
+            Total <span class="keyword">0</span>
+          </div>
+        </div>
+        <ul class="search-list type1  stb-list"></ul>
+		<!-- 썸네일 게시판 리스트 -->
+		<ul class="search-list type2 thumbnail-list" style="display:none;"></ul>
+        <div class="pagination w-page paging">
+          <div class="row justify-content-center" id="divPagingArea"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  window.boardMasterCode = '${boardMasterCode}';
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+	    const titleEl = document.querySelector(".board-title");
+	    const descEl = document.querySelector(".board-desc");
+	    const breadcrumbMenuEl = document.querySelector(".breadcrumb-menu");
+	    const mdl = document.querySelector(".md");
+	    const breadcrumbLinkEl = document.querySelectorAll(".breadcrumbLink");
+	    const boardMasterCode = window.boardMasterCode || 'N01'; // fallback
+	    const boardUrl = `${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=${boardMasterCode}`;
+	    breadcrumbLinkEl.forEach(function(el) {
+	    	  el.href = boardUrl;
+	    });
+    	// 타이틀/브레드크럼/설명 설정
+	    switch (boardMasterCode) {
+	      case "N01":
+	        titleEl.innerText = breadcrumbMenuEl.innerText ="GINI News";
+	        mdl.innerText = mdl.innerText ="News";
+	        descEl.innerText = "Stay updated with the latest announcements from GINI.";
+	        break;
+	      case "N02":
+	        titleEl.innerText = breadcrumbMenuEl.innerText = "Members News";
+	        mdl.innerText = mdl.innerText ="News";
+	        descEl.innerText = "Get the latest updates and news from our members.";
+	        break;
+	      case "N03":
+	        titleEl.innerText = breadcrumbMenuEl.innerText = "Media Release";
+	        mdl.innerText = mdl.innerText ="News";
+	        descEl.innerText = "Browse official media releases and announcements.";
+	        break;
+	      case "N05":
+	        titleEl.innerText = breadcrumbMenuEl.innerText = "Members";
+	        mdl.innerText = mdl.innerText ="Members Area";
+	        descEl.innerText = "Explore member profiles and collaboration details.";
+	        break;
+	      case "N06":
+	        titleEl.innerText = breadcrumbMenuEl.innerText = "Action Group";
+	        mdl.innerText = mdl.innerText ="Members Area";
+	        descEl.innerText = "Discover events and initiatives from action groups.";
+	        break;
+	      case "A01":
+	        titleEl.innerText = breadcrumbMenuEl.innerText = "Publications";
+	        mdl.innerText = mdl.innerText ="About GINI";
+	        descEl.innerText = "Discover events and initiatives from action groups.";
+	        break;
+	      default:
+	        titleEl.innerText = breadcrumbMenuEl.innerText = "GINI News";
+	        descEl.innerText = "Check out the post.";
+	    }
+	    // 썸네일 뷰모드 유지
+	    const savedMode = localStorage.getItem("viewMode");
+	    if (savedMode === "thumbnail") thumOn();
+	
+	    // 초기 리스트 로딩
+	   	 changeSort();
+	
+		  const searchInput = document.getElementById("searchKeyword");
+		  const searchButton = document.getElementById("search");
+		  document.getElementById("search").addEventListener("click", function () {
+			  const keyword = document.getElementById("searchKeyword").value.trim();
+			// 현재 게시글이 하나도 없으면 검색 막기
+			/*   const listItems = document.querySelectorAll(".stb-list .li, .thumbnail-list .li");
+			  const hasRealItems = Array.from(listItems).some(function(el) {
+				  return !el.classList.contains("no-data");
+				});
+			  if (!hasRealItems) {
+			    alert("There are no posts to search.");
+			    return;
+			  } */
+			  // 공백만 입력한 경우 결과 비우고 리턴
+			  if (keyword === '') {
+			    document.querySelector(".keyword").innerText = '0';
+			    const boardMasterCode = window.boardMasterCode || 'N01';
+			    const isThumbnailType = ["N01", "N02", "N03", "A01"].includes(boardMasterCode);
+			    const type1List = document.querySelector(".stb-list");
+			    const type2List = document.querySelector(".thumbnail-list");
+		
+			    type1List.innerHTML = '';
+			    type2List.innerHTML = '';
+			    type1List.style.display = 'none';
+			    type2List.style.display = 'none';
+		
+			    const targetList = isThumbnailType
+			    ? document.querySelector(".thumbnail-list")
+			    : document.querySelector(".stb-list");
+	
+				/*   targetList.style.display = isThumbnailType ? 'grid' : 'block';
+				  targetList.insertAdjacentHTML('afterend', '<li class="li no-data"><p>There are no posts.</p></li>'); */
+
+		    	  document.querySelector("#divPagingArea").innerHTML = '<li class="li no-data" <p>There are no posts.</p></li>';
+
+				  return;
+			  }
+	
+		  // 유효한 키워드일 때만 검색
+		  changeSort(1, keyword);
+		});
+  		searchInput.addEventListener("keydown", function (e) {
+		  if (e.key === 'Enter') {
+		    searchButton.click();
+		  }
+		});
+	})
+  // 게시글 리스트 조회 
+	function changeSort(currentPage = 1, keyword = '') {
+	  const boardMasterCode = window.boardMasterCode || 'N01';
+	  var data = {
+			  currentPage: currentPage,
+			  keyword: keyword,
+			  boardMasterCode: boardMasterCode
+			};
+	  axios.post(`${pageContext.request.contextPath}/board/listAjax.do`, data)
+	    .then(function (res) {
+	      const list = res.data.content;
+	      document.querySelector(".keyword").innerText = res.data.total;
+	      const contextPath = '${pageContext.request.contextPath}';
+	      // 두 리스트 초기화
+	      const type1List = document.querySelector(".stb-list");
+	      const type2List = document.querySelector(".thumbnail-list");
+	      type1List.innerHTML = '';
+	      type2List.innerHTML = '';
+	      type1List.style.display = 'none';
+	      type2List.style.display = 'none';
+	      if (list.length === 0) {
+	    	  const targetList = ["N01", "N02", "N03","A01"].includes(boardMasterCode)
+	    	    ? document.querySelector(".thumbnail-list")
+	    	    : document.querySelector(".stb-list");
+	
+	    	    /* targetList.insertAdjacentHTML('afterend', '<li class="li no-data"><p>There are no posts.</p></li>');
+	    	  targetList.style.display = ["N01", "N02", "N03","A01"].includes(boardMasterCode) ? 'grid' : 'block'; */
+	    	  document.querySelector("#divPagingArea").innerHTML = '<li class="li no-data" <p>There are no posts.</p></li>';
+	    	  return;
+   			}
+	      let html = '';
+	      for (var i = 0; i < list.length; i++) {
+	    	  var item = list[i];
+	    	  // item 사용
+		        const content = item.content.length > 100 ? item.content.slice(0, 100) + '...' : item.content;
+		        var detailUrl = contextPath + "/board/detail.do?boardCode=" + item.boardCode; 
+		
+		        const flagIcon = getFlagIcon(item.cityCode);
+		        const username = item.username || '';
+		        const regDate = item.regDate || '';
+		        const title = item.title || '';
+		
+		        if (["N01", "N02", "N03","A01"].includes(boardMasterCode)) {
+		        	var fileList = item.fileGroupVO && item.fileGroupVO.fileDetailVOList ? item.fileGroupVO.fileDetailVOList : [];
+		        	var thumbnailFiles = [];
+		
+		        	for (var j = 0; j < fileList.length; j++) {
+		        		if (fileList[j].fileType === 'THUMBNAIL') {
+		        			thumbnailFiles.push(fileList[j]);
+		        		}
+		        	}
+		        	var firstFile = thumbnailFiles.length > 0 ? thumbnailFiles[0] : null;
+		        	var baseContextPath = contextPath.endsWith('/') ? contextPath.slice(0, -1) : contextPath;
+					var backsize = ""
+		        	var thumbnailPath = '';
+					//let ttterr = firstFile.fileSaveLocate
+		        	if (firstFile && firstFile.fileSaveLocate) {
+		        	    thumbnailPath = baseContextPath + firstFile.fileSaveLocate.replace(/\\/g, '/');
+		        	}else {
+		        	    thumbnailPath = baseContextPath + '../../img/component/common/no-image-aa.png';
+		        	} 
+		        	html += '<li class="li">'
+		        		+'<img class="card-img" src="' + thumbnailPath + '"'
+		        	    + ' onerror="this.src=\'' + contextPath + '/img/component/common/no-image-aa.png\'"'
+		        	    + ' onclick="location.href=\'' + detailUrl + '\'"'
+		        	    + ' style="width:100%; height:200px; object-fit:cover; cursor:pointer;">'
+		        		+ '<div class="card-body" onclick="location.href=\'' + detailUrl + '\'">'
+		        		+ '<a href="#" class="c-text">'
+		        		+ '<p class="c-tit"><span class="span">' + title + '</span></p>'
+		        		+ '<p class="c-txt thumtxt">' + content + '</p>'
+		        		+ '<p style="display:flex; align-items:center;">'
+		       		    + '<strong class="key"></strong>'
+		       		    + '<span class="value ' + flagIcon + '"  style="display:flex; align-items:center;" >'
+		       		    + username
+		       		    + '</span>'
+		       		    + '</p>'
+		        		+ '</a>'
+		        		+ '<div class="c-btn">'
+		        		+ '<a href="' + detailUrl + '" class="btn md secondary" title="View Details">View Details</a>'
+		        		+ '</div>'
+		        		+ '</div>'
+		        		+ '</li>';
+		        }
+				else {
+		          // 일반 리스트 게시판
+					html += '<li class="li" style="margin-bottom:2%;">'
+					     + '<div class="in">'
+					     + '<div class="card-body" onclick="location.href=\'' + detailUrl + '\'">'
+					     + '<a href="#" class="c-text">'
+					     + '<p class="c-tit"><span class="span">' + title + '</span></p>'
+					     + '<p class="c-txt">' + content + '</p>'
+					     + '<p style="display:flex; align-items:center;">'
+					     + '<strong class="key"></strong>'
+					     + '<span class="value ' + flagIcon + '" style="display:flex; align-items:center;" >'
+					     + username
+					     + '</span>'
+					     + '</p>'
+					     + '<p class="c-date">'
+					     + '<strong class="key">' + regDate + '</strong>'
+					     + '</p>'
+					     + '</a>'
+					     + '<div class="c-btn">'
+					     + '<a href="' + detailUrl + '" class="btn md secondary">View Details</a>'
+					     + '</div>'
+					     + '</div>'
+					     + '</div>'
+					     + '</li>';
+	        	}
+		      }
+		
+		      if (["N01", "N02", "N03","A01"].includes(boardMasterCode)) {
+		        type2List.innerHTML = html;
+		        type2List.style.display = 'grid';
+		        type2List.style.gridTemplateColumns = '1fr 1fr 1fr';
+		        type2List.style.gridGap = 'var(--krds-spacer-6)';
+		      } else {
+		        type1List.innerHTML = html;
+		        type1List.style.display = 'block';
+		      }
+		
+		      document.querySelector("#divPagingArea").innerHTML = res.data.pagingArea;
+		      bindPagingEvents();
+		    });
+		}
+  
+		function getFlagIcon(cityCode) {
+			  switch (cityCode) {
+			    case "01": return "organizer-daejeon";
+			    case "02": return "organizer-dortmund";
+			    case "03": return "organizer-malaga";
+			    case "04": return "organizer-montgomery";
+			    case "05": return "organizer-seattle";
+			    case "06": return "organizer-quebec";
+			    case "07": return "gini";
+			    default: return "organizer-default";
+			  }
+		}
+		
+		function thumOn() {
+			  const type2 = document.querySelector(".thumbnail-list");
+			  const stb = document.querySelector(".stb-list");
+			  if (!type2 || !stb) return;
+			  type2.style.display = 'grid';
+			  type2.style.gridTemplateColumns = '1fr 1fr 1fr';
+			  type2.style.gridGap = 'var(--krds-spacer-6)';
+			  stb.style.display = 'none';
+		}
+		
+		  // 페이징 이벤트 재바인딩
+		  function bindPagingEvents() {
+		    document.querySelectorAll(".clsPagingArea").forEach(function (el) {
+		      el.addEventListener("click", function (e) {
+		        e.preventDefault();
+		        const currentPage = parseInt(this.dataset.currentPage);
+		        const keyword = this.dataset.keyword || '';
+		        changeSort(currentPage, keyword);
+		      });
+		    });
+		  }
+		  
+		  function thumOff() {
+			  document.querySelector(".thumbnail-list").style.display = 'none';
+			  document.querySelector(".stb-list").style.display = 'block';
+		}
+		
+</script>
+
+</body>

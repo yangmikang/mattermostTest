@@ -1,0 +1,14 @@
+package kr.go.distep.user.service;
+
+import java.io.IOException;
+import java.sql.SQLException;
+
+import kr.go.distep.user.vo.UserVO;
+
+public interface UserService {
+	
+	void register(UserVO userVO) throws IOException, Exception;
+
+	boolean checkUserId(String userId) throws IOException, Exception;
+	
+}

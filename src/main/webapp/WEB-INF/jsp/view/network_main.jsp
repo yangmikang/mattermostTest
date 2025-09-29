@@ -1,0 +1,107 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<!-- 컨테이너 영역 -->
+		<div id="container" class="sub-cont-bg">
+			<div class="page-title-wrap visual img-members">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-wrap" aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Network</a></li>
+							<li><a href="#" class="txt">Overview</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<div class="visual-area">
+						<h2 class="h-tit">Overview</h2>
+						<p>Select a member country on the map</p>
+					</div>
+				</div>
+			</div>
+	
+
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				<!-- 섹션 컨텐츠 -->
+				 <div class="gini-cont-wrap">
+					<div class="gini-cont-box">
+				        <h3 class="area-tit">Who Can Join GINI?</h3>
+				        <p class="desc">GINI offers two types of membership: Government and Development Authority Members and Institutional Members. Both types are welcome to participate in GINI activities.</p>
+				         <ul class="info list-bulet">
+				            <li><b>Government and Development Authority Members</b></br>This includes local and regional governments like cities, counties, provinces, and states, as well as organizations with economic development roles.</li>
+				            <li><b>Institutional Members</b></br>This includes research institutes, universities, businesses, and other organizations located within the regions of the local or regional governments mentioned above.</li>
+				         </ul>
+					</div>
+					<div class="gini-cont-box mgt40">
+				        <h3 class="area-tit">How to Become a Member</h3>
+				        <p class="desc">To join GINI, local governments or organizations must agree with the GINI goals and receive approval from the Leaders Assembly.</p>
+						<div class="map-scroll">
+							<div class="map-surface">
+								<div class="map-city-box">
+							          <div class="pin pin-bottom p-seattle"><span class="dot" aria-hidden="true">
+							          	<img src="${pageContext.request.contextPath}/img/component/common/img-map-symbol-seattle.png" alt="daejeon">
+							          </span><span class="label">Seattle</span></div>
+							          <div class="pin pin-bottom p-quebec"><span class="dot">
+							          	<img src="${pageContext.request.contextPath}/img/component/common/img-map-symbol-quebec.png" alt="daejeon">
+							          </span><span class="label">Quebec</span></div>
+							          <div class="pin pin-top p-montgomery"><span class="dot">
+							          	<img src="${pageContext.request.contextPath}/img/component/common/img-map-symbol-mont.png" alt="daejeon">
+							          </span><span class="label">Montgomery</span></div>
+							          <div class="pin pin-bottom p-dortmund"><span class="dot">
+							          	<img src="${pageContext.request.contextPath}/img/component/common/img-map-symbol-dortmund.png" alt="daejeon">
+							          </span><span class="label">Dortmund</span></div>
+							          <div class="pin pin-top p-malaga"><span class="dot">
+							          	<img src="${pageContext.request.contextPath}/img/component/common/img-map-symbol-malaga.png" alt="daejeon">
+							          </span><span class="label">Malaga</span></div>
+							          <div class="pin pin-bottom p-daejeon"><span class="dot">
+							          	<img src="${pageContext.request.contextPath}/img/component/common/img-map-symbol-daejeon.png" alt="daejeon">
+							          </span><span class="label">Daejeon</span></div>
+								</div>
+					        </div>
+				        </div>
+					</div>
+				 </div>
+				<div class="gini-cont-wrap">
+					<div class="gini-cont-box">
+						 <h3 class="area-tit">Who Are Our Members?</h3>
+						 <b>Government and Development Authority Members</b>
+				        <p class="desc">GINI is powered by its founding members—cities and regions known for their strong commitment to science, technology, and innovation. These members collaborate across borders to address shared challenges and co-create new opportunities.</p>
+						<div class="network-table-box" style="margin-top:16px">
+					        <table class="network-table">
+   	    					  <caption>User Management</caption>
+						      <colgroup>
+						         <col style="width: 15%;">
+						         <col style="width: 15%;">
+						         <col style="width: 70%;">    
+						      </colgroup> 
+					          <thead>
+					            <tr>
+						            <th class="group">Member</th>
+						            <th>Country</th><th>Focus Areas</th>
+					            </tr>
+					          </thead>
+					          <tbody>
+					            <tr><td>City of Daejeon</td><td>Republic of Korea</td><td>Aerospace, Biohealth, Chips, Defense, Quantum, Robotics</td></tr>
+					            <tr><td>City of Dortmund</td><td>Germany</td><td>ICT, Nanotechnology, Biomedicine, Logistics, Robotics, Hydrogen, Production technology</td></tr>
+					            <tr><td>City of Málaga</td><td>Spain</td><td>Digital Content, Cybersecurity, Microelectronics, IoT, Renewable Energy</td></tr>
+					            <tr><td>County of Montgomery, MD</td><td>United States</td><td>Biotech, AI, Cleantech, IT, Hospitality Tech</td></tr>
+					            
+					            <tr><td>City of Seattle</td><td>United States</td><td>Cloud Computing, AI, Cleantech, Biotech, Aerospace</td></tr>
+					            <tr><td>Province of Québec</td><td>Canada</td><td>Aerospace, Lifesciences, Quantum, AI</td></tr>
+					          </tbody>
+					        </table>
+					     </div>
+					
+					</div>
+				</div>
+
+					
+
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 -->
+</html>

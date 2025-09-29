@@ -1,0 +1,29 @@
+package kr.go.distep.main.service.vo;
+
+import java.util.Date;
+
+import lombok.Data;
+
+@Data
+public class QnaVo {
+	int rnum;
+    private Long qnaId;
+    private String title;
+    private String content;
+    private String writerId;
+    private String isSecret;      // "Y" or "N"
+    private int viewCount;
+    private Date createdAt;
+    private Date updatedAt;
+
+    // 가공된 필드 (리스트 출력용)
+    private String answerYn;     
+
+    private Long answerId;
+    private String aswContent;
+    private String adminId;
+    private Date createdAtAsw;
+    private Date updateAtAsw;
+    private String deleteYnAsw;
+
+}

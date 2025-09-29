@@ -1,0 +1,103 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<!-- 컨테이너 영역 -->
+		<div id="container">
+			<div class="page-title-wrap visual img-overview">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Programs</a></li>
+							<li><a href="#" class="txt">Overview</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<div class="visual-area">
+						<h2 class="h-tit">Overview</h2>
+						<p>Overview of Operational Projects</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				<!-- 섹션 컨텐츠 -->
+				 <div class="gini-cont-wrap gap20 cont-box">
+					<div class="gini-cont-box">
+						<div class="row cont100">
+							<!-- cont-left -->
+							<div class="cont-left cont50">
+								<div class="area-group">
+									<h3 class="area-tit">What We Do</h3>
+									<p class="desc">We focuses on strengthening practical cooperation among cities through the following three core initiatives.</p>
+								</div>
+							</div>
+							<!-- //cont-left -->
+							<!-- cont-right -->
+							<div class="cont-right cont50">
+								<div class="area-group">
+									<div class="video-box">
+										<!-- <p>비디오영역입니다</p> -->
+										<iframe width="560" height="315" 
+											src="https://www.youtube.com/embed/ZHHfscXEcLQ" 
+											title="Global Innopolis Network Initiative Inaugural Ceremony" 
+											frameborder="0" 
+											allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+											allowfullscreen>
+										</iframe>	
+									</div>
+								</div>
+							</div>
+							<!-- //cont-right -->
+						</div>
+						<div class="area-group">
+							<!-- card-list -->
+							<ul class="card-list">
+								<li>
+									<a href="#">
+										<div class="img-wrap"><i class="ico ico-leader"></i></div>
+										<div class="list-conts">
+											<h4 class="card_tit">Leaders' Assembly</h4>
+											<p>Establishing the Basis for Global Collaboration</p>
+										</div>
+									</a>
+								</li>
+								<li>
+									<a href="#">
+										<div class="img-wrap"><i class="ico ico-seminer"></i></div>
+										<div class="list-conts">
+											<h4 class="card_tit">Forums & Seminars</h4>
+											<p>Discussing solutions to common urban issues</p>
+										</div>
+									</a>
+								</li>
+								<li>
+									<a href="#">
+										<div class="img-wrap"><i class="ico ico-joint"></i></div>
+										<div class="list-conts">
+											<h4 class="card_tit">Joint Projects</h4>
+											<p>Developing and Executing Practical Initiatives for Mutual Benefit</p>
+										</div>
+									</a>
+								</li>
+							</ul>
+							<!-- //card-list -->
+						 </div>
+					</div>
+					
+
+					
+				 </div>
+				<!-- //섹션 컨텐츠 -->
+
+					
+
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 --> 
+</html>

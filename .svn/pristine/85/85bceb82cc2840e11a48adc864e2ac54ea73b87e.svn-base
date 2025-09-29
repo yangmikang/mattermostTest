@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.go.distep.user.service.impl.UserMapper">
+	
+	<insert id="insertUser" parameterType="kr.go.distep.user.vo.UserVO">
+        INSERT INTO member (
+            id, username, password, email, city_code, city_etc, role
+        ) VALUES (
+            #{id}, #{username}, #{password}, #{email}, #{city_code}, #{city_etc}, #{role}
+        )
+    </insert>
+    
+    <select id="checkUserId" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM member WHERE id = #{userId}
+    </select>
+    <select id="checkEmail" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM member WHERE email = #{email}
+    </select>
+    
+    <select id="checkUsername" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM member WHERE username = #{username}
+    </select>
+    
+    <select id="selectUserById" parameterType="string" resultType="kr.go.distep.user.vo.UserVO">
+        SELECT id, password, username, email, city_code, city_etc, role, appr_yn
+        FROM member
+        WHERE id = #{id}
+    </select>
+    
+    <select id="selectUserList" resultType="kr.go.distep.user.vo.UserVO">
+        SELECT id, password, username, email, (select code_name from code where code_id = city_code) as city_name, city_code, city_etc, (select code_name from code where code_id = role) as role_nm, role, appr_yn
+        FROM member
+        ORDER BY ID ASC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+    
+    <select id="getUserCount" resultType="int">
+	    SELECT COUNT(*)
+	    FROM member
+	</select>
+    
+    <update id="updateUserRole" >
+	    UPDATE member
+	    SET appr_yn = #{appr_yn}
+	    WHERE id = #{id}
+	</update>
+	
+    <update id="updateUserType" >
+	    UPDATE member
+	    SET role = #{role}
+	    WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteUser" parameterType="string">
+	    DELETE FROM member WHERE id = #{id}
+	</delete>
+	
+    <update id="grantAdminRole" >
+	    UPDATE member
+	    SET appr_yn = 'Y',
+	        role = 'A'	    
+	    WHERE id = #{id}
+	</update>
+	
+    <update id="removeAdminRole" >
+	    UPDATE member
+	    SET appr_yn = 'N',
+	        role = 'G'	    
+	    WHERE id = #{id}
+	</update>
+	
+	<select id="findUserIdByNameAndEmail" resultType="String">
+	    SELECT id
+	    FROM member
+	    WHERE username = #{name}
+	      AND email = #{email}
+	</select>
+	
+	<select id="findUserByIdAndEmail" resultType="kr.go.distep.user.vo.UserVO">
+	    SELECT *
+	    FROM member
+	    WHERE id = #{userId}
+	      AND email = #{email}
+	</select>
+	
+	<update id="updateUserPassword">
+	    UPDATE member
+	    SET password = #{encodedPassword}
+	    WHERE id = #{userId}
+	</update>
+	
+	<update id="updateUser" parameterType="kr.go.distep.user.vo.UserVO">
+	    UPDATE member
+	    SET username = #{username},
+	        email = #{email},
+	        city_code = #{city_code},
+	        city_etc = #{city_etc}
+	    WHERE id = #{id}
+	</update>
+	
+	<select id="getBoardPermissionList" resultType="hashMap">
+	    SELECT 
+		    a.board_master_code,
+		    a.board_master_name,
+		    IFNULL(MAX(CASE WHEN b.user_type = 'G' THEN b.read_auth END), 'N') AS G_read_auth,
+		       CASE 
+		        WHEN a.board_master_code IN ('B01','B02','B03','B04') THEN '-'
+		        ELSE IFNULL(MAX(CASE WHEN b.user_type = 'N' THEN b.read_auth END), 'N')
+		    END AS N_read_auth,
+		    CASE 
+		        WHEN a.board_master_code NOT IN ('N01', 'N02', 'N03', 'N04', 'N05', 'N06', 'A01') THEN '-'
+		        ELSE IFNULL(MAX(CASE WHEN b.user_type = 'N' THEN b.file_auth END), 'N')
+		    END AS N_file_auth,
+		    CASE 
+		        WHEN a.board_master_code IN ('B01','B02','B03','B04') THEN '-'
+		        ELSE IFNULL(MAX(CASE WHEN b.user_type = 'G' THEN b.update_auth END), 'N')
+		    END AS G_update_auth,
+		    CASE 
+		        WHEN a.board_master_code NOT IN ('N01', 'N02', 'N03', 'N04', 'N05', 'N06', 'A01') THEN '-'
+		        ELSE IFNULL(MAX(CASE WHEN b.user_type = 'G' THEN b.file_auth END), 'N')
+		    END AS G_file_auth,
+		    IFNULL(MAX(CASE WHEN b.user_type = 'C' THEN b.read_auth END), 'N') AS C_read_auth,
+		    CASE 
+		        WHEN a.board_master_code IN ('B01','B02','B03','B04') THEN '-'
+		        ELSE IFNULL(MAX(CASE WHEN b.user_type = 'C' THEN b.update_auth END), 'N')
+		    END AS C_update_auth,
+		    CASE 
+		        WHEN a.board_master_code NOT IN ('N01', 'N02', 'N03', 'N04', 'N05', 'N06', 'A01') THEN '-'
+		        ELSE IFNULL(MAX(CASE WHEN b.user_type = 'C' THEN b.file_auth END), 'N')
+		    END AS C_file_auth,
+		    IFNULL(MAX(CASE WHEN b.user_type = 'O' THEN b.read_auth END), 'N') AS O_read_auth,
+		    CASE 
+		        WHEN a.board_master_code IN ('B01','B02','B03','B04') THEN '-'
+		        ELSE IFNULL(MAX(CASE WHEN b.user_type = 'O' THEN b.update_auth END), 'N')
+		    END AS O_update_auth,
+		    CASE 
+		        WHEN a.board_master_code NOT IN ('N01', 'N02', 'N03', 'N04', 'N05', 'N06', 'A01') THEN '-'
+		        ELSE IFNULL(MAX(CASE WHEN b.user_type = 'O' THEN b.file_auth END), 'N')
+		    END AS O_file_auth,
+    		board_use_yn
+		FROM board_master a
+		LEFT JOIN board_auth b ON a.board_master_code = b.board_master_code_id
+		GROUP BY a.board_master_code, a.board_master_name
+		ORDER BY a.board_order asc
+	</select>
+	
+	 <update id="callUpsertBoardAuth" parameterType="kr.go.distep.user.vo.UserVO">
+        CALL upsert_board_auth(
+            #{userType, jdbcType=CHAR},
+            #{boardId, jdbcType=VARCHAR},
+            #{authType, jdbcType=VARCHAR},
+            #{authValue, jdbcType=CHAR},
+            #{userId, jdbcType=VARCHAR}
+        )
+    </update>
+    
+    <update id="updateBoardMasterName">
+	    UPDATE board_master
+	    SET board_master_name = #{boardMasterName}
+	    WHERE board_master_code = #{boardMasterCode}
+	</update>
+	
+	<update id="updateBoardUseYn">
+	    UPDATE board_master
+	    SET board_use_yn = #{boardUseYn}
+	    WHERE board_master_code = #{boardMasterCode}
+	</update>
+	
+	
+<!-- 	<select id="getBoardReadAuth" resultType="hashMap">
+		select read_auth, update_auth, file_auth 
+		from board_auth 
+		where user_type = #{userType} 
+		and board_master_code_id = 
+		(
+			select board_master_code 
+			from board_master 
+			where board_link = #{fullUri}
+		)
+
+	  </select> -->
+
+	<select id="getBoardMasterCodeByLink" resultType="string">
+	    SELECT board_master_code
+	    FROM board_master
+	    WHERE board_link = #{fullUri}
+	</select>
+	
+	<select id="getBoardReadAuth" resultType="string">
+	    SELECT read_auth
+	    FROM board_auth
+	    WHERE user_type = #{userType}
+	      AND board_master_code_id = #{boardMasterCode}
+	</select>
+	 <select id="getBoardMasterCodeByBoardCode" parameterType="string" resultType="string">
+        SELECT bm.board_master_code
+        FROM board a
+        JOIN board_master bm 
+          ON a.board_master_code = bm.board_master_code
+        WHERE a.board_code =  #{boardCode}
+    </select>
+		
+</mapper>

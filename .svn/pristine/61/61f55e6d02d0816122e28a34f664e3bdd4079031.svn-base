@@ -1,0 +1,155 @@
+package kr.go.distep.main.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import kr.go.distep.cmmn.file.vo.FileGroupVO;
+import kr.go.distep.main.service.BoardMasterService;
+import kr.go.distep.main.service.UploadService;
+import kr.go.distep.main.service.vo.BoardVo;
+import kr.go.distep.main.service.vo.QnaVo;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+public class BoardMasterServiceImpl implements BoardMasterService {
+
+    @Autowired
+    FileGroupMapper fileGroupMapper;
+
+    @Autowired
+    private BoardMapper boardMapper;
+
+    @Autowired
+    private UploadService uploadService;
+
+    @Override
+    public List<BoardVo> list(Map<String, Object> map) {
+        return this.boardMapper.list(map);
+    }
+
+    @Override
+    public int getTotal(Map<String, Object> map) {
+        return this.boardMapper.getTotal(map);
+    }
+
+    @Override
+    public BoardVo detail(BoardVo boardVo) {
+        return this.boardMapper.detail(boardVo);
+    }
+
+    @Override
+    public int boardInsert(BoardVo boardVo) {
+        try {
+            long fileGroupNo = 0L;
+
+            // 1. 파일 그룹 먼저 생성
+            FileGroupVO fileGroupVO = new FileGroupVO();
+            fileGroupMapper.insertFileGroup(fileGroupVO);
+            fileGroupNo = fileGroupVO.getFileGroupNo();
+            boardVo.setFileGroupNo(fileGroupNo); // 단 한 번만 지정
+
+            // 2. 썸네일이 있으면 append 방식으로 추가
+            MultipartFile thumbnailFile = boardVo.getThumbnailFile();
+            if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
+                uploadService.appendSingleFileToGroup(fileGroupNo, thumbnailFile, "THUMBNAIL");
+            }
+
+            // 3. 일반 파일도 append
+            MultipartFile[] uploadFiles = boardVo.getUploadFiles();
+            if (uploadFiles != null && uploadFiles.length > 0 && uploadFiles[0].getOriginalFilename().length() > 0) {
+                uploadService.appendFilesToGroup(fileGroupNo, uploadFiles, "GENERAL");
+            }
+
+            log.info("boardInsert 실행 직전 파라미터: {}", boardVo);
+
+            int result = boardMapper.boardInsert(boardVo); 
+            log.info(" boardMapper insert result: {}", result);
+            return result;
+
+        } catch (Exception e) {
+            log.error(" boardInsert 중 예외 발생: {}", e.getMessage(), e);
+            throw new RuntimeException("boardInsert 실패", e);
+        }
+    }
+
+    @Override
+    public int updateBd(BoardVo boardVo) {
+        try {
+            MultipartFile[] uploadFiles = boardVo.getUploadFiles();
+            MultipartFile thumbnailFile = boardVo.getThumbnailFile();
+
+            long fileGroupNo = boardVo.getFileGroupNo();
+
+            // 파일 그룹이 없는 경우 새로 생성
+            if (fileGroupNo == 0) {
+                FileGroupVO fileGroupVO = new FileGroupVO();
+                fileGroupMapper.insertFileGroup(fileGroupVO);
+                fileGroupNo = fileGroupVO.getFileGroupNo();
+                boardVo.setFileGroupNo(fileGroupNo);
+            }
+
+            // 썸네일이 있을 경우 기존 썸네일만 삭제 후 추가
+            if (thumbnailFile != null && !thumbnailFile.isEmpty()) {
+            	fileGroupMapper.deleteFilesByType(fileGroupNo, "THUMBNAIL");
+                uploadService.appendSingleFileToGroup(fileGroupNo, thumbnailFile, "THUMBNAIL");
+            }
+
+            // 일반 파일이 있는 경우 기존 일반파일 유지하고 새로 추가
+            if (uploadFiles != null && uploadFiles.length > 0 && !uploadFiles[0].isEmpty()) {
+                uploadService.appendFilesToGroup(fileGroupNo, uploadFiles, "GENERAL");
+            }
+            String[] deletedFileIdArray = boardVo.getDeletedFileIds(); // 또는 List<String>
+            if (deletedFileIdArray != null && deletedFileIdArray.length > 0) {
+                for (String idStr : deletedFileIdArray) {
+                    long id = Long.parseLong(idStr);
+                    fileGroupMapper.deleteFileById(id); // 또는 deleteFile(id)
+                }
+            }
+
+            log.info("updateBd 실행 파라미터: {}", boardVo);
+            return boardMapper.updateBd(boardVo);
+
+        } catch (Exception e) {
+            log.error("updateBd 중 예외 발생: {}", e.getMessage(), e);
+            throw new RuntimeException("게시글 수정 실패", e);
+        }
+    }
+
+
+
+	@Override
+	public int deleteBd(BoardVo boardVo) {
+		return this.boardMapper.deleteBd(boardVo);
+	}
+
+	@Override
+	public int qnaGetTotal(Map<String, Object> map) {
+		return this.boardMapper.qnaGetTotal(map);
+	}
+
+	@Override
+	public List<QnaVo> qnaList(Map<String, Object> map) {
+		return this.boardMapper.qnaList(map);
+	}
+
+	@Override
+	public int qnaInsert(QnaVo qnaVo) {
+		return this.boardMapper.qnaInsert(qnaVo);
+	}
+
+	@Override
+	public int answerInsert(QnaVo qnaVo) {
+		return this.boardMapper.answerInsert(qnaVo);
+	}
+
+	@Override
+	public int answerDelete(Long qnaId) {
+		return this.boardMapper.answerDelete(qnaId);
+	}
+
+}

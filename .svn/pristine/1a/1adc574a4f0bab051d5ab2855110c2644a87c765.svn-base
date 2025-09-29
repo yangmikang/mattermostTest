@@ -1,0 +1,81 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<!-- 컨테이너 영역 -->
+		<div id="container" class="sub-cont-bg">
+			<!-- 컨텐츠 영역 -->
+			<div class="page-title-wrap visual img-members">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<!-- program 관련 페이지만 브레드크럼 위치 변경 됩니다. -->
+					<nav class="breadcrumb-wrap" aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Programs</a></li>
+							<li><a href="#" class="txt">Leaders Assembly</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<div class="visual-area">
+						<h2 class="h-tit">Leaders Assembly</h2>
+						<p>We focuses on strengthening practical cooperation among cities through the following three core initiatives.</p>
+					</div>
+<!-- 					<div class="tit-disc">
+						<p>GINI holds regular meetings of city representatives-at both high-level and working-level-to build trust and enhance collaboration among member cities. These meetings address key urban issues and are supported by the operation of a dedicated secretariat and administrative assistance.</p>
+					</div> -->
+				</div>
+			</div>
+			    <div class="inner">
+			      <div class="gini-cont-wrap">
+			      	<div class="gini-cont-box">
+				        <h3 class="area-tit">Joint Project</h3>
+				          <div class="area-group">
+				            <!-- <h4 class="sub-tit">Global Innopolis Forum</h4> -->
+				            <p class="desc">The Leaders Assembly is GINI’s main decision-making platform. It brings together key meetings—the High-Level and Working-Level Meetings—where important plans and policies are discussed and shaped.</p>
+				            <b class="mgt40">High-Level Meeting</b>
+				          	<p class="desc">The High-Level Meeting is GINI’s most important event. It brings together top-decision makers from member governments and development authorities to discuss and approve key policies, major projects, and other strategic issues.</p>
+				          </div>
+   	          	          <div class="gallery">
+					          <article class="card">
+					            <div class="media">
+					              <img src="${pageContext.request.contextPath}/img/pattern/content/img-High-Level Meeting.jpg" alt="Forum 2023"/>
+					            </div>
+					          </article>
+				          </div>
+				          <ul class="forum-info list-bulet">
+				            <li><b>How often?</b>Every two years</li>
+				            <li><b>Who joins?</b>Senior Representatives from each member government and development authority</li>
+				          </ul>
+			        </div>
+			      </div>
+   			      <div class="gini-cont-wrap mgt40">
+			      	<div class="gini-cont-box">
+				          <div class="area-group">
+				            <h4 class="sub-tit">Working-Level Meeting</h4>
+				            <p class="desc">The Working-Level Meeting plays a key role in keeping GINI running smoothly. It focuses on preparing and coordinating important topics such as policies, new initiatives, and budgets. This meeting also reviews items before they are brought to the High-Level Meeting for final decisions.</p>
+				          </div>
+   	          	          <div class="gallery two-row">
+					          <article class="card">
+					            <div class="media">
+					              <img src="${pageContext.request.contextPath}/img/pattern/content/img-Working-level Meeting-1.png" alt="Forum 2023"/>
+					            </div>
+			            	  </article>
+			            	  <article class="card">
+					            <div class="media">
+					              <img src="${pageContext.request.contextPath}/img/pattern/content/img-Working-level Meeting-2.png" alt="Forum 2023"/>
+					            </div>
+					          </article>
+				          </div>
+				          <ul class="forum-info list-bulet">
+				            <li><b>How often?</b>Biennially (held in alternate years to the High-Level Meeting)</li>
+				            <li><b>Who joins?</b>One representative from the designated department of each Government and Development Authority Members</li>
+				          </ul>
+			        </div>
+			      </div>
+		      </div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 -->
+</html>

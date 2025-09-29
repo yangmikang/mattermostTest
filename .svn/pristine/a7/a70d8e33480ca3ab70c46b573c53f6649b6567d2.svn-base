@@ -1,0 +1,92 @@
+package kr.go.distep.main.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import kr.go.distep.main.service.BoardMasterService;
+import kr.go.distep.main.service.UploadService;
+import kr.go.distep.main.service.vo.BoardVo;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+public class BoardMasterServiceImpl implements BoardMasterService {
+
+    @Autowired
+    private BoardMapper boardMapper;
+
+    @Autowired
+    private UploadService uploadService;
+
+    @Override
+    public List<BoardVo> list(Map<String, Object> map) {
+        return this.boardMapper.list(map);
+    }
+
+    @Override
+    public int getTotal(Map<String, Object> map) {
+        return this.boardMapper.getTotal(map);
+    }
+
+    @Override
+    public BoardVo detail(BoardVo boardVo) {
+        return this.boardMapper.detail(boardVo);
+    }
+
+    @Override
+    public int boardInsert(BoardVo boardVo) {
+        try {
+            MultipartFile[] uploadFiles = boardVo.getUploadFiles();
+
+            if (uploadFiles != null && uploadFiles[0].getOriginalFilename().length() > 0) {
+                long fileGroupNo = this.uploadService.multiImageUpload(uploadFiles);
+                boardVo.setFileGroupNo(fileGroupNo);
+            }
+
+            log.info("boardInsert 실행 직전 파라미터: {}", boardVo);
+
+            int result = boardMapper.boardInsert(boardVo); 
+            log.info(" boardMapper insert result: {}", result);
+            return result;
+
+        } catch (Exception e) {
+            log.error(" boardInsert 중 예외 발생: {}", e.getMessage(), e);
+            throw new RuntimeException("boardInsert 실패", e);
+        }
+    }
+    @Override
+    public int updateBd(BoardVo boardVo) {
+        try {
+            MultipartFile[] uploadFiles = boardVo.getUploadFiles();
+
+            if (uploadFiles != null && uploadFiles.length > 0 && !uploadFiles[0].isEmpty()) {
+                if (boardVo.getFileGroupNo() != 0) {
+                    // uploadService.deleteFileGroup(boardVo.getFileGroupNo());
+                }
+
+                long newFileGroupNo = uploadService.multiImageUpload(uploadFiles);
+                boardVo.setFileGroupNo(newFileGroupNo);
+            } else {
+                log.info(" 새 파일 없음 → 기존 fileGroupNo 유지: {}", boardVo.getFileGroupNo());
+            }
+
+            log.info("updateBd 실행 파라미터: {}", boardVo);
+            return boardMapper.updateBd(boardVo);
+
+        } catch (Exception e) {
+            log.error(" updateBd 중 예외 발생: {}", e.getMessage(), e);
+            throw new RuntimeException("게시글 수정 실패", e);
+        }
+    }
+
+
+	@Override
+	public int deleteBd(BoardVo boardVo) {
+		return this.boardMapper.deleteBd(boardVo);
+	}
+
+}

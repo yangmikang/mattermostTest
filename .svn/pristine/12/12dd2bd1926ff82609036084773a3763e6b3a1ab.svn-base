@@ -1,0 +1,684 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+	<meta name="keywords" content="" />
+	<meta name="description" content="" />
+	<meta name="format-detection" content="telephone=no" />
+	<link rel="apple-touch-icon" sizes="180x180" href="../../resources/img/guide/favicon_180.png">
+	<link rel="icon" type="image/png" sizes="512x512" href="../../resources/img/guide/favicon_512.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="../../resources/img/guide/favicon_192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../../resources/img/guide/favicon_32.png">
+	<title>GINI - Global Innopolis Network Initiative</title>
+	<link href="../../resources/css/swiper-bundle.min.css" type="text/css" rel="stylesheet" />
+	<link href="../../resources/css/pattern_css.css" type="text/css" rel="stylesheet" />
+	<link href="../../resources/css/output/p_common.css" type="text/css" rel="stylesheet" />
+	<link href="../../resources/css/output/p_content.css" type="text/css" rel="stylesheet" />
+	<link href="../../resources/css/output/p_layout.css" type="text/css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css' rel='stylesheet' />
+	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales/ko.global.min.js"></script>
+
+<title>Insert title here</title>
+</head>
+<body>
+<div id="wrap">
+		<!-- 본문 바로가기 영역 -->
+		<!-- //본문 바로가기 영역 -->
+		<!-- 상단 배너영역 -->
+		<!-- //상단 배너영역 -->
+
+		<!-- 헤더 영역 -->
+				<!-- //헤더 상단 기타메뉴 -->
+			<!-- //헤더 컨텐츠 영역  -->
+			
+			<!-- 모바일 : 전체메뉴 -->
+		<!-- //헤더 영역 -->
+
+		<!-- 컨테이너 영역 -->
+		<div id="container">
+		
+					<!-- breadcrumb -->
+			<div class="page-title-wrap visual img-members">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a href="${pageContext.request.contextPath}/index.do" class="txt">Home</a></li>
+							<li><a href="${pageContext.request.contextPath}/calendar.do" class="txt">Programs</a></li>
+							<li><a href="${pageContext.request.contextPath}/calendar.do" class="txt">Events</a></li> 
+							<li><a href="${pageContext.request.contextPath}/calendar/detail.do?id=${calendar.id}" class="txt">Schedule Management</a></li> 
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<div class="visual-area">
+						<h2 class="h-tit">Schedule Management</h2>
+						<p>Schedule Management</p>
+					</div>
+				</div>
+			</div>
+		<form class="form-horizontal" id="form" action="${pageContext.request.contextPath}/calendar/delete.do"
+	method="post" enctype="multipart/form-data">
+		<input type="hidden" id="getId" name="id" value="${calendar.id}">
+			<!-- breadcrumb -->
+			
+			<!-- breadcrumb -->
+
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				<!-- 페이지 타이틀 영역 -->
+				<!-- //페이지 타이틀 영역 -->
+				<!-- 일정등록 폼 -->
+				 <div class="gini-cont-wrap">
+					<div class="gini-cont-box">
+						<div class="row cont100">
+							<!-- 폼그룹 left -->
+							<div class="cont-left cont50">
+								<!-- 폼그룹 -->
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="consult_name">Event Title</label>
+									</div>
+									<div class="form-conts">
+										<input type="text" id="consult_name" class="form-control delread" value="${calendar.eventTitle}" placeholder="Event Title" readonly>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="consult_name">
+										Author</label>
+									</div>
+									<div class="form-conts">
+										<h3><%-- <c:choose>
+												<c:when test="${calendar.organizer == 'gini'}">
+													<!-- Daejeon / South Korea -->
+													<img
+														src="${pageContext.request.contextPath}/img/component/common/ico_korea.svg"
+														alt="Korea Flag" />
+												</c:when>
+												<c:when test="${calendar.organizer == 'city of dortmund'}">
+													<!-- Dortmund / Germany -->
+													<img
+														src="${pageContext.request.contextPath}/img/component/common/ico_germany.svg"
+														alt="Germany Flag" />
+												</c:when>
+												<c:when test="${calendar.organizer == 'city of malaga'}">
+													<!-- Malaga / Spain -->
+													<img
+														src="${pageContext.request.contextPath}/img/component/common/ico_spain.svg"
+														alt="Spain Flag" />
+												</c:when>
+												<c:when
+													test="${calendar.organizer == '04' || boardVo.cityCode == 'city of malaga'}">
+													<!-- Montgomery County / Seattle => USA -->
+													<img
+														src="${pageContext.request.contextPath}/img/component/common/ico_usa.svg"
+														alt="USA Flag" />
+												</c:when>
+												<c:when test="${calendar.organizer == 'city of malaga'}">
+													<!-- Quebec / Canada -->
+													<img
+														src="${pageContext.request.contextPath}/img/component/common/ico_canada.svg"
+														alt="Canada Flag" />
+												</c:when>
+												<c:otherwise>
+													<!-- Other / Unknown -->
+													<img
+														src="${pageContext.request.contextPath}/img/component/common/ico_usa.svg"
+														alt="Global Flag" />
+												</c:otherwise>
+											</c:choose> --%>${calendar.username}</h3>
+									</div>
+								</div>
+								<!-- //폼그룹 -->
+								<!-- 날짜 입력 필드 폼그룹 -->
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="cal">Start Date & Time</label>
+									</div>
+									<div class="form-conts form-row">
+										<div class="form-conts datepicker-conts">
+											<div class="datepicker-input">
+												<fmt:formatDate value="${calendar.startDatetime}" pattern="yyyy-MM-dd'T'HH:mm" var="formattedStart" />
+											
+												<input type="text" readonly class="form-control  datepicker cal delread startdate" value="${formattedStart}" disabled="disabled"  id="startdate" placeholder="Select date" id="cal">
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- //날짜 입력 필드 폼그룹 -->
+								<!-- 날짜 입력 필드 폼그룹 -->
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="cal">End Date & Time</label>
+									</div>
+									<div class="form-conts form-row">
+										<div class="form-conts datepicker-conts">
+											<div class="datepicker-input">
+												<fmt:formatDate value="${calendar.endDatetime}" pattern="yyyy-MM-dd'T'HH:mm" var="endDatetime"/>
+												<input type="text" readonly class="form-control  datepicker delread cal enddate" value="${endDatetime}" id="enddate" disabled="disabled"  placeholder="Select date" id="cal">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- //폼그룹 left -->
+							<!-- cont-right -->
+							<div class="cont-right cont50">
+								<!-- 폼그룹 -->
+								 <div class="form-group">
+									<div class="form-tit">
+										<label for="consult_name">Event Description</label>
+									</div>
+									<div class="form-conts">
+										<input type="text" readonly id="description" class="form-control delread" value="${calendar.eventDescription}" placeholder="Event Description">
+									</div>
+								</div> 
+								<!-- //폼그룹 -->
+								<!-- 폼그룹 -->
+								<div class="form-group">
+									<div class="form-tit">
+										<label for="consult_name">Organizer</label>
+									</div>
+									<div class="form-conts">
+										<select class="form-select lg delDis" id="selectOrg" name="organizer" title="선택" disabled>
+										    <option value="">select</option>
+										    <option value="GINI" ${calendar.organizer == 'GINI' ? 'selected' : ''}>GINI</option>
+										    <option value="City of Daejeon" ${calendar.organizer == 'City of Daejeon' ? 'selected' : ''}>City of Daejeon</option>
+										    <option value="City of Dortmund" ${calendar.organizer == 'City of Dortmund' ? 'selected' : ''}>City of Dortmund</option>
+										    <option value="City of Malaga" ${calendar.organizer == 'City of Malaga' ? 'selected' : ''}>City of Malaga</option>
+										    <option value="County of Montgomery, MD" ${calendar.organizer == 'County of Montgomery, MD' ? 'selected' : ''}>County of Montgomery, MD</option>
+										    <option value="City of Seattle" ${calendar.organizer == 'City of Seattle' ? 'selected' : ''}>City of Seattle</option>
+										    <option value="Province of Quebec" ${calendar.organizer == 'Province of Quebec' ? 'selected' : ''}>Province of Quebec</option>
+										</select>
+
+									</div>
+								</div>
+								 <div class="form-group">
+									<div class="form-tit">
+										<label for="consult_name">External Link</label>
+									</div>
+									<div class="form-conts">
+										<input type="text" id="link" class="form-control delread" name="externalLink" value="${calendar.externalLink}" placeholder="https://example.com" readonly="readonly">
+									</div>
+								</div>
+								<!-- //폼그룹 -->
+								<!-- //폼 끝 -->
+							<!-- //cont-right -->
+						</div>
+					</div>
+
+					<div class="gini-cont-box">
+						<div class="fileCont" >
+							<!-- 파일업로드 -->
+							<div class="file-upload " ondragover="f_over()"   ondrop="f_drop()" style="display: none;">
+								<p class="txt">Please drag and drop the file you wish to attach here, or click the Select File button to select the file directly.</p>
+								
+							</div>
+							<%-- <c:if test="${calendar.fileGroupVO != null}"> --%>
+
+       <c:forEach var="fileDetailVO" items="${calendar.fileGroupVO.fileDetailVOList}">
+  <input type="hidden" name="existingFileIds" value="${fileDetailVO.fileSn}" />
+</c:forEach>
+       
+       
+        <div class="file-upload-result ">
+            <img class="img-fluid imgFileSaveLocate"
+                     style="cursor: pointer; display: none;" src="${fileDetailVO.fileSaveLocate}"
+                     data-file-original-name="${fileDetailVO.fileOriginalName}"
+                     data-file-save-locate="${fileDetailVO.fileSaveLocate}" /> 
+               <!--  <button type="button"  class="prev" >미리보기</button> -->
+				 				<div class="upload-top">
+									<div class="file-total">
+									<div>
+								
+										<span class="current fileCount">
+												    <span class="current fileCount">
+													  ${calendar.fileGroupVO.fileDetailVOList != null ? calendar.fileGroupVO.fileDetailVOList.size() : 0}
+													</span>
+										
+										</span> / 6</div>
+									</div>
+						<button type="button" class="btn btn-txt ico-before ico-del sm h-auto " style="display:none;" onclick="deleteAllFiles()">Delete All</button>								
+              		 	 <button type="button" class="down allDown" onclick="fn_dwMulti()">Full Download</button>
+										
+										
+								</div>
+								
+								<ul class="upload-list" id="">
+								    <div class="row fileContSel" style="display: none;">
+												<!-- 파일업로드 -->
+												<div class="file-upload cont50" ondragover="f_over()"   ondrop="f_drop()">
+													<p class="txt">Please drag and drop the file you wish to attach here, or click the Select File button to select the file directly.</p>
+													<button type="button" class="btn primary ico-before ico-upload md" onclick="document.getElementById('uploadFiles').click()">Select file</button>
+											
+												</div>
+												<!-- //파일업로드 -->
+												<!-- 파일업로드 -->
+												<div class="file-upload-result cont50">
+													<div class="upload-top">
+													</div>
+													<div class="upload-delete-btn">
+													</div>
+												</div>
+												<!-- //파일업로드 리스트 -->
+												<!-- //폼그룹 -->
+											</div>
+													<ul class="upload-list" id="fileListArea">
+							    <c:forEach var="fileDetailVO" items="${calendar.fileGroupVO.fileDetailVOList}" varStatus="stat">
+										  <li>
+										    <div class="in">
+										      <div class="file-name" onclick="fn_dw(this)" class="imgFileSaveLocate" style="cursor: pointer;"  id="${fileDetailVO.fileSaveLocate}"
+							                     data-file-original-name="${fileDetailVO.fileOriginalName}"
+							                     data-file-save-locate="${fileDetailVO.fileSaveLocate}">
+										        ${fileDetailVO.fileOriginalName}
+										        [${fileDetailVO.fileMime}, ${fileDetailVO.fileFancySize}]
+										      </div>
+										      <div class="file-btn">
+										       <button type="button" class=" ico-del"
+              style="display:none;"
+              onclick="this.closest('li').remove(); deletedFileIds.push('${fileDetailVO.fileSn}'); updateFileCount();">
+        Delete
+      </button>
+										        <!-- <button type="button" class="btn btn-txt ico-before ico-del sm h-auto"  style="display: none;" onclick="this.closest('li').remove(); updateFileCount();">삭제</button>
+										     -->  </div>
+										    </div>
+										  </li>
+						
+						    </c:forEach>
+								</ul>
+							<input type="file" name="uploadFiles" style="display: none;" multiple id="uploadFiles"style="display:none;" onchange="handleFileUpload(event)" />
+								<div class="upload-delete-btn" style="
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+">
+									 
+							 	</div>
+							</div>
+       
+					<%-- 	</c:if> --%>
+							<!-- //파일업로드 -->
+							<!-- 파일업로드 -->
+							
+							<!-- //파일업로드 리스트 -->
+						</div>
+						<div class="page-btn-wrap both" style="background-color:#EDF1F5; " >
+							<div>
+							      <!-- Other / Unknown -->
+								<button type="button" class="btn primary" onclick="location.href='${pageContext.request.contextPath}/calendar.do'">Go to list</button>
+							</div>
+							<div id="userBtn" style="display:none;">
+							<button type="button" class="btn primary Modify" onclick="UpdatEvent()">Modify </button>
+							<button type="button" class="btn primary Submit" style="display: none;" onclick="updateSub()">Submit </button>
+							<button type="button" class="btn primary" onclick="Deletevent()">Delete </button>
+							</div>
+						</div>
+						
+					</div>
+				 </div>
+				 </div>
+				<!-- //일정등록 폼 -->
+
+					
+
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 -->
+
+		<!-- 푸터 영역 -->
+		<!-- //푸터 영역 -->
+	</div>
+	<input type="hidden" id="fileGroupNo" name="fileGroupNo" value="${calendar.fileGroupNo}" />
+	</form>
+	<c:if test="${ sessionScope.loggedInUser.id eq calendar.userId or userType eq 'A'}">
+		<script type="text/javascript">
+			let userBtn = document.querySelector("#userBtn")
+			userBtn.style.display = 'block'
+		</script>
+	</c:if>
+	
+	<!-- //레이어 : 검색필터 -->
+
+	<!-- 스크립트 : 라이브러리 -->
+	<script src="../../resources/js/pattern/jquery.min.js"></script>
+
+	<!-- 스크립트 : 패턴 페이지 -->
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script src="../../resources/js/pattern/ui-pattern-script.js"></script>
+	
+
+	<!-- 스크립트 : 컴포넌트 -->
+	<script src="../../resources/js/component/ui-script.js"></script>
+	
+	<!-- 스크립트 : input date  -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+flatpickr(".startdate", {
+	  enableTime: true,
+	  dateFormat: "Y-m-d\\TH:i",
+	  time_24hr: false
+	});
+
+	flatpickr(".enddate", {
+	  enableTime: true,
+	  dateFormat: "Y-m-d\\TH:i",
+	  locale: "en",
+	  time_24hr: false
+	});
+
+
+</script>
+<script>
+const contextPath = '${pageContext.request.contextPath}';
+const fileList = [
+  <c:forEach var="fileDetailVO" items="${calendar.fileGroupVO.fileDetailVOList}" varStatus="stat">
+    {
+      name: "${fileDetailVO.fileOriginalName}",
+      path: "${fileDetailVO.fileSaveLocate}"
+    }<c:if test="${!stat.last}">,</c:if>
+  </c:forEach>
+];
+function citiText(){
+	 
+	const citySelect = document.getElementById("selectOrg");
+	
+	
+	const cityValue = citySelect.value;
+	const cityText = citySelect.options[citySelect.selectedIndex].text;
+	const description =  document.getElementById("description").value;
+	
+	console.log("cityText",cityText)
+	 
+ }
+	  let uploadedFiles = [];
+	  let deletedFileIds = [];
+
+	  function UpdatEvent() {
+	    document.querySelectorAll(".delread").forEach(el => el.removeAttribute("readonly"));
+	    document.querySelectorAll(".delread").forEach(el => el.removeAttribute("disabled"));
+	    document.querySelectorAll(".delDis").forEach(el => el.removeAttribute("disabled"));
+	    document.querySelectorAll(".ico-del").forEach(el => el.style.display = "inline-block");
+	    document.querySelector(".Modify").style.display = "none";
+	    document.querySelector(".allDown").style.display = "none";
+	    document.querySelector(".fileContSel").style.display = "block";
+	    document.querySelector(".Submit").style.display = "inline-block";
+	    
+	  }
+
+
+	function deleteSingleFile(index, button, fileId) {
+	  if (fileId) {
+	    deletedFileIds.push(fileId); // 기존 파일일 경우 ID 저장
+	  } else {
+	    uploadedFiles.splice(index, 1); // 새로 올린 파일은 배열에서 제거
+	  }
+	  button.closest('li').remove();
+	  updateFileCount();
+	}
+
+
+	function updateFileCount() {
+		  const countSpan = document.querySelector('.file-total .current');
+		  const allFileInputs = document.querySelectorAll('input[name="existingFileIds"]');
+		  
+		  let validExistingCount = 0;
+		  allFileInputs.forEach(input => {
+		    if (!deletedFileIds.includes(input.value)) {
+		      validExistingCount++;
+		    }
+		  });
+
+		  const totalCount = validExistingCount + uploadedFiles.length;
+		  countSpan.textContent = `\${totalCount}`;
+		}
+
+
+	  function deleteAllFiles() {
+	   /*  uploadedFiles = [];
+	    const fileListArea = document.getElementById('fileListArea');
+	    fileListArea.innerHTML = '';
+	    updateFileCount(); */
+	    
+	    const existingFileInputs = document.querySelectorAll('input[name="existingFileIds"]');
+		  const newFileItems = uploadedFiles.length;
+		
+		  if (existingFileInputs.length === 0 && newFileItems === 0) {
+		    alert("There are no files to delete.");
+		    return;
+		  }
+		
+		  // 기존 파일 삭제 처리
+		  existingFileInputs.forEach(input => {
+		    const fileId = Number(input.value);
+		    deletedFileIds.push(fileId);
+		    input.remove(); // hidden input 제거
+		  });
+		
+		  // 새로 업로드한 파일 초기화
+		  uploadedFiles = [];
+		
+		  // UI에서 리스트 제거
+		  const fileListArea = document.getElementById('fileListArea');
+		  fileListArea.innerHTML = '';
+		
+		  updateFileCount();
+	  }
+
+
+  function formatBytes(bytes) {
+    if (bytes === 0) return '0KB';
+    const k = 1024;
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    const size = parseFloat((bytes / Math.pow(k, i)).toFixed(1));
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    return `\${size} \${sizes[i]}`;
+  }
+
+
+
+  function handleFileUpload(event) {
+    const files = event.target.files;
+    const fileListArea = document.getElementById('fileListArea');
+    const allowedExtensions = [
+  	  'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt',
+  	  'jpg', 'jpeg', 'png', 'gif', 'zip', 'hwp'
+  	];
+    const existingCount = document.querySelectorAll('input[name="existingFileIds"]').length; 
+    const validExistingCount = existingCount - deletedFileIds.length;
+    for (let i = 0; i < files.length; i++) {
+    	
+      const file = files[i];
+      const extension = file.name.split('.').pop().toLowerCase();
+
+      
+      if (!allowedExtensions.includes(extension)) {
+          const li = document.createElement('li');
+          li.classList.add('is-error');
+          li.innerHTML = `
+            <div class="in">
+        	  <div class="file-name">\${file.name} [\${file.name.split('.').pop()}, \${formatBytes(file.size)}]</div>
+                  <div class="file-btn">
+                <span class="ico-invalid error"><em class="sr-only">error</em></span>
+                <button type="button" class="btn btn-txt ico-before ico-del sm h-auto" onclick="this.closest('li').remove(); updateFileCount();">Delete</button>
+              </div>
+            </div>
+            <p class="file-hint">Only the following file types can be uploaded:<br>
+            pdf, doc, docx, xls, xlsx, ppt, pptx, txt, jpg, jpeg, png, gif, zip, hwp</p>
+          `;
+          fileListArea.appendChild(li);
+          continue;
+        }
+
+      if (file.size > 20 * 1024 * 1024) {
+        const li = document.createElement('li');
+        li.classList.add('is-error');
+        li.innerHTML = `
+          <div class="in">
+            <div class="file-name">\${file.name} [\${file.name.split('.').pop()}, \${formatBytes(file.size)}]</div>
+            <div class="file-btn">
+              <span class="ico-invalid error"><em class="sr-only">error</em></span>
+              <button type="button" class="btn btn-txt ico-before ico-del" onclick="deleteSingleFile(${uploadedFiles.length - 1}, this)">Delete</button>
+            </div>
+          </div>
+          <p class="file-hint">The file size that can be registered has been exceeded.<br>Only files less than 20MB can be registered.</p>
+        `;
+        fileListArea.appendChild(li);
+        continue;
+      }
+      const totalCount = validExistingCount + uploadedFiles.length;
+      if (totalCount >= 6) {
+        alert("You can register up to 6 files including existing files.");
+        break;
+      }
+
+      uploadedFiles.push(file);
+
+
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <div class="in">
+          <div class="file-name">\${file.name} [\${file.name.split('.').pop()}, \${formatBytes(file.size)}]</div>
+          <div class="file-btn">
+          <button type="button" class="" onclick="deleteSingleFile(${uploadedFiles.length - 1}, this)">Delete</button>
+          
+          </div>
+        </div>
+      `;
+      fileListArea.appendChild(li);
+    }
+
+    updateFileCount();
+    event.target.value = '';
+  }
+
+
+	function deleteSingleFile(index, button, fileId) {
+	 if (fileId) {
+	   deletedFileIds.push(fileId);
+	 } else {
+	   uploadedFiles.splice(index, 1);
+	 }
+	 button.closest('li').remove();
+	 updateFileCount();
+	}
+
+  function updateSub() {
+	  const errorItems = document.querySelectorAll('#fileListArea li.is-error');
+	  if (errorItems.length > 0) {
+	    alert("There are invalid files in the attachment list. Please remove them before submitting.");
+	    return;
+	  }
+  
+	  const isTitleChanged = document.getElementById("consult_name").value !== "${calendar.eventTitle}";
+	  const isStartChanged = document.getElementById("startdate").value !== "${formattedStart}";
+	  const isEndChanged = document.getElementById("enddate").value !== "${endDatetime}";
+	  const isDescriptionChanged = document.getElementById("description").value !== "${calendar.eventDescription}";
+	  const isOrganizerChanged = document.getElementById("selectOrg").value !== "${calendar.organizer}";
+	  const islinkChanged = document.getElementById("link").value !== "${calendar.externalLink}";
+	  const isFileChanged = uploadedFiles.length > 0 || deletedFileIds.length > 0;
+
+	  if (!isTitleChanged && !isStartChanged && !isEndChanged && !isDescriptionChanged && !isOrganizerChanged && !isFileChanged && !islinkChanged) {
+	    alert("There is no change to update.");
+	    return;
+	  }
+	  
+    const formData = new FormData();
+    
+    formData.append("id", document.querySelector("#getId").value);
+    formData.append("eventTitle", document.getElementById("consult_name").value);
+    formData.append("startDatetime", document.getElementById("startdate").value);
+    formData.append("endDatetime", document.getElementById("enddate").value);
+    formData.append("eventDescription", document.getElementById("description").value);
+    formData.append("organizer", document.getElementById("selectOrg").value);
+    formData.append("externalLink", document.getElementById("link").value);
+    if (deletedFileIds.length > 0) {
+    	  formData.append("deletedFileIds", deletedFileIds.join(","));
+    	}
+    console.log("deletedFileIds", deletedFileIds);
+    formData.append("fileGroupNo", document.getElementById("fileGroupNo").value); //  추가!
+
+    const fileInput = document.getElementById("uploadFiles");
+    console.log(fileInput.files);
+ //수정된 부분
+    for (let i = 0; i < uploadedFiles.length; i++) {
+      formData.append("uploadFiles", uploadedFiles[i]);
+    }
+    document.querySelectorAll('input[name="existingFileIds"]').forEach(input => {
+    	  formData.append("existingFileIds", input.value);
+    	});
+
+
+    axios.post("${pageContext.request.contextPath}/modify.do", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then(response => {
+      alert("The schedule has been changed.");
+      location.href = "${pageContext.request.contextPath}/calendar.do";
+    })
+    .catch(error => {
+      alert("Fix failed");
+    });
+  }
+
+  function Deletevent() {
+    const form = document.getElementById("form");
+    if (confirm("Are you sure you want to delete it?")) {
+      form.action = "${pageContext.request.contextPath}/calendar/delete.do";
+      form.submit();
+    }
+  }
+  
+  function fn_dw(el) {
+	//다운로드 버튼 이벤트
+	  const target = document.querySelector(".imgFileSaveLocate");
+	    console.log("el",el)
+	
+	  if (target) {
+	    const fileSaveLocate = el.dataset.fileSaveLocate;
+	    
+	    console.log("fileSaveLocate : " + fileSaveLocate);
+	    location.href = "${pageContext.request.contextPath}/download.do?fileName=" + encodeURIComponent(fileSaveLocate);
+	  } else {
+	  }
+	    
+  }
+	    function fn_dwMulti() {
+	    	  if (!fileList || fileList.length === 0) {
+	    	    alert("No file to download.");
+	    	    return;
+	    	  }
+
+	    	  if (fileList.length === 1) {
+	    	    const file = fileList[0];
+	    	    const url = contextPath +
+	    	      '/download.do?fileName=' + encodeURIComponent(file.path) +
+	    	      '&originalName=' + encodeURIComponent(file.name);
+	    	    location.href = url;
+	    	  } else {
+	    	    const params = fileList.map(function(f) {
+	    	      return 'fileNames=' + encodeURIComponent(f.path);
+	    	    }).join("&");
+	    	    const url = contextPath + '/downloadMulti.do?' + params;
+	    	    location.href = url;
+	    	  }
+	    }
+
+</script>
+
+
+</body>
+</html>

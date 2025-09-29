@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.go.distep.calendar.service.impl.CalendarMapper">
+	 <resultMap id="calendarResultMap" type="kr.go.distep.calendar.vo.CalendarVO">
+        <id property="id" column="id" />
+        <result property="eventTitle" column="event_title" />
+        <result property="eventDescription" column="event_description"/>
+        <result property="startDatetime" column="start_datetime" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+        <result property="endDatetime" column="end_datetime" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="organizer" column="organizer" />
+        <result property="location" column="location" />
+        <result property="contact" column="contact" />
+        <result property="userId" column="user_id" />
+        <result property="uploadThumbnail" column="upload_thumbnail" />
+        <result property="externalLink" column="external_link" />
+        <result property="eventStatus" column="event_status" />
+        <result property="fileGroupNo" column="file_group_no" />
+    </resultMap>
+
+    <insert id="insertCalendar" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO schedule_calendar
+        (event_title, event_description, start_datetime, end_datetime, organizer, location, contact, upload_thumbnail, external_link
+         <if test="fileGroupNo > 0">
+        ,file_group_no
+        </if>
+        ,user_id
+        )
+        VALUES
+        (#{eventTitle}, #{eventDescription}, #{startDatetime}, #{endDatetime}, #{organizer}, #{location}, #{contact}, #{uploadThumbnail}, #{externalLink}
+         <if test="fileGroupNo > 0">
+        ,#{fileGroupNo}
+        </if>
+        ,#{userId}
+        )
+    </insert>
+
+    <update id="updateCalendar">
+        UPDATE schedule_calendar SET
+        event_title = #{eventTitle},
+        event_description = #{eventDescription},
+        start_datetime = #{startDatetime},
+        end_datetime = #{endDatetime},
+        organizer = #{organizer},
+        external_link = #{externalLink},
+        updated_dt = NOW()
+         <if test="fileGroupNo > 0">
+         ,file_group_no = #{fileGroupNo}
+         </if>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="removeCalendar" >
+        DELETE FROM schedule_calendar WHERE id = #{id}
+    </delete>
+
+    <select id="selectCalendar" resultMap="calendarResultMap" parameterType="int">
+        SELECT * FROM schedule_calendar WHERE id = #{id}
+    </select>
+
+    <select id="selectCalendarList" resultMap="calendarResultMap">
+        SELECT * FROM schedule_calendar ORDER BY start_datetime DESC
+    </select>
+    <select id="getTotal" parameterType="hashMap" resultType="int">
+          <![CDATA[
+	  WITH X AS (
+	    SELECT 
+	      id,
+	      event_title,
+	      event_description,
+	      start_datetime,
+	      end_datetime,
+	      organizer,
+	      location,
+	      contact,
+	      upload_thumbnail,
+	      event_status,
+	      created_dt,
+	      updated_dt,
+	      external_link,
+	      file_group_no,
+	      ROW_NUMBER() OVER (ORDER BY start_datetime DESC) AS rnum
+	    FROM schedule_calendar
+	    WHERE start_datetime <= #{endDate}
+	      AND end_datetime >= #{startDate}
+	  )
+	  SELECT COUNT(*)
+	  FROM X
+	  WHERE 1=1
+	  ]]>
+    </select>
+
+    <!-- 파일 관련 -->
+    <insert id="insertCalendarFile" useGeneratedKeys="true" keyProperty="fileId">
+        INSERT INTO schedule_calendar_file (calendar_id, file_name, file_size, file_path)
+        VALUES (#{calendarId}, #{fileName}, #{fileSize}, #{filePath})
+    </insert>
+
+    <delete id="deleteCalendarFilesByCalendarId">
+        DELETE FROM schedule_calendar_file WHERE calendar_id = #{calendarId}
+    </delete>
+
+    <select id="selectFilesByCalendarId" resultType="kr.go.distep.calendar.vo.CalendarVO" parameterType="int">
+        SELECT * FROM schedule_calendar_file WHERE calendar_id = #{calendarId}
+    </select>
+   <select id="list" resultMap="calendarResultMap" parameterType="hashMap">
+	  <![CDATA[
+	  WITH X AS (
+	    SELECT 
+	      id,
+	      event_title,
+	      event_description,
+	      start_datetime,
+	      end_datetime,
+	      organizer,
+	      location,
+	      contact,
+	      upload_thumbnail,
+	      event_status,
+	      created_dt,
+	      updated_dt,
+	      external_link,
+	      file_group_no,
+	      ROW_NUMBER() OVER (ORDER BY start_datetime DESC) AS rnum
+	    FROM schedule_calendar
+	    WHERE start_datetime <= #{endDate}
+	      AND end_datetime >= #{startDate}
+	  )
+	  SELECT *
+	  FROM X
+	  WHERE X.rnum BETWEEN ((#{currentPage} * 2) - 1) AND (#{currentPage} * 2)
+	  ]]>
+	</select>
+   <select id="mainlist" resultMap="calendarResultMap" parameterType="kr.go.distep.calendar.vo.CalendarVO">
+	  <![CDATA[
+		WITH X AS (
+		  SELECT 
+		    id,
+		    event_title,
+		    event_description,
+		    start_datetime,
+		    end_datetime,
+		    organizer,
+		    location,
+		    contact,
+		    upload_thumbnail,
+		    event_status,
+		    created_dt,
+		    updated_dt,
+		    external_link,
+		    file_group_no,
+		    ROW_NUMBER() OVER (ORDER BY start_datetime ASC) AS rnum
+		  FROM schedule_calendar
+		  WHERE start_datetime >= NOW()
+		)
+		SELECT *
+		FROM X
+	  ]]>
+	</select>
+
+	<select id="detail" parameterType="kr.go.distep.calendar.vo.CalendarVO"
+		resultMap="calendarResultMap">
+			SELECT *
+			FROM schedule_calendar s inner join member m 
+            on s.user_id = m.id
+			WHERE s.id = #{id}
+		</select>
+		
+		
+		<select id="getBoarUpdateAuth" resultType="string">
+	    SELECT update_auth
+	    FROM board_auth
+	    WHERE user_type = #{userType}
+	      AND board_master_code_id = #{boardMasterCode}
+	</select>
+	
+	
+		<select id="getBoarFileAuth" resultType="string">
+	    SELECT file_auth
+	    FROM board_auth
+	    WHERE user_type = #{userType}
+	      AND board_master_code_id = #{boardMasterCode}
+	</select>
+</mapper>

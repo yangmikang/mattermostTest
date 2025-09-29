@@ -1,0 +1,61 @@
+package kr.go.distep.statis.web;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import kr.go.distep.statis.service.StatisService;
+import kr.go.distep.statis.vo.StatisVo;
+
+@Controller
+public class StatisController {
+	
+
+		@Autowired
+	    private StatisService statisService;
+
+	    // 통계 페이지 이동
+	    @RequestMapping(value="/userStats.do",method = RequestMethod.GET)
+	    public String viewUserStatsPage(Model model) {
+	        return "stats/stats"; 
+	    }
+
+	    // 월별 전체 요청 수
+	    @ResponseBody
+	    @RequestMapping(value="/monthlyTotal.do",method = RequestMethod.GET)
+	    public List<StatisVo> getMonthlyTotalRequests() {
+	    	
+	    	 List<StatisVo> statisVoList = statisService.getMonthlyTotalRequests();
+	        return statisVoList;
+	    }
+
+	    // 일별 전체 요청 수
+	    @ResponseBody
+	    @RequestMapping(value="/dailyTotal.do",method = RequestMethod.GET)
+	    public List<StatisVo> getDailyTotalRequests() {
+	    	List<StatisVo> statisVoList = statisService.getDailyTotalRequests();
+	        return statisVoList;
+	    }
+
+	    // 역할별 일별 요청 수
+	    @ResponseBody
+	    @RequestMapping(value="/dailyByRole.do",method = RequestMethod.GET)
+	    public List<StatisVo> getDailyRequestsByRole() {
+	    	List<StatisVo> statisVoList  = statisService.getDailyRequestsByRole();
+	        return  statisVoList;
+	    }
+
+	    // 역할별 월별 요청 수
+	    @ResponseBody
+	    @RequestMapping(value="/monthlyByRole.do",method = RequestMethod.GET)
+	    public List<StatisVo> getMonthlyRequestsByRole() {
+	    	List<StatisVo> statisVoList  = statisService.getMonthlyRequestsByRole();
+	        return statisVoList;
+	    }
+}

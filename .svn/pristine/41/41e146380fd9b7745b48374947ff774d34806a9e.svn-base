@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.go.distep.main.service.impl.BoardMapper">
+
+<resultMap id="boardResultMap" type="kr.go.distep.main.service.vo.BoardVo">
+    <result property="boardCode" column="BOARD_CODE"/>
+    <result property="title" column="TITLE"/>
+    <result property="content" column="CONTENT"/>
+    <result property="userId" column="USER_ID"/>
+    <result property="regDate" column="REG_DATE"/>
+    <result property="status" column="STATUS"/>
+    <result property="cityCode" column="CITY_CODE"/>
+    <result property="boardMasterCode" column="BOARD_MASTER_CODE"/>
+    
+    <result property="fileGroupNo" column="FILE_GROUP_NO"/>
+</resultMap>
+	
+	<select id="list" resultMap="boardResultMap" parameterType="hashMap">
+		WITH X AS (
+	    SELECT 
+	        B.BOARD_CODE,
+	        B.TITLE,
+	        B.CONTENT,
+	        B.USER_ID,
+	        DATE_FORMAT(B.REG_DATE, '%Y-%m-%d') AS regDate,
+	        B.STATUS,
+	        ROW_NUMBER() OVER (ORDER BY B.REG_DATE DESC) AS RNUM,
+	        B.FILE_GROUP_NO,
+	        B.BOARD_MASTER_CODE,
+	        M.USERNAME,
+	        M.ID,
+	        M.CITY_CODE AS CITY_CODE 
+	    FROM BOARD B 
+	    LEFT JOIN MEMBER M 
+	    ON B.USER_ID = M.ID
+	    WHERE B.STATUS = 'Y'
+	    <if test="keyword != null and keyword != ''">
+	        AND (TITLE LIKE CONCAT('%', #{keyword}, '%') 
+	             OR CONTENT LIKE CONCAT('%', #{keyword}, '%'))
+	    </if>
+	    <if test="boardMasterCode != null and boardMasterCode != ''">
+	        AND  B.BOARD_MASTER_CODE = #{boardMasterCode}
+	    </if>
+	
+			)
+			SELECT *
+			FROM X
+			WHERE X.RNUM BETWEEN (#{currentPage} * 10) - (10 - 1)
+	              AND (#{currentPage} * 10)
+
+	
+	</select>
+
+	 <select id="getTotal" parameterType="hashMap" resultType="int">
+	 	WITH X AS (
+		    SELECT 
+		        B.BOARD_CODE,
+		        B.TITLE,
+		        B.CONTENT,
+		        B.USER_ID,
+		        DATE_FORMAT(B.REG_DATE, '%Y-%m-%d') AS regDate,
+		        B.STATUS,
+		        ROW_NUMBER() OVER (ORDER BY B.REG_DATE DESC) AS RNUM,
+		        B.FILE_GROUP_NO,
+		        B.BOARD_MASTER_CODE,
+		        M.USERNAME,
+		        M.ID,
+		        M.CITY_CODE AS CITY_CODE 
+		    FROM BOARD B 
+		    LEFT JOIN MEMBER M 
+		    ON B.USER_ID = M.ID
+		    WHERE B.STATUS = 'Y'
+		    <if test="keyword != null and keyword != ''">
+		        AND (TITLE LIKE CONCAT('%', #{keyword}, '%') 
+		             OR CONTENT LIKE CONCAT('%', #{keyword}, '%'))
+		    </if>
+		     <if test="boardMasterCode != null and boardMasterCode != ''">
+	        AND  B.BOARD_MASTER_CODE = #{boardMasterCode}
+	   		 </if>
+	
+		
+		)
+		SELECT COUNT(*)
+		FROM X
+		WHERE 1 = 1
+	
+		
+		
+	
+	 
+	 </select>
+ 
+
+	 <select id="detail" parameterType="kr.go.distep.main.service.vo.BoardVo"
+		resultMap="boardResultMap">
+			SELECT *
+			FROM board b	inner join member m
+            ON b.user_id = m.id
+			WHERE board_code = #{boardCode}
+			  <if test="boardMasterCode != null and boardMasterCode != ''">
+	        AND  B.BOARD_MASTER_CODE = #{boardMasterCode}
+	    </if>
+	
+		</select>
+	
+	<!--
+
+	<update id=""></update>
+ -->
+	<insert id="boardInsert"
+        parameterType="kr.go.distep.main.service.vo.BoardVo"
+        useGeneratedKeys="true"
+        keyProperty="boardCode">
+
+    INSERT INTO BOARD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        TITLE,
+        CONTENT,
+        USER_ID,
+        REG_DATE,
+        STATUS,
+        BOARD_MASTER_CODE,
+        <if test="fileGroupNo > 0">
+            FILE_GROUP_NO,
+        </if>
+    </trim>
+    VALUES
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{title},
+        #{content},
+        #{userId},
+        SYSDATE(),
+        'Y',
+        #{boardMasterCode},
+        <if test="fileGroupNo > 0">
+            #{fileGroupNo},
+        </if>
+    </trim>
+</insert>
+	<update id="updateBd" parameterType="kr.go.distep.main.service.vo.BoardVo" > 
+			update board 
+			set title = #{title} , content =#{content},FILE_GROUP_NO = #{fileGroupNo}
+			where board_code = #{boardCode}
+		
+		</update>
+	<update id="deleteBd" parameterType="kr.go.distep.main.service.vo.BoardVo" > 
+			update board 
+			set status = 'N'
+			where board_code = #{boardCode}
+		
+		</update>
+</mapper>

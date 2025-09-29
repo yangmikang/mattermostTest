@@ -1,0 +1,115 @@
+package kr.go.distep.statis.web;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import kr.go.distep.statis.service.StatisService;
+import kr.go.distep.statis.vo.StatisVo;
+
+@Controller
+public class StatisController {
+	
+
+		@Autowired
+	    private StatisService statisService;
+
+	    // 통계 페이지 이동
+	    @RequestMapping(value="/userStats.do",method = RequestMethod.GET)
+	    public String viewUserStatsPage(Model model) {
+	        return "stats/stats"; 
+	    }
+
+	    // 월별 전체 요청 수
+	    @ResponseBody
+	    @RequestMapping(value="/monthlyTotal.do",method = RequestMethod.GET)
+	    public List<StatisVo> getMonthlyTotalRequests() {
+	    	
+	    	 List<StatisVo> statisVoList = statisService.getMonthlyTotalRequests();
+	        return statisVoList;
+	    }
+
+	    // 일별 전체 요청 수
+	    @ResponseBody
+	    @RequestMapping(value="/dailyTotal.do",method = RequestMethod.GET)
+	    public List<StatisVo> getDailyTotalRequests() {
+	    	List<StatisVo> statisVoList = statisService.getDailyTotalRequests();
+	        return statisVoList;
+	    }
+
+	    // 역할별 일별 요청 수
+	    @ResponseBody
+	    @RequestMapping(value="/dailyByRole.do",method = RequestMethod.GET)
+	    public List<StatisVo> getDailyRequestsByRole() {
+	    	List<StatisVo> statisVoList  = statisService.getDailyRequestsByRole();
+	        return  statisVoList;
+	    }
+
+	    // 역할별 월별 요청 수
+	    @ResponseBody
+	    @RequestMapping(value="/monthlyByRole.do",method = RequestMethod.GET)
+	    public List<StatisVo> getMonthlyRequestsByRole() {
+	    	List<StatisVo> statisVoList  = statisService.getMonthlyRequestsByRole();
+	        return statisVoList;
+	    }
+	    
+//	    @ResponseBody
+//	    @RequestMapping(value="/getStatis.do",method = RequestMethod.POST)
+//	    public List<StatisVo> getStatis(@RequestBody Map<String, Object> map) {
+//	    	String startDate = "";
+//	    	String endDate = "";
+//	    	 System.out.println("📥 받은 파라미터: " + map);
+//
+//	    	
+//	    	// 여기서 유효성 검증 또는 기본값 처리 가능
+//	        if (!map.containsKey("startDate") || ((String)map.get("startDate")).isEmpty()) {
+//	            map.put("startDate", "2025-01-01");
+//	        }
+//	        if (!map.containsKey("endDate") || ((String)map.get("endDate")).isEmpty()) {
+//	            map.put("endDate", "2025-12-31");
+//	        }
+//
+//	    	map.put("statType", statType);    
+//	    	map.put("dateUnit", dateUnit);        
+//	    	map.put("startDate",startDate);
+//	    	map.put("endDate", endDate);
+//
+//	    	List<StatisVo> statisVoList  = statisService.getStatis(map);
+//	    	
+//	    	return statisVoList;
+//	    }
+	    
+	    @ResponseBody
+	    @RequestMapping(value="/getStatis.do", method = RequestMethod.POST)
+	    public List<StatisVo> getStatis(@RequestBody Map<String, Object> map) {
+
+	        if (!map.containsKey("statType") || map.get("statType") == null || map.get("statType").toString().trim().isEmpty()) {
+	            map.put("statType", "total");
+	        }
+
+			/*
+			 * if (!map.containsKey("dateUnit") || map.get("dateUnit") == null ||
+			 * map.get("dateUnit").toString().trim().isEmpty()) { map.put("dateUnit",
+			 * "ymd"); }
+			 */
+	        if (!map.containsKey("startDate") || map.get("startDate") == null || map.get("startDate").toString().trim().isEmpty()) {
+	            map.put("startDate", "2025-01-01");
+	        }
+
+	        if (!map.containsKey("endDate") || map.get("endDate") == null || map.get("endDate").toString().trim().isEmpty()) {
+	            map.put("endDate", "2025-12-31");
+	        }
+	        List<StatisVo> statisVoList  = statisService.getStatis(map);
+	        System.out.println("최종 파라미터: " + map);
+	        return statisVoList;
+	    }
+
+}

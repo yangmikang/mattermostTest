@@ -1,0 +1,125 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<!-- 컨테이너 영역 -->
+		<div id="container">
+			<!-- 컨텐츠 영역 -->
+			<div class="page-title-wrap visual img-meeting">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<!-- program 관련 페이지만 브레드크럼 위치 변경 됩니다. -->
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Programs</a></li>
+							<li><a href="#" class="txt">Leader's Assembly</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<div class="visual-area">
+						<h2 class="h-tit">Leader's Assembly</h2>
+						<p>We focuses on strengthening practical cooperation among cities through the following three core initiatives.</p>
+					</div>
+<!-- 					<div class="tit-disc">
+						<p>GINI holds regular meetings of city representatives-at both high-level and working-level-to build trust and enhance collaboration among member cities. These meetings address key urban issues and are supported by the operation of a dedicated secretariat and administrative assistance.</p>
+					</div> -->
+				</div>
+			</div>
+			<div class="inner">
+				<!-- 섹션 컨텐츠 -->
+				 <div class="gini-cont-wrap gap20 assembly cont-box">
+					<div class="gini-cont-box">
+						<div class="row">
+							<!-- cont-left -->
+							<div class="cont-left cont50">
+								<div class="area-group assembly-type-box">
+									<div class="img-box">
+										<img src="${pageContext.request.contextPath}/img/component/common/bg_meeting.jpg" alt="meeting">
+									</div>
+									<h3 class="area-tit"><strong>High-Level</strong>Meeting</h3>
+								</div>
+							</div>
+							<!-- //cont-left -->
+							<!-- cont-right -->
+							<div class="cont-right cont50">
+								<div class="area-group">
+									<h4 class="sub-tit ico-bullet2">High-Level Meeting</h4>
+									<p class="desc">The High-Level Meeting serves as the highest decision-making body. This meeting deliberates and approves major policies, projects, and matters specified in the Charter.</p>
+								</div>
+								<div class="area-group">
+									<h4 class="sub-tit ico-bullet2">Meeting Frequency</h4>
+									<p class="desc">Biennially</p>
+								</div>
+								<div class="area-group">
+									<h4 class="sub-tit ico-bullet2">Participants</h4>
+									<p class="desc">The representative (or their designated delegate) from each Government and</p>
+								</div>
+							</div>
+							<!-- //cont-right -->
+						</div>
+						<div class="row">
+							<!-- cont-left -->
+							<div class="cont-left cont50">
+								<div class="area-group assembly-type-box working">
+									<div class="img-box">
+										<img src="${pageContext.request.contextPath}/img/component/common/bg_workingLevelMeeting.jpg" alt="meeting">
+									</div>
+									<h3 class="area-tit"><strong>Working-Level</strong>Meeting</h3>
+								</div>
+								
+							</div>
+							<!-- //cont-left -->
+							<!-- cont-right -->
+							<div class="cont-right cont50">
+								<div class="area-group">
+									<h4 class="sub-tit ico-bullet2">Working-Level Meeting</h4>
+									<p class="desc">The Working-Level Meeting is responsible for deliberating and coordinating significant issues related to the operation of the GINI, including major policies, initiatives, and budgets, as well as conducting preliminary reviews of the High-Level Meeting agenda.</p>
+								</div>
+								<div class="area-group">
+									<h4 class="sub-tit ico-bullet2">Meeting Frequency</h4>
+									<p class="desc">Biennially (in the years alternate to the High-Level Meeting)</p>
+								</div>
+								<div class="area-group">
+									<h4 class="sub-tit ico-bullet2">Participants</h4>
+									<p class="desc">One representative from the designated department of each Government and Development Authority Member</p>
+								</div>
+							</div>
+							<!-- //cont-right -->
+						</div>
+
+							
+							<!-- //cont-left -->
+							<!-- cont-right -->
+							<!-- <div class="cont-right cont50">
+								<div class="area-group assembly-type-box">
+									<h3 class="area-tit">Working-Level Meeting</h3>
+									<div class="img-box">
+										<img src="${pageContext.request.contextPath}/img/component/common/bg_workingLevelMeeting.jpg" alt="meeting">
+									</div>
+									<p class="desc">The Working-Level Meeting is responsible for deliberating and coordinating significant issues related to the operation of the GINI, including major policies, initiatives, and budgets, as well as conducting preliminary reviews of the High-Level Meeting agenda.</p>
+								</div>
+								<div class="area-group">
+									<h4 class="sub-tit">Meeting Frequency</h4>
+									<p class="desc">Biennially (in the years alternate to the High-Level Meeting)</p>
+								</div>
+								<div class="area-group">
+									<h4 class="sub-tit">Participants</h4>
+									<p class="desc">One representative from the designated department of each Government and Development Authority Member</p>
+								</div>
+							</div> -->
+							<!-- //cont-right -->
+					</div>
+						
+				 </div>
+				<!-- //섹션 컨텐츠 -->
+				 
+
+					
+
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 -->
+</html>

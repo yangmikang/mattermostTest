@@ -1,0 +1,76 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<!-- 컨테이너 영역 -->
+		<div id="container">
+			
+
+			<!-- 컨텐츠 영역 -->
+			<div class="page-title-wrap visual img-seminer">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<!-- program 관련 페이지만 브레드크럼 위치 변경 됩니다. -->
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Programs</a></li>
+							<li><a href="#" class="txt">Forums&Seminars</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<div class="visual-area">
+						<h2 class="h-tit">Forums & Seminars</h2>
+						<p>Discussing solutions to common urban issue</p>
+					</div>
+				</div>
+			</div>
+			<div class="inner">
+				<!-- 섹션 컨텐츠 -->
+				 <div class="gini-cont-wrap gap10 forums cont-box">
+					<div class="bg-imgType">
+						<div class="gini-cont-box">
+							<div class="row cont100">
+								<!-- cont-left -->
+								<div class="cont-left cont50">
+									<div class="area-group">
+										<h3 class="area-tit">Forums</h3>
+										<p class="desc">GINI operates a regular forum to strengthen the technological competitiveness of its member cities by facilitating collaboration among industry, academia, and research sectors, supporting startup market expansion, and establishing their global innovation network. The forum features keynote speeches, panel discussions, and events such as research and business networking sessions.</p>
+									</div>
+								</div>
+								<!-- cont-right -->
+								<div class="cont-right cont50">
+									<div class="area-group">
+										<h4 class="sub-tit ico-bullet2">Meeting Frequency</h4>
+										<p class="desc">Biennially (in the same year as the High-Level Meeting)</p>
+									</div>
+									<div class="area-group">
+										<h4 class="sub-tit ico-bullet2">Participants</h4>
+										<p class="desc">Representatives from member cities, along with local experts from industry, academia, and research organizations</p>
+									</div>
+								</div>
+							</div>
+							<!-- //cont-right -->
+						</div>
+						<div class="gini-cont-box">
+							<div class="area-group">
+								<h3 class="area-tit">Seminars</h3>
+								<p class="desc">GINI seminars invite relevant institutions and city representatives to explore areas of shared interest and to develop joint projects with local partners within member jurisdictions.</p>
+							</div>
+							
+							<!-- //cont-right -->
+						</div>
+					</div>					
+
+					
+				</div>
+				<!-- //섹션 컨텐츠 -->
+
+					
+
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 -->
+</html>

@@ -1,0 +1,357 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+   response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+   response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+   response.setDateHeader("Expires", 0); // Proxies
+%>
+<%@ include file="/WEB-INF/jsp/cmmn/tagLib.jsp" %>
+<!-- 헤더 영역 -->
+		<header id="header">
+			<!-- 헤더 컨텐츠 영역  -->
+			<div class="header-in">
+				<!-- 헤더 상단 기타메뉴 -->
+				<div class="head-body">
+					<div class="inner">
+						<div class="head-in">
+							<h1 class="logo">
+								<a href="${pageContext.request.contextPath}/index.do">
+									<img src="${pageContext.request.contextPath}/img/pattern/layout/head_logo.svg" class="logo-im" alt="Global Innopolis Network Initiative">
+									<!-- <img src="${pageContext.request.contextPath}/img/pattern/layout/head_logo_slogan.svg" class="logo-slogan" alt="다시 대한민국! 새로운 국민의 나라"> -->
+								</a>
+							</h1>
+							<!-- 웹 : 메뉴 영역 -->
+							<nav class="krds-gnb new">
+								<div class="inner">
+									<ul class="gnb-menu menu-1depth">
+										<li>  
+											<button>About GINI</button>
+											<div class="menu-drop">
+												<div class="inner">
+													<div class="menu-title">
+														<strong class="ico-gini">About GINI</strong>
+													</div>
+													<div class="menu-cont">
+														<div class="menu-2depth-box">
+															<ul class="menu-2depth">
+																<li><a href="${pageContext.request.contextPath}/overview.do">Overview</a></li>
+																<li><a href="${pageContext.request.contextPath}/logo.do">Logo</a></li>
+																<li><a href="${pageContext.request.contextPath}/contactus.do">Contact Us</a></li>
+																<li><a href="${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=A01">Publications</a></li>
+															</ul>
+														</div>
+													</div>
+												</div>
+											</div>
+										</li>
+										<li>
+											<button>Network</button>
+											<div class="menu-drop">
+												<div class="inner">
+													<div class="menu-title">
+														<strong class="ico-network">Network</strong>
+													</div>
+													<div class="menu-cont">
+														<div class="menu-2depth-box">
+															<ul class="menu-2depth">
+																<li><a href="${pageContext.request.contextPath}/networkMain.do">Members</a></li>
+																<li><a href="${pageContext.request.contextPath}/daejeon.do">Daejeon</a></li>
+																<li><a href="${pageContext.request.contextPath}/dortmund.do">Dortmund</a></li>
+																<li><a href="${pageContext.request.contextPath}/malaga.do">Malaga</a></li>
+																<li><a href="${pageContext.request.contextPath}/montgomery.do">Montgomery Count</a></li> 
+																<li><a href="${pageContext.request.contextPath}/seattle.do">Seattle</a></li>
+																<li><a href="${pageContext.request.contextPath}/quebec.do">Quebec</a></li>
+															</ul>
+														</div>
+													</div>
+												</div>
+											</div>
+										</li>
+										<li>
+											<button>Programs</button>
+											<div class="menu-drop">
+												<div class="inner">
+													<div class="menu-title">
+														<strong class="ico-program">Programs</strong>
+													</div>
+													<div class="menu-cont">
+														<div class="menu-2depth-box">
+															<ul class="menu-2depth">
+																<li><a href="${pageContext.request.contextPath}/calendar.do">Events</a></li>
+																<li><a href="${pageContext.request.contextPath}/overview2.do">Overview</a></li>
+																<li><a href="${pageContext.request.contextPath}/leadersAssembly.do">Leader's Assembly</a></li>
+																<li><a href="${pageContext.request.contextPath}/forumsSeminars.do">Forums&Seminars</a></li>
+																<li><a href="${pageContext.request.contextPath}/jointProjects.do">Joint Projects</a></li>
+															</ul>
+														</div>
+													</div>
+												</div>
+											</div>
+										</li>
+										<li>
+											<button>Board</button>
+											<div class="menu-drop">
+												<div class="inner">
+													<div class="menu-title">
+														<strong class="ico-board">Board</strong>
+													</div>
+													<div class="menu-cont">
+														<div class="menu-2depth-box">
+															<ul class="menu-2depth">
+																<li>
+																	<a>News</a>
+																	<div class="menu-3depth-box">
+																		<ul class="menu-3depth">
+																			<li><a href="${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=N01">GINI News</a></li>
+																			<li><a href="${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=N02">Member's News</a></li>
+																			<li><a href="${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=N03">Media Release</a></li>
+																		</ul>
+																	</div>
+																</li>
+																<li><a href="${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=N04">Q&A</a></li>
+																<li>
+																	<a>Member's Area</a>
+																	<div class="menu-3depth-box">
+																		<ul class="menu-3depth">
+																			<li><a href="${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=N05">Members</a></li>
+																			<li><a href="${pageContext.request.contextPath}/board/boardList.do?boardMasterCode=N06">Action Group</a></li>
+																		</ul>
+																	</div>
+																</li>
+															</ul>
+														</div>
+													</div>
+												</div>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</nav>
+							<!-- //웹 : 메뉴 영역 -->
+							<div class="right ">
+									<!-- <button type="button" class="btn-navi sch" title="통합검색 레이어" onclick="common.popupEvent('#popTotalSch');">통합검색</button> -->
+								<div class="krds-drop-wrap my-drop drop-language">
+									  <button type="button" class="btn-navi language drop-btn">Language<span class="sr-only">열기</span></button>
+									  <div class="drop-menu">
+									    <div class="drop-in">
+									    	<div class="drop-top-info">
+												<p class="drop-info">Translate this page using your browser.</p>
+											</div>
+										    <ul class="drop-list">
+										      <li><a href="#" data-lang="en" class="lang-option item-ico ico-eng">English</a></li>
+										      <li><a href="#" data-lang="ko" class="lang-option item-ico ico-kor">Korean</a></li>
+										      <li><a href="#" data-lang="de" class="lang-option item-ico ico-de">German</a></li>
+										      <li><a href="#" data-lang="es" class="lang-option item-ico ico-es">Spanish</a></li>
+										      <li><a href="#" data-lang="fr" class="lang-option item-ico ico-fr">French</a></li>
+										    </ul>
+									    </div>
+									  </div>
+									</div>
+									<div id="google_translate_element" style="position:absolute; left:-9999px;"></div>
+								<c:if test="${empty sessionScope.loggedInUser}">  
+								<a href="#" class="btn-navi login" onclick="location.href='${pageContext.request.contextPath}/login.do'">Login</a>
+								<button type="button" class="btn-navi join" onclick="location.href='${pageContext.request.contextPath}/userRegister.do'">Join</button>
+								</c:if>
+								<c:if test="${not empty sessionScope.loggedInUser}">
+									<a href="#" class="btn-navi logout" onclick="location.href='${pageContext.request.contextPath}/logout.do'">Logout</a>
+<%-- 									<c:if test="${sessionScope.loggedInUser.role ne 'A'}"> --%>
+										<a href="#" class="btn-navi my" onclick="location.href='${pageContext.request.contextPath}/editUser.do'">MyPage</a>
+									</c:if>
+								<!-- 관리자 로그인을 한 경우에만 노출, 멤버 회원도 마이페이지 필요한지 모르겠음 --> 
+									<c:if test="${sessionScope.loggedInUser.role eq 'A'}">
+										<div class="krds-drop-wrap my-drop">
+											<button type="button" class="btn-navi admin drop-btn">Admin<span class="sr-only">열기</span></button>
+											<div class="drop-menu">
+												<div class="drop-in">
+													<div class="drop-top-info">
+														<p class="my-name">${sessionScope.loggedInUser.username}</p>
+														<!-- 세션이 필요한 경우 사용 -->
+														<!-- <dl class="my-time">
+															<dt>로그아웃까지 남은 시간</dt>
+															<dd>
+																<span class="time">30:00</span>
+																<button type="button" class="btn sm btn-txt">시간 연장</button>
+															</dd>
+														</dl> -->
+														<!-- //세션이 필요한 경우 사용 -->
+													</div>
+													<ul class="drop-list">
+														<li><a href="#" class="item-link ico-go" alt="Admin System" onclick="location.href='${pageContext.request.contextPath}/admin.do'">User Management</a></li>
+														<li><a href="#" class="item-link ico-go">Board Management</a></li>
+													</ul>
+<!-- 													<div class="drop-btm-btn"> -->
+<!-- 														<button type="button" class="btn sm btn-txt ico-log ico-before">로그아웃</button> -->
+<!-- 													</div> -->
+												</div>
+											</div>
+										</div>
+									</c:if>
+									<!-- //관리자 로그인을 한 경우에만 노출 -->
+								<button type="button" class="btn-navi all" aria-controls="mobile-nav" aria-expanded="false">전체메뉴</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //헤더 상단 기타메뉴 -->
+			</div>
+			<!-- //헤더 컨텐츠 영역  -->
+			
+			
+		</header>
+		<!-- //헤더 영역 -->
+<script>
+		/* layer : 검색필터 */
+		const $tag = document.querySelector(".pop-filter-top .tag-in");
+		const $tagBtn = document.querySelector(".pop-filter-top #btn-toggle");
+		if ($tagBtn) {
+			$tagBtn.addEventListener("click", (e) => {
+				if (!e.target.classList.contains("active")) {
+					$tag.classList.add("is-open");
+					e.target.classList.add("active");
+				} else {
+					$tag.classList.remove("is-open");
+					e.target.classList.remove("active");
+				}
+			});
+		}
+	</script>
+
+	<script>
+    document.addEventListener('DOMContentLoaded', function () {
+		const calendarEl = document.getElementById('calendar');
+
+		const calendar = new FullCalendar.Calendar(calendarEl, {
+			locale: 'en',               // 한국어
+			initialView: 'dayGridMonth',
+			selectable: true,          // 드래그 또는 클릭으로 선택 허용
+			editable: true,            // 드래그로 이동/수정 가능
+			headerToolbar: {
+			// left: 'timeGridDay', //dayGridMonth,timeGridWeek
+			left: 'title',
+			right: 'prev,today,next'
+			},
+
+			// 날짜 클릭 → 새 이벤트 생성
+			dateClick: function (info) {
+			const title = prompt('일정 제목을 입력하세요:');
+			if (title) {
+				calendar.addEvent({
+				title: title,
+				start: info.dateStr,
+				allDay: true
+				});
+			}
+			},
+
+			// 이벤트 클릭 → 수정
+			eventClick: function (info) {
+			const newTitle = prompt('수정할 제목을 입력하세요:', info.event.title);
+			if (newTitle !== null) {
+				info.event.setProp('title', newTitle);
+			}
+			}
+		});
+
+		calendar.render();
+		});
+	</script> 
+	
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const gnbItems = document.querySelectorAll('.gnb-menu > li');
+
+  gnbItems.forEach(item => {
+    const mainTrigger = item.querySelector('.gnb-main-trigger');
+    const toggleWrap = item.querySelector('.gnb-toggle-wrap');
+
+    mainTrigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+
+      // 기존 열려 있는 메뉴 닫기
+      document.querySelectorAll('.gnb-toggle-wrap').forEach(wrap => {
+        if (wrap !== toggleWrap) wrap.style.display = 'none';
+      });
+
+      // 토글 열기/닫기
+      if (toggleWrap.style.display === 'block') {
+        toggleWrap.style.display = 'none';
+      } else {
+        toggleWrap.style.display = 'block';
+      }
+    });
+
+    // 하위 메뉴 토글 (2차 메뉴)
+    const subTrigger = item.querySelector('.gnb-sub-trigger');
+    const subList = item.querySelector('.gnb-sub-list');
+
+    if (subTrigger && subList) {
+      subTrigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+
+        // 다른 서브 닫기 
+        document.querySelectorAll('.gnb-sub-list').forEach(list => {
+          if (list !== subList) list.style.display = 'none';
+        });
+
+        // 서브 토글
+        if (subList.style.display === 'block') {
+          subList.style.display = 'none';
+        } else {
+          subList.style.display = 'block';
+        }
+      });
+    }
+  });
+
+  // 메뉴 외 클릭 시 닫기
+  document.addEventListener('click', function () {
+    document.querySelectorAll('.gnb-toggle-wrap').forEach(wrap => {
+      wrap.style.display = 'none';
+    });
+    document.querySelectorAll('.gnb-sub-list').forEach(sub => {
+      sub.style.display = 'none';
+    });  
+  });
+});
+</script>    
+
+
+<script>
+function setCookie(name, value, days) {
+  let expires = "";
+  if (days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days*24*60*60*1000));
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+function translateLanguage(lang) {
+  if (!lang) return;
+
+  setCookie('googtrans', '/en/' + lang, 1);
+  setCookie('googtrans', '/en/' + lang, 1, 'translate.google.com');
+
+  location.reload();
+}
+
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    includedLanguages: 'en,ko,de,es,fr',
+    layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+  }, 'google_translate_element');
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.lang-option').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.preventDefault();
+        const lang = this.dataset.lang;
+        translateLanguage(lang);
+      });
+    });
+  });
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>

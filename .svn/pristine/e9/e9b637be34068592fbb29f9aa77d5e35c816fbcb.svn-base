@@ -1,0 +1,181 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<!-- 컨테이너 영역 -->
+		<div id="container">
+
+			<div class="page-title-wrap visual img-members">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Network</a></li>
+							<li><a href="#" class="txt">City of Daejeon</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<!-- 페이지 타이틀 영역 -->
+					<div class="visual-area">
+						<h2 class="h-tit">City of Daejeon</h2>
+						<p>Members</p>
+					</div>
+				<!-- //페이지 타이틀 영역 -->
+				</div>
+			</div>
+			
+
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				
+				<!-- 섹션 컨텐츠 -->
+				 <div class="gini-cont-wrap gap20 cont-box cont-network">
+					<div class="gini-cont-box">
+						<h3 class="area-tit ico ico-location-2"><a href=""></a>City of Daejeon</h3>
+						<div class="row cont100">
+							<div class="cont-left cont50 memb_view">
+								<div class="city-view-box">
+									<div class="city-view-box-in">
+										<div class="city-view-ico">
+											<i class="item-ico ico-kor">
+												<img src="${pageContext.request.contextPath}/img/component/common/ico-symbol-daejeon.png" alt="symbol daejeon">
+											</i>
+										</div>
+										<div class="city-view-img-box">
+											<span class="city-view-img"><img src="${pageContext.request.contextPath}/img/component/common/membe_daejeon_view.png" alt=""></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="cont-right cont50">
+								<div class="tbl_wrap">
+									<ul class="list-tableType type2">
+										<li><span class="title ico-area">Area</span><span class="value">539.73㎢</span></li>
+										<li><span class="title ico-population">Population</span><span class="value">1.4 Million</span></li>
+										<li><span class="title ico-city-budget">City Budget</span><span class="value">$4.1 billion</span></li>
+										<li><span class="title ico-grdp">GRDP</span><span class="value">$36.64 Billion</span></li>
+										<li><span class="title ico-capita"">Per Capita Income</span><span class="value">$27,800</span></li>
+										<li><span class="title ico-companies">Total Number of Companies</span><span class="value">3,380 (including 559 Venture Enterprises)</span></li>
+										<li><span class="title ico-education">Higher Education</span><span class="value">19 universities including KAIST</span></li>
+									</ul>
+								</div>
+							</div>	
+						</div>
+						<div class="gini-cont-box">
+							<h3 class="area-tit">Strategic Industries</h3>
+							<div class="grid cols-3">
+						        <article class="card city">
+						          <div class="icon"><img src="${pageContext.request.contextPath}/img/component/common/ico-idea-exchange.svg" alt="Business Exchange"></div>
+						          <div>
+						            <b>Aerospace</b>
+						          </div>
+						        </article>
+						        <article class="card city">
+						          <div class="icon"><img src="${pageContext.request.contextPath}/img/component/common/ico-man-scientist.svg" alt="Research Collaboration"></div>
+						          <div>
+						            <b>Biohealth</b>
+						          </div>
+						        </article>
+						        <article class="card city">
+						          <div class="icon"><img src="${pageContext.request.contextPath}/img/component/common/ico-talent-hand.svg" alt="Talent Mobility"></div>
+						          <div>
+						            <b>Chips</b>
+						          </div>
+						        </article>
+						         <article class="card city">
+						          <div class="icon"><img src="${pageContext.request.contextPath}/img/component/common/ico-talent-hand.svg" alt="Talent Mobility"></div>
+						          <div>
+						            <b>Defense</b>
+						          </div>
+						        </article>
+  						        <article class="card city">
+						          <div class="icon"><img src="${pageContext.request.contextPath}/img/component/common/ico-talent-hand.svg" alt="Talent Mobility"></div>
+						          <div>
+						            <b>Quantum</b>
+						          </div>
+						        </article>
+						        <article class="card city">
+						          <div class="icon"><img src="${pageContext.request.contextPath}/img/component/common/ico-talent-hand.svg" alt="Talent Mobility"></div>
+						          <div>
+						            <b>Robotics</b>
+						          </div>
+						        </article>
+					      	</div>
+				      	</div>
+<!-- 						<div class="bg-imgType type02">
+							<div class="txt-box outline">
+									<h4 class="outline-tit">Strategic Industries</h4>
+									<p class="outline-txt">
+										<ol class="list-num">
+									<li>Aerospace: Home to the Space Industry Cluster, specializing in research and talent development.</li>
+									<li>Biohealth: Designated as a National Bio-Specialized Complex, aiming to lead in innovative drug development and R&D.</li>
+									<li>Chips: Developing a Nano and Semiconductor National Industrial Complex over 5 square kilometers.</li>
+									<li>Defense: A hub for space, AI, drones, semiconductors, and robotics, with a Drone Special Regulatory Free Zone and the Robot Drone Support Center.</li>
+									<li>Quantum: Hosting a National Quantum Cluster, fostering quantum startups, international research, and a quantum fabrication facility by 2031.</li>
+									<li>Robotics: Advancing innovation in mobile robots, drone robots, intelligent robot software, and robot content and services, supported by cutting-edge research and development.</li>
+								</ol>
+								
+							</div>
+						</div> -->
+				      	<div class="gini-cont-box">
+				      		<h3 class="area-tit ico ico-location-2">Daedeok Innopolis</h3>
+							<div class="row cont100">
+								<div class="cont-left cont50">
+									<div class="city-media">
+										<img src="${pageContext.request.contextPath}/img/component/common/membe_daejeon.png" alt="대전 지도" style="aspect-ratio:16/12;">
+									</div>
+
+								</div>
+								<div class="cont-right cont50">
+									<ul class="list-line">
+										<li><span class="title">Employee</span><span class="value">91,886</span></li>
+										<li><span class="title">PhD Researchers</span><span class="value">17,604</span></li>
+										<li><span class="title">Technology Transfer</span><span class="value">2,015</span></li>
+										<li><span class="title">Government-funded Research Institutes</span><span class="value">26</span></li>
+										<li><span class="title">Research Companies</span><span class="value">447</span></li>
+										<li><span class="title">High-Tech Companies</span><span class="value">135</span></li>
+									</ul>
+								</div>
+							</div>
+							<div class="row cont100">
+									<div class="grid cols-7">
+										<article class="card">
+											<p>Daejeon Technopark</p>
+											<%-- <img src="${pageContext.request.contextPath}/img/component/common/stadt-dortmund-logo-rechts.png" alt="Business Exchange"> --%>
+							          	</article>
+										<article class="card">
+											<p>Daejeon Center for Creative Economy & Innovation</p>
+											<%-- <img src="${pageContext.request.contextPath}/img/component/common/img-dortmund-th.png" alt="Business Exchange"> --%>
+							          	</article>
+							          	<article class="card">
+							          		<p>KRIBB</p>
+											<%-- <img src="${pageContext.request.contextPath}/img/component/common/FHDO-Logo-large.svg" alt="Business Exchange"> --%>
+							          	</article>
+										<article class="card">
+											<p>KRISS</p>
+											<%-- <img src="${pageContext.request.contextPath}/img/component/common/stadt-dortmund-logo-rechts.png" alt="Business Exchange"> --%>
+							          	</article>
+										<article class="card">
+											<p>ETRI</p>
+											<%-- <img src="${pageContext.request.contextPath}/img/component/common/img-dortmund-th.png" alt="Business Exchange"> --%>
+							          	</article>
+							          	<article class="card">
+							          		<p>카이스트</p>
+											<%-- <img src="${pageContext.request.contextPath}/img/component/common/FHDO-Logo-large.svg" alt="Business Exchange"> --%>
+							          	</article>
+							          	<article class="card">
+							          		<p>DiSTEP</p>
+											<%-- <img src="${pageContext.request.contextPath}/img/component/common/FHDO-Logo-large.svg" alt="Business Exchange"> --%>
+							          	</article>
+									</div>
+							</div>
+				      	</div>
+					</div>	
+				 </div>
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 -->
+</html>

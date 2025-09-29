@@ -1,0 +1,94 @@
+package kr.go.distep.calendar.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import kr.go.distep.calendar.service.CalendarService;
+import kr.go.distep.calendar.vo.CalendarFileVO;
+import kr.go.distep.calendar.vo.CalendarVO;
+
+@Service("calendarService")
+public class CalendarServiceImpl implements CalendarService {
+	
+	@Resource(name="calendarMapper")
+    private CalendarMapper calendarMapper;
+
+    @Override
+    @Transactional
+    public int registerCalendar(CalendarVO calendar) throws Exception {
+        int result = calendarMapper.insertCalendar(calendar);
+
+        if (calendar.getFileList() != null) {
+            for (CalendarFileVO file : calendar.getFileList()) {
+                file.setCalendarId(calendar.getId());
+                calendarMapper.insertCalendarFile(file);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public int modifyCalendar(CalendarVO calendar) throws Exception {
+        // 기존 파일 삭제 후 새로 등록
+        calendarMapper.deleteCalendarFilesByCalendarId(calendar.getId());
+
+        if (calendar.getFileList() != null) {
+            for (CalendarFileVO file : calendar.getFileList()) {
+                file.setCalendarId(calendar.getId());
+                calendarMapper.insertCalendarFile(file);
+            }
+        }
+
+        return calendarMapper.updateCalendar(calendar);
+    }
+
+    @Override
+    @Transactional
+    public int removeCalendar(int id) throws Exception {
+        return calendarMapper.deleteCalendar(id);
+    }
+
+    @Override
+    public CalendarVO getCalendar(int id) throws Exception {
+        CalendarVO calendar = calendarMapper.selectCalendar(id);
+        if (calendar != null) {
+            calendar.setFileList(calendarMapper.selectFilesByCalendarId(id));
+        }
+        return calendar;
+    }
+
+    @Override
+    public List<CalendarVO> getCalendarList() throws Exception {
+        return calendarMapper.selectCalendarList();
+    }
+
+	@Override
+	public int getTotal(Map<String, Object> getTotal) {
+		return calendarMapper.getTotal(getTotal);
+	}
+
+	@Override
+	public List<CalendarVO> list(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return calendarMapper.list(map);
+	}
+
+	@Override
+	public int updateTitle(CalendarVO vo) {
+		return calendarMapper.updateTitle(vo);
+		
+	}
+
+	@Override
+	public int updateDates(CalendarVO vo) {
+		return calendarMapper.updateDates(vo);
+	}
+
+}

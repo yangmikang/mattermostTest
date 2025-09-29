@@ -1,0 +1,87 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="EUC-KR">
+    <title>ID Result</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            width: 600px;
+            margin: 80px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 40px 30px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: "";
+            display: block; 
+            width: 60px;
+            height: 3px;
+            background-color: var(--krds-primary);
+            margin: 10px auto 0;
+            border-radius: 3px;
+        }
+
+        .gini-cont-box {
+            text-align: center;
+        }
+
+        .consult_name {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .form-conts {
+            font-weight: bold;
+            color: var(--krds-primary);
+        }
+
+        .btn-login {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--krds-primary);
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background-color: #2c80b4;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <h2 class="section-title">Find Your ID</h2>
+    <div class="gini-cont-box">
+        <p class="consult_name">Your ID is: <strong class="form-conts">${foundUserId}</strong></p>
+        <a href="login.do" class="btn-login">Go to Login</a>
+    </div>
+</div>
+
+</body>
+</html>

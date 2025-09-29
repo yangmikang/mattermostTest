@@ -1,0 +1,35 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<head><title>Temporary Password</title></head>
+<body>
+
+<div id="container">
+	<div class="inner">
+		<div class="page-title-wrap">
+			<h2>Your temporary password has been generated</h2>
+		</div>
+		<div class="gini-cont-wrap">
+			<div class="gini-cont-box al_center">
+				<div class="form-group cont50">
+					<p class="consult_name"><strong class="form-conts">Temporary Password:</strong> ${tempPassword}</p>
+					<p class="form-hint info">Please log in and change your password immediately.</p>
+					<div class="btn-wrap pc-only al_center">
+						<a href="login.do" class="btn primary">Go to Login</a>
+				    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+			
+
+
+
+
+
+
+
+</body>
+</html>

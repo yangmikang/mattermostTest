@@ -1,0 +1,431 @@
+package kr.go.distep.main.web;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import kr.go.distep.calendar.service.CalendarService;
+import kr.go.distep.cmmn.file.vo.FileGroupVO;
+import kr.go.distep.main.service.BoardMasterService;
+import kr.go.distep.main.service.UploadService;
+import kr.go.distep.main.service.vo.BoardVo;
+import kr.go.distep.main.service.vo.QnaVo;
+import kr.go.distep.user.vo.UserVO;
+import kr.go.distep.util.ArticlePage;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RequestMapping("/board")
+@Controller
+public class BoardController {
+
+	@Autowired
+	BoardMasterService boardmasterservice;
+	
+    @Autowired
+    UploadService uploadService;
+    
+	
+	@RequestMapping("/qna.do")
+	public String qna() {
+		return "board/qnaList";
+	}
+	@RequestMapping("/qnaregister.do")
+	public String qnaregister() {
+		return "board/qnaInsert";
+	}
+    
+	@Resource(name = "calendarService")
+	private CalendarService calendarService;
+
+
+	   // 공통 게시판 화면
+    @RequestMapping(value = "/boardList.do", method = RequestMethod.GET)
+    public String boardListPage(@RequestParam("boardMasterCode") String boardMasterCode, Model model,  HttpSession session,
+			RedirectAttributes redirectAttributes,HttpServletRequest request) {
+    	
+    	
+    	UserVO user = (UserVO) session.getAttribute("loggedInUser");
+    	String userType = "N"; 
+        String userYn = "N";
+    	String fileuserYn = "N";  
+  	    String apprYn = "";
+  	    
+        if (user != null) {
+            apprYn = user.getAppr_yn();
+            HashMap<String, String> param = new HashMap<>();
+          
+            if(apprYn.equals("Y")) {
+            	userType = user.getRole();
+            } else {
+            	userType = "G";
+            }
+           
+            
+            param.put("userType",userType);
+            param.put("boardMasterCode",boardMasterCode);
+             userYn = calendarService.getBoarUpdateAuth(param);
+    		
+            fileuserYn = calendarService.getBoarFileAuth(param);
+        }
+		
+		
+		
+        model.addAttribute("fileuserYn", fileuserYn);
+        model.addAttribute("boardMasterCode", boardMasterCode);
+        model.addAttribute("userYn", userYn);
+		model.addAttribute("userType", userType);
+		
+        return "board/board";
+    }
+
+    // 비동기 리스트
+    @ResponseBody
+    @RequestMapping(value = "/listAjax.do", method = RequestMethod.POST)
+    public ArticlePage<BoardVo> listAjax(@RequestBody Map<String, Object> map) {
+
+        int currentPage = 1;
+        String keyword = "";
+        String boardMasterCode = "";
+
+        if (map.get("currentPage") != null) {
+            try {
+                currentPage = Integer.parseInt(map.get("currentPage").toString());
+            } catch (NumberFormatException e) {
+                currentPage = 1;
+            }
+        }
+
+        if (map.get("keyword") != null) {
+            keyword = map.get("keyword").toString();
+        }
+        if (map.get("boardMasterCode") != null) {
+            boardMasterCode = map.get("boardMasterCode").toString();
+        }
+
+        map.put("currentPage", currentPage);
+        map.put("keyword", keyword);
+        map.put("boardMasterCode", boardMasterCode);
+
+        int getTotal = boardmasterservice.getTotal(map);
+        List<BoardVo> boardList = boardmasterservice.list(map);
+
+        for (BoardVo vo : boardList) {
+            if (vo.getFileGroupNo() > 0) {
+                FileGroupVO fileGroupVO = uploadService.getFileGroupWithDetails(vo.getFileGroupNo());
+                vo.setFileGroupVO(fileGroupVO);
+            }
+        }
+
+        return new ArticlePage<>(getTotal, currentPage, 9, boardList, keyword, "ajax");
+    }
+
+    // 비동기 리스트
+    @ResponseBody
+    @RequestMapping(value = "/listQnaAjax.do", method = RequestMethod.POST)
+    public ArticlePage<QnaVo> listQnaAjax(@RequestBody Map<String, Object> map) {
+
+        int currentPage = 1;
+        String keyword = "";
+
+        if (map.get("currentPage") != null) {
+            try {
+                currentPage = Integer.parseInt(map.get("currentPage").toString());
+            } catch (NumberFormatException e) {
+                currentPage = 1;
+            }
+        }
+
+        if (map.get("keyword") != null) {
+            keyword = map.get("keyword").toString();
+        }
+
+        map.put("currentPage", currentPage);
+        map.put("keyword", keyword);
+
+        int getTotal = boardmasterservice.qnaGetTotal(map);
+        List<QnaVo> qnaList = boardmasterservice.qnaList(map);
+
+
+        return new ArticlePage<>(getTotal, currentPage, 10, qnaList, keyword, "ajax");
+    }
+	// 게시판 상세
+		
+    @RequestMapping(value = "/detail.do", method = RequestMethod.GET)
+    public String detail(BoardVo boardVo, Model model, HttpSession session,
+                         RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        
+        boardVo = boardmasterservice.detail(boardVo); // board 테이블에서 조회됨
+
+        log.info(">> fileGroupNo: {}", boardVo.getFileGroupNo()); // 디버깅용
+
+        if (boardVo.getFileGroupNo() > 0) {
+            FileGroupVO fileGroupVO = uploadService.getFileGroupWithDetails(boardVo.getFileGroupNo());
+            boardVo.setFileGroupVO(fileGroupVO);
+            log.info("fileDetailVOList: {}", fileGroupVO.getFileDetailVOList());
+        }
+
+        String boardMasterCode = boardVo.getBoardMasterCode();
+
+        UserVO user = (UserVO) session.getAttribute("loggedInUser");
+        String userType = "N"; 
+        String userYn = "N";   
+        String apprYn = "";
+        
+        
+        HashMap<String, String> param = new HashMap<>();
+        if (user != null) {
+        	 apprYn = user.getAppr_yn();
+
+            
+            if(apprYn.equals("Y")) {
+             	userType = user.getRole();
+             } else {
+             	userType = "G";
+             }
+            
+            param.put("userType", userType);
+            param.put("boardMasterCode", boardMasterCode);
+
+        }
+        else {
+        	log.info("Fefefffffffffffffffff로직타나");
+        	userType = "N";
+        	 param.put("userType", userType);
+             param.put("boardMasterCode", boardMasterCode);
+             
+        	
+        }
+        userYn = calendarService.getBoarFileAuth(param);
+
+        log.info("유저타입체킁" + userType);
+        model.addAttribute("boardMasterCode", boardMasterCode);
+        model.addAttribute("fileuserYn", userYn);         // 권한 여부 Y/N
+        model.addAttribute("userType", userType);         // 권한 여부 Y/N
+        model.addAttribute("fileuserType", userType);     // 사용자 타입 A/G/N 등
+        model.addAttribute("boardVo", boardVo);
+        model.addAttribute("boardVo", boardVo);
+
+        return "board/boardDetail";
+    }
+
+
+		@RequestMapping(value = "/boardInsert.do", method = RequestMethod.POST)
+		@ResponseBody
+		public Map<String, Object> createCm(
+		    BoardVo boardVo,
+		    HttpSession session,
+		    @RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnailFile,
+		    @RequestParam(value = "boardMasterCode", required = false) String boardMasterCode
+		) {
+		    Map<String, Object> resultMap = new HashMap<>();
+
+		    UserVO user = (UserVO) session.getAttribute("loggedInUser");
+
+		    // 로그인 체크
+		    if (user == null || user.getId() == null || user.getId().trim().isEmpty()) {
+		        resultMap.put("success", false);
+		        resultMap.put("message", "로그인 후 이용 가능합니다.");
+		        resultMap.put("redirectUrl", "/board/list.do");
+		        return resultMap;
+		    }
+
+		    // boardMasterCode 기본값 처리
+		    if (boardMasterCode == null || boardMasterCode.trim().isEmpty()) {
+		        boardMasterCode = "N01";
+		    }
+		    boardVo.setBoardMasterCode(boardMasterCode);
+
+		    boardVo.setUserId(user.getId());
+		    boardVo.setThumbnailFile(thumbnailFile);
+
+		    int result = this.boardmasterservice.boardInsert(boardVo);
+
+		    if (result > 0) {
+		        // boardMasterCode에 따라 리다이렉트 경로 설정
+		        String redirectUrl;
+		        switch (boardMasterCode) {
+		            case "N01": case "N02": case "N03":
+		            case "N04": case "N05": case "N06":
+		            case "A01":
+		                redirectUrl = "/board/detail.do?boardCode=" + boardVo.getBoardCode();
+		                break;
+		            default:
+		                redirectUrl = "/board/home.do?boardCode=" + boardVo.getBoardCode();
+		                break;
+		        }
+		        resultMap.put("success", true);
+		        resultMap.put("redirectUrl", redirectUrl);
+		    } else {
+		        resultMap.put("success", false);
+		        resultMap.put("message", "게시글 등록에 실패했습니다.");
+		    }
+
+		    return resultMap;
+		}
+
+		@RequestMapping(value = "/qnaInsert.do", method = RequestMethod.POST)
+		public String qnaInsert(
+				QnaVo qnaVo,
+				Model model,
+				HttpSession session,
+				RedirectAttributes redirectAttributes
+				) {
+			
+			UserVO user = (UserVO) session.getAttribute("loggedInUser");
+			
+			// 로그인 체크
+			if (user == null || user.getId() == null || user.getId().trim().isEmpty()) {
+				redirectAttributes.addFlashAttribute("error", "로그인 후 이용 가능합니다.");
+				return "redirect:/board/list.do";
+			}
+			
+			
+			qnaVo.setWriterId(user.getId());
+			
+			int result = this.boardmasterservice.qnaInsert(qnaVo);
+			log.debug("boardVo: " + qnaVo);
+			
+			// boardMasterCode에 따라 리다이렉트 경로 다르게 설정
+			String redirectUrl;
+			//redirectUrl = "/board/list.do?qnaId=" + qnaVo.getQnaId();
+			redirectUrl = "/board/qna.do";
+			
+			
+			return "redirect:"+redirectUrl;
+		}
+		@RequestMapping(value = "/answerDelete.do", method = RequestMethod.POST)
+		@ResponseBody
+		public int answerDelete(@RequestBody QnaVo qnaVo) {
+		    int result = boardmasterservice.answerDelete(qnaVo.getQnaId());
+		    
+		    return result ;
+		}
+		@RequestMapping(value = "/answerUpdate.do", method = RequestMethod.POST)
+		@ResponseBody
+		public int answerUpdate(@RequestBody QnaVo qnaVo) {
+			int result = boardmasterservice.answerUpdate(qnaVo);
+			
+			return result ;
+		}
+
+		@ResponseBody
+		@RequestMapping(value = "/answerInsert.do", method = RequestMethod.POST)
+		public String answerInsert(
+				 @RequestBody QnaVo qnaVo,
+				HttpSession session,
+				RedirectAttributes redirectAttributes
+				) {
+			
+			UserVO user = (UserVO) session.getAttribute("loggedInUser");
+			
+			// 로그인 체크
+			if (user == null || user.getId() == null || user.getId().trim().isEmpty()) {
+				redirectAttributes.addFlashAttribute("error", "로그인 후 이용 가능합니다.");
+				return "redirect:/board/list.do";
+			}
+			
+			
+			qnaVo.setAdminId(user.getId());
+			
+			int result = this.boardmasterservice.answerInsert(qnaVo);
+			log.debug("boardVo: " + qnaVo);
+			
+			// boardMasterCode에 따라 리다이렉트 경로 다르게 설정
+			String redirectUrl;
+			//redirectUrl = "/board/list.do?qnaId=" + qnaVo.getQnaId();
+			redirectUrl = "/board/qna.do";
+			
+			
+			return redirectUrl;
+		}
+
+
+	// 게시판 등록페이지 로딩
+	@RequestMapping(value ="/boardPage.do", method=RequestMethod.GET)
+	public String boardInsertForm() {
+	    return "board/boardInsert"; 
+}
+	// 게시판 등록페이지 로딩
+	@RequestMapping(value ="/boarThumbIst.do", method=RequestMethod.GET)
+	public String boardThumbInsertForm() {
+		return "board/boardThumbInsert"; 
+	}
+	
+	// 게시판 수정
+	@RequestMapping(value="/update.do", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> updateCm(
+	        BoardVo boardVo,
+	        @RequestParam(value = "uploadFiles", required = false) MultipartFile[] uploadFiles,
+	        @RequestParam(value = "deletedFileIds", required = false) String deletedFileIds,
+	        @RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnailFile,
+	        javax.servlet.http.HttpServletResponse resp) {
+
+	    Map<String, Object> res = new HashMap<>();
+	    try {
+	        int result = this.boardmasterservice.updateBd(boardVo);
+
+	        if (result > 0) {
+	            res.put("success", true);         
+	            return res;
+	        } else {
+	            resp.setStatus(400);               
+	            res.put("success", false);
+	            res.put("error", "NO_ROWS_UPDATED");
+	            res.put("message", "Update failed: No rows updated.");
+	            return res;
+	        }
+
+	    } catch (org.springframework.dao.DataIntegrityViolationException e) {// 컬럼 length오류 
+	        resp.setStatus(400);                   
+	        res.put("success", false);
+	        res.put("error", "DATA_TOO_LONG");
+	        res.put("message", "제목/컬럼 길이 제한 초과");
+	        return res;
+
+	    } catch (Exception e) {// 기타 서버 오류
+	        resp.setStatus(500);                  
+	        res.put("success", false);
+	        res.put("error", "INTERNAL_ERROR");
+	        res.put("message", "서버 오류");
+	        return res;
+	    }
+	}
+	// 게시판 삭제
+	@ResponseBody
+	@RequestMapping(value = "/delete.do", method = RequestMethod.POST)
+	public String deleteCm(@RequestBody BoardVo boardVo) {
+	    log.info("boardVo: " + boardVo);
+	    int result = this.boardmasterservice.deleteBd(boardVo);
+	    log.info("result: " + result);
+
+	    String boardMasterCode = boardVo.getBoardMasterCode();
+	    String redirectUrl = "/board/boardList.do?boardMasterCode=" + boardMasterCode;
+	    return redirectUrl; 
+	}
+
+
+	
+	
+	
+	
+	
+	
+	
+}

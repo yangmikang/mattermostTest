@@ -1,0 +1,117 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<!-- 컨테이너 영역 -->
+		<div id="container">
+			<!-- breadcrumb -->
+			<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+				<ol class="breadcrumb">
+					<li class="home"><a href="#" class="txt">Home</a></li>
+					<li><a href="#" class="txt">Network</a></li>
+					<!-- <li><a href="#" class="txt">Overview</a></li> -->
+				</ol>
+			</nav>
+			<!-- breadcrumb -->
+
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				<!-- 페이지 타이틀 영역 -->
+				<div class="page-title-wrap">
+					<h2 class="h-tit">Members</h2>
+					<p>Select a member country on the map</p>
+				</div>
+				<!-- //페이지 타이틀 영역 -->
+				<!-- 섹션 컨텐츠 -->
+				 <div class="gini-cont-wrap gap20 cont-box cont-map">
+					<div class="gini-cont-box">
+						<div class="row cont100">
+							<div class="cont-left cont40">
+								<div class="quick-nav-area">
+									<div class="quick-title-wrap pc-only">
+										<h3 class="sec-tit">Members</h3>
+									</div>
+									<nav class="quick-list">
+										<ul>
+											<li><a href="">City of Daejeon</a></li>
+											<li><a href="">City of Dortmund</a></li>
+											<li><a href="">City of Malaga</a></li>
+											<li><a href="">County of Montgomery, MD</a></li>
+											<li><a href="">City of Seattle</a></li>
+											<li><a href="">Quebec Province</a></li>
+											<li><a href="">Hisnchu</a></li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+							<div class="cont-right cont60 map-area">
+								<!-- <p>지도 이미지를 첨부 예정입니다</p> -->
+							 <!-- <img src="/resources/img/component/common/img_memberMap.jpg" alt="Member map"> -->
+							 <svg width="800" height="400" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+								<!-- 배경색 -->
+								<rect width="100%" height="100%" fill="transparent" />
+
+								<!-- City of Daejeon -->
+								<a href="/city/daejeon" aria-label="City of Daejeon">
+									<circle cx="100" cy="100" r="30" fill="#6BAED6">
+									<title>City of Daejeon</title>
+									</circle>
+								</a>
+
+								<!-- City of Dortmund -->
+								<a href="/city/dortmund" aria-label="City of Dortmund">
+									<circle cx="250" cy="80" r="30" fill="#9ECAE1">
+									<title>City of Dortmund</title>
+									</circle>
+								</a>
+
+								<!-- City of Malaga -->
+								<a href="/city/malaga" aria-label="City of Malaga">
+									<circle cx="250" cy="160" r="30" fill="#C6DBEF">
+									<title>City of Malaga</title>
+									</circle>
+								</a>
+
+								<!-- County of Montgomery, MD -->
+								<a href="/county/montgomery-md" aria-label="County of Montgomery, MD">
+									<circle cx="400" cy="100" r="30" fill="#FDD0A2">
+									<title>County of Montgomery, MD</title>
+									</circle>
+								</a>
+
+								<!-- City of Seattle -->
+								<a href="/city/seattle" aria-label="City of Seattle">
+									<circle cx="550" cy="80" r="30" fill="#FDAE6B">
+									<title>City of Seattle</title>
+									</circle>
+								</a>
+
+								<!-- Quebec Province -->
+								<a href="/province/quebec" aria-label="Quebec Province">
+									<circle cx="550" cy="180" r="30" fill="#F16913">
+									<title>Quebec Province</title>
+									</circle>
+								</a>
+
+								<!-- Hsinchu -->
+								<a href="/city/hsinchu" aria-label="Hsinchu">
+									<circle cx="700" cy="120" r="30" fill="#D94801">
+									<title>Hsinchu</title>
+									</circle>
+								</a>
+								</svg>
+							</div>
+							
+						</div>
+					</div>
+					
+
+					
+				 </div>
+				<!-- //섹션 컨텐츠 -->
+
+					
+
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 -->

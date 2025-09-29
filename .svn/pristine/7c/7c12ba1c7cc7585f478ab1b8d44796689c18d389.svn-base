@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.go.distep.main.service.impl.BoardMapper">
+
+<resultMap id="boardResultMap" type="kr.go.distep.main.service.vo.BoardVo">
+    <result property="boardCode" column="board_code"/>
+    <result property="title" column="title"/>
+    <result property="content" column="content"/>
+    <result property="userId" column="user_id"/>
+    <result property="regDate" column="reg_date"/>
+    <result property="status" column="status"/>
+    <result property="cityCode" column="city_code"/>
+    <result property="boardMasterCode" column="board_master_code"/>
+    <result property="fileGroupNo" column="file_group_no"/>
+</resultMap>
+<resultMap id="qnaResultMap" type="kr.go.distep.main.service.vo.QnaVo">
+    <result property="qnaId" column="qna_id"/>
+    <result property="title" column="title"/>
+    <result property="content" column="content"/>
+    <result property="writerId" column="writer_id"/>
+    <result property="isSecret" column="is_secret"/>
+    <result property="viewCount" column="view_count"/>
+    <result property="createdAt" column="created_at"/>
+    <result property="updatedAt" column="update_at"/>
+    
+     <!-- 답변 정보 -->
+  <result property="answerId" column="answer_id"/>
+  <result property="aswContent" column="asw_content"/>
+  <result property="adminId" column="admin_id"/>
+  <result property="createdAtAsw" column="created_at_asw"/>
+  <result property="updatedAtAsw" column="updated_at_asw"/>
+  <result property="deleteYnAsw" column="delete_yn_asw"/>
+</resultMap>
+	
+	<select id="list" resultMap="boardResultMap" parameterType="hashMap">
+		WITH X AS (
+	    SELECT 
+	        B.board_code,
+	        B.title,
+	        B.content,
+	        B.user_id,
+	        DATE_FORMAT(B.reg_date, '%Y-%m-%d') AS regDate,
+	        B.status,
+	        ROW_NUMBER() OVER (ORDER BY B.reg_date DESC) AS RNUM,
+	        B.file_group_no,
+	        B.board_master_code,
+	        M.username,
+	        M.id,
+	        M.city_code AS city_code 
+	    FROM board B 
+	    LEFT JOIN member M 
+	    ON B.user_id = M.id
+	    WHERE B.status = 'Y'
+	    <if test="keyword != null and keyword != ''">
+	        AND (title LIKE CONCAT('%', #{keyword}, '%') 
+	             OR content LIKE CONCAT('%', #{keyword}, '%'))
+	    </if>
+	    <if test="boardMasterCode != null and boardMasterCode != ''">
+	        AND  B.board_master_code = #{boardMasterCode}
+	    </if>
+			)
+			SELECT *
+			FROM X
+			WHERE X.rnum BETWEEN (#{currentPage} * 10) - (10 - 1)
+	              AND (#{currentPage} * 10)
+
+	</select>
+	
+	<select id="qnaList" resultMap="qnaResultMap" parameterType="hashMap">
+	WITH X AS (
+	  SELECT 
+	    q.qna_id,
+	    q.title,
+	    q.content,
+	    q.writer_id,
+	    q.is_secret,
+	    q.view_count,
+	    q.answer_yn,
+	    q.delete_yn,
+	    q.created_at AS createdAt,
+	    q.updated_at AS updatedAt,
+	    a.answer_id ,
+	    a.asw_content,
+	    a.admin_id ,
+	    a.created_at_asw AS createdAtAsw,
+	    a.updated_at_asw AS updatedAtAsw,
+	    ROW_NUMBER() OVER (ORDER BY q.created_at DESC) AS rnum
+	  FROM qna q
+	  LEFT JOIN qna_answer a ON q.qna_id = a.qna_id AND a.delete_yn_asw = 'Y'
+	  WHERE q.delete_yn = 'Y'
+	)
+	SELECT *
+	FROM X
+	WHERE X.rnum BETWEEN (#{currentPage} * 10) - (10 - 1)
+	              AND (#{currentPage} * 10)
+</select>
+
+	
+	
+	<select id="qnaGetTotal" parameterType="hashMap"  resultType="int">
+		WITH X AS (
+	    SELECT 
+	        qna_id,
+	        qna.title,
+	        qna.content,
+	        qna.writer_id,
+            qna.is_secret,
+            qna.view_count,
+            qna.answer_yn,
+            qna.delete_yn,
+	        DATE_FORMAT(qna.created_at, '%Y-%m-%d') AS regDate,
+	        DATE_FORMAT(qna.updated_at, '%Y-%m-%d') AS updateDate,
+            ROW_NUMBER() OVER (ORDER BY qna.created_at DESC) AS RNUM
+	    FROM qna qna 
+        LEFT JOIN member M 
+	    ON qna.writer_id = M.id
+	    WHERE  qna.delete_yn = 'Y'
+			)
+			SELECT COUNT(*)
+			FROM X
+			WHERE 1 = 1
+	
+	</select>
+
+	 <select id="getTotal" parameterType="hashMap" resultType="int">
+	 	WITH X AS (
+		    SELECT 
+		        B.board_code,
+		        B.title,
+		        B.content,
+		        B.user_id,
+		        DATE_FORMAT(B.reg_date, '%Y-%m-%d') AS regDate,
+		        B.status,
+		        ROW_NUMBER() OVER (ORDER BY B.reg_date DESC) AS RNUM,
+		        B.file_group_no,
+		        B.board_master_code,
+		        M.username,
+		        M.id,
+		        M.city_code AS city_code 
+		    FROM board B 
+		    LEFT JOIN member M 
+		    ON B.user_id = M.id
+		    WHERE B.status = 'Y'
+		    <if test="keyword != null and keyword != ''">
+		        AND (title LIKE CONCAT('%', #{keyword}, '%') 
+		             OR content LIKE CONCAT('%', #{keyword}, '%'))
+		    </if>
+		     <if test="boardMasterCode != null and boardMasterCode != ''">
+	        AND  B.board_master_code = #{boardMasterCode}
+	   		 </if>
+	
+		
+		)
+		SELECT COUNT(*)
+		FROM X
+		WHERE 1 = 1
+	
+		
+		
+	
+	 
+	 </select>
+ 
+
+	 <select id="detail" parameterType="kr.go.distep.main.service.vo.BoardVo"
+		resultMap="boardResultMap">
+			SELECT *
+			FROM board b	inner join member m
+            ON b.user_id = m.id
+			WHERE board_code = #{boardCode}
+			  <if test="boardMasterCode != null and boardMasterCode != ''">
+	        AND  B.board_master_code = #{boardMasterCode}
+	    </if>
+	
+		</select>
+	
+	<!--
+
+	<update id=""></update>
+ -->
+	<insert id="boardInsert"
+        parameterType="kr.go.distep.main.service.vo.BoardVo"
+        useGeneratedKeys="true"
+        keyProperty="boardCode">
+
+    INSERT INTO board
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        title,
+        content,
+        user_id,
+        reg_date,
+        status,
+        board_master_code,
+        <if test="fileGroupNo > 0">
+            file_group_no,
+        </if>
+    </trim>
+    VALUES
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{title},
+        #{content},
+        #{userId},
+        SYSDATE(),
+        'Y',
+        #{boardMasterCode},
+        <if test="fileGroupNo > 0">
+            #{fileGroupNo},
+        </if>
+    </trim>
+</insert>
+	<insert id="qnaInsert"
+        parameterType="kr.go.distep.main.service.vo.QnaVo"
+        useGeneratedKeys="true"
+        keyProperty="qnaId">
+
+    INSERT INTO qna(
+  title,
+  content,
+  writer_id,
+  is_secret,
+  answer_yn,
+  delete_yn,
+  created_at,
+  updated_at
+  )
+    VALUES
+    (
+        #{title},
+        #{content},
+        #{writerId},
+        #{isSecret},
+        'N',
+        'Y',
+        SYSDATE(),
+        SYSDATE()
+        )
+</insert>
+
+<insert id="answerInsert"  parameterType="kr.go.distep.main.service.vo.QnaVo"
+        useGeneratedKeys="true"
+        keyProperty="answerId">
+    INSERT INTO qna_answer (
+        qna_id,
+        asw_content,
+        admin_id,
+        created_at_asw,
+        updated_at_asw
+    ) VALUES (
+        #{qnaId},
+        #{aswContent},
+        #{adminId},
+        NOW(),
+        NOW()
+        
+    )
+</insert>
+
+	<update id="updateBd" parameterType="kr.go.distep.main.service.vo.BoardVo" > 
+			update board 
+			set title = #{title} , content =#{content},file_group_no = #{fileGroupNo}
+			where board_code = #{boardCode}
+		
+	</update>
+	<update id="deleteBd" parameterType="kr.go.distep.main.service.vo.BoardVo" > 
+			update board 
+			set status = 'N'
+			where board_code = #{boardCode}
+		
+	</update>
+	
+	<update id="answerDelete" parameterType="kr.go.distep.main.service.vo.QnaVo">
+	    UPDATE  qna_answer
+	    SET delete_yn_asw = 'N'
+	    WHERE qna_id = #{qnaId}
+</update>
+	<update id="answerUpdate" parameterType="kr.go.distep.main.service.vo.QnaVo">
+	    UPDATE  qna_answer
+	    SET asw_content = #{aswContent},
+	    	updated_at_asw = SYSDATE()
+	    WHERE qna_id = #{qnaId}
+</update>
+	
+</mapper>

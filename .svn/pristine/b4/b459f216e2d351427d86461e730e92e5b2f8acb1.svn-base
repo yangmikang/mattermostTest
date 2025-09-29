@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.go.distep.main.service.impl.BoardMapper">
+
+<resultMap id="boardResultMap" type="kr.go.distep.main.service.vo.BoardVo">
+    <result property="boardCode" column="BOARD_CODE"/>
+    <result property="title" column="TITLE"/>
+    <result property="content" column="CONTENT"/>
+    <result property="userId" column="USER_ID"/>
+    <result property="regDate" column="REG_DATE"/>
+    <result property="status" column="STATUS"/>
+    
+    <result property="fileGroupNo" column="FILE_GROUP_NO"/>
+</resultMap>
+	
+	<select id="list" resultMap="boardResultMap" parameterType="hashMap">
+		WITH X AS (
+		    SELECT 
+		        BOARD_CODE,
+		        TITLE,
+		        CONTENT,
+		        USER_ID,
+		        DATE_FORMAT(REG_DATE, '%Y-%m-%d') AS regDate,
+		        STATUS,
+		        ROW_NUMBER() OVER (ORDER BY REG_DATE DESC) AS RNUM 
+		   		 FROM BOARD
+		    WHERE STATUS = 'Y'
+		    <if test="keyword != null and keyword != ''">
+		        AND (TITLE LIKE CONCAT('%', #{keyword}, '%') 
+		             OR CONTENT LIKE CONCAT('%', #{keyword}, '%'))
+		    </if>
+		)
+		SELECT *
+		FROM X
+		WHERE X.RNUM BETWEEN (#{currentPage} * 10) - (10 - 1)
+              AND (#{currentPage} * 10)
+
+	
+	</select>
+
+	 <select id="getTotal" parameterType="hashMap" resultType="int">
+	 			WITH X AS (
+		SELECT 
+			BOARD_CODE,
+			TITLE,
+			CONTENT,
+			USER_ID ,
+					DATE_FORMAT(REG_DATE, '%Y-%m-%d') AS regDate,
+					STATUS,
+					 ROW_NUMBER() OVER (ORDER BY REG_DATE DESC) AS RNUM 
+				FROM BOARD
+				WHERE STATUS = 'Y'
+				  <if test="keyword != null and keyword != ''">
+				     AND (TITLE LIKE CONCAT('%', #{keyword}, '%') 
+				       OR CONTENT LIKE CONCAT('%', #{keyword}, '%'))
+				   </if>				
+			)
+			SELECT COUNT(*)
+			FROM X
+			WHERE 1=1 
+		
+		
+	
+	 
+	 </select>
+ 
+
+	 <select id="detail" parameterType="kr.go.distep.main.service.vo.BoardVo"
+		resultMap="boardResultMap">
+			SELECT *
+			FROM board
+			WHERE board_code = #{boardCode}
+		</select>
+	
+	<!--
+
+	<update id=""></update>
+ -->
+	<insert id="boardInsert"
+        parameterType="kr.go.distep.main.service.vo.BoardVo"
+        useGeneratedKeys="true"
+        keyProperty="boardCode">
+
+    INSERT INTO BOARD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        TITLE,
+        CONTENT,
+        USER_ID,
+        REG_DATE,
+        STATUS,
+        <if test="fileGroupNo > 0">
+            FILE_GROUP_NO,
+        </if>
+    </trim>
+    VALUES
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{title},
+        #{content},
+        'customer',
+        SYSDATE(),
+        'Y',
+        <if test="fileGroupNo > 0">
+            #{fileGroupNo},
+        </if>
+    </trim>
+</insert>
+	<update id="updateBd" parameterType="kr.go.distep.main.service.vo.BoardVo" > 
+			update board 
+			set title = #{title} , content =#{content},FILE_GROUP_NO = #{fileGroupNo}
+			where board_code = #{boardCode}
+		
+		</update>
+	<update id="deleteBd" parameterType="kr.go.distep.main.service.vo.BoardVo" > 
+			update board 
+			set status = 'N'
+			where board_code = #{boardCode}
+		
+		</update>
+</mapper>

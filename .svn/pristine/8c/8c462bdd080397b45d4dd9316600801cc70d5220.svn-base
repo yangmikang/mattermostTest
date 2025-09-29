@@ -1,0 +1,921 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css' rel='stylesheet' />
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales/ko.global.min.js"></script>
+
+<style>
+.flag-icon::before, .organizer-daejeon::before, .organizer-dortmund::before,
+	.organizer-gini::before, .organizer-malaga::before,
+	.organizer-montgomery::before, .organizer-seattle::before,
+	.organizer-quebec::before, .gini::before, .organizer-default::before {
+	content: "";
+	display: inline-block;
+	width: 28px;
+	height: 28px;
+	margin-right: 3px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.organizer-daejeon::before {
+	background-image: url('../../img/component/common/ico_korea.svg');
+}
+
+.organizer-gini::before {
+	background-image: url('../../img/component/common/ginilogo.png');
+}
+
+.organizer-dortmund::before {
+	background-image: url('../../img/component/common/ico_germany.svg');
+}
+
+.organizer-malaga::before {
+	background-image: url('../../img/component/common/ico_spain.svg');
+}
+
+.organizer-montgomery::before {
+	background-image: url('../../img/component/common/ico_usa.svg');
+}
+
+.organizer-seattle::before {
+	background-image: url('../../img/component/common/ico_usa.svg');
+}
+
+.organizer-quebec::before {
+	background-image: url('../../img/component/common/ico_canada.svg');
+}
+
+.gini::before {
+	background-image: url('../../img/component/common/ginilogo.png');
+}
+
+.organizer-default::before {
+	background-image: url('../../img/component/common/ico_default.svg');
+}
+.organizer-s {
+	width: 100%;
+}
+.form-conts {
+	width: 100%;
+}
+.cancel{
+	display: none;
+}
+.file-upload-result .upload-list {
+ 	margin-top: 0; 
+}
+#userBtn{
+	gap :10px;
+}
+@media (max-width: 599px) {
+    .page-btn-wrap {
+        margin: 0; 
+    }
+}
+.upload-list > li {
+    font-weight:400;
+    padding: 17px !important;
+    border: 1px solid var(--krds-gray-40) !important;
+    border-radius: 0.6rem;
+    color: var(--krds-gray-90);
+}
+.file-upload{
+    padding: var(--krds-spacer-16) var(--krds-spacer-10) !important;
+}
+</style>
+<body>
+	<div id="wrap">
+		<!-- 컨테이너 영역 -->
+		<div id="container">
+			<!-- breadcrumb -->
+			<div class="page-title-wrap visual img-members">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a
+								href="${pageContext.request.contextPath}/index.do" class="txt">Home</a></li>
+							<li><a href="${pageContext.request.contextPath}/calendar.do"
+								class="txt">Programs</a></li>
+							<li><a href="${pageContext.request.contextPath}/calendar.do"
+								class="txt">Events</a></li>
+							<li><a
+								href="${pageContext.request.contextPath}/calendar/detail.do?id=${calendar.id}"
+								class="txt">Event Details</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<div class="visual-area">
+						<h2 class="h-tit">Event Details</h2>
+						<p>Event Details</p>
+					</div>
+				</div>
+			</div>
+			<form class="form-horizontal" id="form" action="/contract/create"
+				method="post" enctype="multipart/form-data">
+				<input type="hidden" id="getId" name="id" value="${calendar.id}">
+				<input type="hidden" id="fileGroupNo" name="fileGroupNo"
+					value="${calendar.fileGroupNo}" />
+
+				<!-- 컨텐츠 영역 -->
+				<div class="inner">
+					<!-- 페이지 타이틀 영역 -->
+					<!-- //페이지 타이틀 영역 -->
+					<!-- 상세보기 영역 -->
+					<div class="conts-area">
+						<div class="conts-detail-wrap txt-box bg-white">
+							<!-- real contents -->
+							<div class="conts-wrap scroll-check">
+								<div class="conts-wrap section-link" id="section_01">
+									<h3 class="sec-tit view-section">${calendar.eventTitle}</h3>
+									</h3>
+									<!-- table list -->
+									<div class="tbl-wrap">
+										<dl class="tbl def-list">
+											<dt class="Bdtitle update-section" style="display: none;">Event
+												Title</dt>
+											<dd class="Bdtitle update-section" style="display: none;">
+												<div class="form-conts">
+
+													<input type="text" id="consult_name" maxlength="150"
+														value="${calendar.eventTitle}"
+														class="form-control update-section" autocomplete="on"
+														placeholder="Event Title" name="title">
+												</div>
+											</dd>
+											<!-- <dt>Title</dt>
+										<dd><h3 class="sec-tit">제목입력해주세요</h3></dd> -->
+											<dt>Organizer</dt>
+
+											<dd style="display: flex;">
+												<div class="flag-icon"
+													data-city-code="${calendar.organizer}" align-items:
+													center;"   onclick="applyFlagIcons()"></div>
+												<div class="view-section organizer-s">
+													${calendar.organizer}</div>
+												<div class="form-conts">
+													<select class="form-select lg delDis update-section"
+														id="selectOrg" name="organizer" title="선택"
+														style="display: none;">
+														<option value="">select</option>
+														<option value="GINI"
+															${calendar.organizer == 'GINI' ? 'selected' : ''}>GINI</option>
+														<option value="City of Daejeon"
+															${calendar.organizer == 'City of Daejeon' ? 'selected' : ''}>City
+															of Daejeon</option>
+														<option value="City of Dortmund"
+															${calendar.organizer == 'City of Dortmund' ? 'selected' : ''}>City
+															of Dortmund</option>
+														<option value="City of Málaga"
+															${calendar.organizer == 'City of Málaga' ? 'selected' : ''}>City of Málaga</option>
+														<option value="County of Montgomery, MD"
+															${calendar.organizer == 'County of Montgomery, MD' ? 'selected' : ''}>County
+															of Montgomery, MD</option>
+														<option value="City of Seattle"
+															${calendar.organizer == 'City of Seattle' ? 'selected' : ''}>City
+															of Seattle</option>
+														<option value="Province of Québec"
+															${calendar.organizer == 'Province of Québec' ? 'selected' : ''}>Province of Québec</option>
+													</select>
+
+												</div>
+
+											</dd>
+											<dt>Author</dt>
+											<dd>${calendar.username }</dd>
+											<!-- <dt>Author</dt> -->
+											<%-- <dd class="flag-icon" style="display: flex; align-items: center;"   onclick="applyFlagIcons()">
+												${calendar.username}
+											</dd>  --%>
+											<dt>Start Date</dt>
+											<dd>
+												<div class="view-section">
+													 <c:choose>
+												      <c:when test="${not empty startLocalView}">${startLocalView}</c:when>
+												      <c:otherwise>${calendar.startDatetime}</c:otherwise>
+												    </c:choose>
+
+												</div>
+												<div class="datepicker-input update-section"
+													style="display: none;">
+													<%-- <input type="text"
+														class="form-control  datepicker cal  startdate"
+														value="${formattedStart}" id="startdate"
+														placeholder="Select date" id="cal" readonly="readonly"> --%>
+														
+														<input type="text" id="cal" class="form-control  datepicker cal  startdate" placeholder="Select date" name="startDatetime" readonly="readonly"
+      													 value="<c:out value='${not empty startLocalInput ? startLocalInput : calendar.startDatetime}'/>"/>
+														
+												</div>
+
+											</dd>
+											<dt>End Date</dt>
+											<dd>
+												<div class="form-conts form-row">
+													<div class="form-conts datepicker-conts">
+														<div class="datepicker-input">
+															<div class="view-section">
+																 <c:choose>
+															      <c:when test="${not empty endLocalView}">${endLocalView}</c:when>
+															      <c:otherwise>${calendar.endDatetime}</c:otherwise>
+															    </c:choose>
+															</div>
+															<%-- <input type="text" style="display: none;"
+																class="form-control update-section  datepicker  cal enddate"
+																value="${endDatetime}" id="enddate"
+																placeholder="Select date" id="cal" readonly="readonly"> --%>
+																
+																<div class="datepicker-input update-section" style="display:none;">
+																  <input
+																    type="text"
+																    id="enddate"
+																    name="endDatetime"
+																    class="form-control datepicker enddate"
+																    placeholder="Select date"
+																    value="<c:out value='${not empty endLocalInput ? endLocalInput : calendar.endDatetime}'/>"
+																    readonly="readonly"
+																  />
+																</div>
+
+																
+														</div> 
+													</div>
+												</div>
+											</dd>
+											<dt>Description</dt>
+											<dd>
+												<span class="Recont view-section">${calendar.eventDescription}</span>
+												<div class="form-conts update-section" id="content"
+													style="display: none;">
+													<textarea rows="10" cols="50" id="description"
+														class="updtcon content form-control delread"
+														name="content" maxlength="10000" class="form-control"
+														name="content" placeholder="Event Description">${calendar.eventDescription}</textarea>
+												</div>
+											</dd>
+											<dt>External Link</dt>
+											<dd>
+												<span class="Recont view-section"> <c:choose>
+														<c:when test="${not empty calendar.externalLink}">
+															<a href="${calendar.externalLink}" target="_blank">${calendar.externalLink}</a>
+														</c:when>
+														<c:otherwise>
+												      -
+												      </c:otherwise>
+													</c:choose>
+												</span>
+												<div class="form-conts update-section" id="content"
+													style="display: none;">
+													<input type="text" id="link" class="form-control delread"
+														name="externalLink" value="${calendar.externalLink}"
+														placeholder="https://example.com">
+												</div>
+											</dd>
+											<dt class="upload-file">File Attachments</dt>
+											<dd class="upload-file">
+												<div class="gini-cont-box">
+													<div class="fileCont">
+														<!-- 파일업로드 -->
+														<div class="file-upload " style="display: none;">
+															<p class="txt">Click the Choose File button to select
+																the file directly.</p>
+														</div>
+														<%-- <c:if test="${calendar.fileGroupVO != null}"> --%>
+
+														<c:forEach var="fileDetailVO"
+															items="${calendar.fileGroupVO.fileDetailVOList}">
+															<input type="hidden" name="existingFileIds"
+																value="${fileDetailVO.fileSn}" />
+														</c:forEach>
+														<div class="file-upload-result ">
+															<img class="img-fluid imgFileSaveLocate"
+																style="cursor: pointer; display: none;"
+																src="${fileDetailVO.fileSaveLocate}"
+																data-file-original-name="${fileDetailVO.fileOriginalName}"
+																data-file-save-locate="${fileDetailVO.fileSaveLocate}" />
+															<!--  <button type="button"  class="prev" >미리보기</button> -->
+															<div class="upload-top">
+																<div class="file-total">
+																	<div>
+																		<span class="current fileCount"> <span
+																			class="current fileCount">
+																				${calendar.fileGroupVO.fileDetailVOList != null ? calendar.fileGroupVO.fileDetailVOList.size() : 0}
+																		</span>
+																		</span> / 6
+																	</div>
+																</div>
+																<!-- 	<button type="button" class="btn btn-txt ico-before ico-del sm h-auto " style="display:none;" onclick="deleteAllFiles()">Delete All</button>							 -->
+																<button type="button" class="btn xsm tertiary  down allDown"
+																	onclick="fn_dwMulti()">Download All Files</button>
+															</div>
+															<ul class="upload-list" id="">
+																<div class="row fileContSel" style="display: none;">
+																	<div class="file-upload cont50">
+																		<p class="txt">Click the Choose File button to select a file.</p>
+																		<button type="button"
+																			class="btn primary ico-before ico-upload md"
+																			onclick="document.getElementById('uploadFiles').click()">Choose File</button>
+
+																	</div>
+																	<div class="file-upload-result cont50">
+																		<div class="upload-top"></div>
+																		<div class="upload-delete-btn"></div>
+																	</div>
+																</div>
+																<ul class="upload-list" id="fileListArea">
+																	<c:forEach var="fileDetailVO"
+																		items="${calendar.fileGroupVO.fileDetailVOList}"
+																		varStatus="stat">
+																		<li>
+																			<div class="in">
+																				<div class="file-name" onclick="fn_dw(this)"
+																					class="imgFileSaveLocate" style="cursor: pointer;"
+																					id="${fileDetailVO.fileSaveLocate}" title="${fileDetailVO.fileOriginalName}[${fileDetailVO.fileExt},${fileDetailVO.fileFancySize}]"
+																					data-file-original-name="${fileDetailVO.fileOriginalName}"
+																					data-file-save-locate="${fileDetailVO.fileSaveLocate}">
+																					${fileDetailVO.fileOriginalName}
+																					[${fileDetailVO.fileExt},
+																					${fileDetailVO.fileFancySize}]</div>
+																				<div class="file-btn">
+																					<button type="button"
+																						class="btn btn-txt ico-before ico-del sm h-auto"
+																						style="display: none;"
+																						onclick="this.closest('li').remove(); deletedFileIds.push('${fileDetailVO.fileSn}'); updateFileCount();">Delete</button>
+																					<!-- <button type="button" class="btn btn-txt ico-before ico-del sm h-auto"  style="display: none;" onclick="this.closest('li').remove(); updateFileCount();">삭제</button> -->
+																				</div>
+																			</div>
+																		</li>
+																	</c:forEach>
+																</ul>
+																<input type="file" name="uploadFiles" style="display: none;" multiple id="uploadFiles" onchange="handleFileUpload(event)" />
+																<div class="upload-delete-btn" style="display: flex; justify-content: space-evenly; align-items: center;">
+																</div>
+														</div>
+													</div>
+												</div>
+									</div>
+									<div class="page-btn-wrap both">
+										<div>
+											<!-- Other / Unknown -->
+											<button type="button" class="btn lg primary"
+												onclick="location.href='${pageContext.request.contextPath}/calendar.do'">Back to List </button>
+										</div>
+										<div id="userBtn" style="display: none;">
+											<button type="button" class="btn lg secondary Modify"
+												onclick="UpdatEvent()">Edit</button>
+											<button type="button" class="btn lg secondary Submit"
+												style="display: none;" onclick="updateSub()">Save Changes
+											</button>
+											<button type="button" class="btn lg tertiary delete"
+												onclick="Deletevent()">Delete</button>
+												<button type="button" class="btn lg tertiary cancel" onclick="cancelEdit()">Cancel</button>
+										</div>
+									</div>
+								</div>
+								</dl>
+							</div>
+						</div>
+					</div>
+					<input type="hidden" id="origStart" value="${formattedStart}">
+					<input type="hidden" id="origEnd"   value="${endDatetime}">
+					<input type="hidden" name="boardMasterCode" id="boardMasterCode" value="${boardVo.boardMasterCode}" /> 
+					<input type="hidden" name="" id="" value="${boardVo.userId}" />
+				</div>
+				<%-- <dd>${fileuserYn} :::::::::::: ${userType}</dd> --%>
+		</div>
+		<!-- //컨테이너 영역 -->
+	</div><input type="hidden" id="origTitle" value="${calendar.eventTitle}">
+<input type="hidden" id="origDesc"  value="${calendar.eventDescription}">
+<!-- 추가 -->
+<input type="hidden" id="origOrg"   value="${calendar.organizer}">
+	<input type="hidden" id="origLink" value="${calendar.externalLink}">
+	
+	</form>
+<input type="hidden" id="origTitle" value="${calendar.eventTitle}">
+<input type="hidden" id="origDesc"  value="${calendar.eventDescription}">
+
+	<c:if test="${ sessionScope.loggedInUser.id eq calendar.userId or userType eq 'A' }">
+		<script type="text/javascript">
+			let userBtn = document.querySelector("#userBtn")
+			userBtn.style.display = 'flex'
+		</script>
+	</c:if>
+	<c:set var="generalCount" value="0" />
+	<c:forEach var="file" items="${calendar.fileGroupVO.fileDetailVOList}">
+		<c:if test="${file.fileType == 'GENERAL'}">
+			<c:set var="generalCount" value="${generalCount + 1}" />
+		</c:if>
+	</c:forEach>
+	
+<!-- 스크립트 : 라이브러리  -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+
+	  flatpickr(".startdate", {
+	    enableTime: true,
+	    dateFormat: "Y-m-d\\TH:i", 
+	    altInput: true,            
+	    altFormat: "Y-m-d H:i",   
+	    allowInput: false,         // 키보드 입력 막음
+	    clickOpens: true,
+	    disableMobile: true       
+	  });
+
+	  flatpickr("#enddate", {
+	    enableTime: true,
+	    dateFormat: "Y-m-d\\TH:i",
+	    altInput: true,
+	    altFormat: "Y-m-d H:i",
+	    locale: "en",
+	    allowInput: false,
+	    clickOpens: true,
+	    disableMobile: true
+	  });
+
+
+</script>
+<script>
+    let uploadedFiles = [];
+    let deletedFileIds = [];
+    let isEditMode = true; 
+    
+	const contextPath = '${pageContext.request.contextPath}';
+	const fileList = [
+	  <c:forEach var="fileDetailVO" items="${calendar.fileGroupVO.fileDetailVOList}" varStatus="stat">
+	    {
+	      name: "${fileDetailVO.fileOriginalName}",
+	      path: "${fileDetailVO.fileSaveLocate}"
+	    }
+	    <c:if test="${!stat.last}">,</c:if>
+	  </c:forEach>
+	];
+      document.addEventListener("DOMContentLoaded", applyFlagIcons);
+	  document.addEventListener("DOMContentLoaded", function () {
+	    const generalFileCount = '${generalCount}';
+	    function uploadFile() {
+	        const uploadFields = document.querySelectorAll(".upload-file");
+	        if (generalFileCount <= 0) {
+	            uploadFields.forEach(function(el) {
+	                el.style.display = "none";
+	            });
+	        } else {
+	            uploadFields.forEach(function(el) {
+	                el.style.display = "";
+	            });
+	        }
+	    }
+	    uploadFile(); 
+	});
+	  function cancelEdit() {
+		  location.reload(); 
+		}
+		
+	function applyFlagIcons() {
+	  document.querySelectorAll(".flag-icon").forEach(function(el) {
+	    const cityCode = el.getAttribute("data-city-code"); 
+	    const iconClass = getFlagIcon(cityCode);
+	    el.classList.add(iconClass);
+	  });
+	}
+	
+	function getFlagIcon(cityCode) {
+		  let organizerClass = "";
+		  switch (cityCode) {
+		    case "GINI": organizerClass = "organizer-gini"; break;
+		    case "City of Daejeon": organizerClass = "organizer-daejeon"; break;
+		    case "City of Dortmund": organizerClass = "organizer-dortmund"; break;
+		    case "City of Málaga": organizerClass = "organizer-malaga"; break;
+		    case "County of Montgomery, MD": organizerClass = "organizer-montgomery"; break;
+		    case "City of Seattle": organizerClass = "organizer-seattle"; break;
+		    case "Province of Québec": organizerClass = "organizer-quebec"; break;
+		    default: organizerClass = "organizer-default"; break;
+		  }
+		  return organizerClass; 
+	}
+	
+	function citiText(){
+		const citySelect = document.getElementById("selectOrg");
+		const cityValue = citySelect.value;
+		const cityText = citySelect.options[citySelect.selectedIndex].text;
+		const description =  document.getElementById("description").value;
+		// console.log("cityText",cityText)
+	 }
+
+	  function UpdatEvent() {
+		  if (isEditMode) {
+  		    document.querySelectorAll(".file-name").forEach(function(el){
+      		    el.style.pointerEvents = "none"; 
+  		    	
+  		    })
+  		}
+		  const editSuffix = " Edit ";
+		  const pageTitle = document.querySelector(".h-tit");
+        	if (pageTitle && !pageTitle.textContent.startsWith(editSuffix)) {
+        	  pageTitle.textContent = editSuffix + pageTitle.textContent;
+        	}
+        	 let cancel = document.querySelector(".cancel");
+         	  cancel.style.display = "inline-flex";
+         	  let deletebt = document.querySelector(".delete");
+          	  deletebt.style.display = "none";
+		  document.querySelectorAll(".delread").forEach(function(el) {
+			  el.removeAttribute("readonly");
+			});
+			document.querySelectorAll(".delread").forEach(function(el) {
+			  el.removeAttribute("disabled");
+			});
+			document.querySelectorAll(".delDis").forEach(function(el) {
+			  el.removeAttribute("disabled");
+			});
+			document.querySelectorAll(".ico-del").forEach(function(el) {
+			  el.style.display = "inline-flex";
+			});
+			document.querySelectorAll(".view-section").forEach(function(el) {
+			  el.style.display = "none";
+			});
+			document.querySelectorAll(".update-section").forEach(function(el) {
+			  el.style.display = "block";
+			});
+		    document.querySelector(".Modify").style.display = "none";
+		    document.querySelector(".flag-icon").style.display = "none";
+		    document.querySelector(".allDown").style.display = "none";
+		    document.querySelector(".fileContSel").style.display = "block";
+		    document.querySelector(".Submit").style.display = "inline-block";
+		    document.querySelectorAll(".upload-file").forEach(function (el) {
+	          el.style.display = "block"; 
+	        })
+	        
+	        var tEl = document.getElementById("consult_name");
+		    var dEl = document.getElementById("description");
+		    if (tEl) tEl.dataset.init = tEl.value;
+		    if (dEl) dEl.dataset.init = dEl.value;
+	  }
+
+	  function deleteUploadedFile(btn) {
+		  var li = btn.closest('li');
+		  var fullname = (li && li.dataset && li.dataset.fullname) ? li.dataset.fullname : '';
+		  var fsize = (li && li.dataset && li.dataset.size) ? Number(li.dataset.size) : 0;
+
+		  if (fullname && fsize) {
+		    for (var i = 0; i < uploadedFiles.length; i++) {
+		      var f = uploadedFiles[i];
+		      if (f && f.name === fullname && f.size === fsize) {
+		        uploadedFiles.splice(i, 1);
+		        break;
+		      }
+		    }
+		  }
+		  if (li) li.parentNode.removeChild(li);
+		  updateFileCount();
+		}
+
+
+	function updateFileCount() {
+		  const countSpan = document.querySelector('.file-total .current');
+		  const allFileInputs = document.querySelectorAll('input[name="existingFileIds"]');
+		  
+		  let validExistingCount = 0;
+		  allFileInputs.forEach(function(input) {
+			  if (!deletedFileIds.includes(input.value)) {
+			    validExistingCount++;
+			  }
+		  });
+		  const totalCount = validExistingCount + uploadedFiles.length;
+		  countSpan.textContent = `\${totalCount}`;
+	}
+
+	  function deleteAllFiles() {
+	    const existingFileInputs = document.querySelectorAll('input[name="existingFileIds"]');
+		  const newFileItems = uploadedFiles.length;
+		
+		  if (existingFileInputs.length === 0 && newFileItems === 0) {
+		    alert("There are no files to delete.");
+		    return;
+		  }
+		  // 기존 파일 삭제 처리
+		  existingFileInputs.forEach(function(input) {
+			  var fileId = Number(input.value);
+			  deletedFileIds.push(fileId);
+			  input.remove(); // hidden input 제거
+			});
+		  // 새로 업로드한 파일 초기화
+		  uploadedFiles = [];
+		
+		  // UI에서 리스트 제거
+		  const fileListArea = document.getElementById('fileListArea');
+		  fileListArea.innerHTML = '';
+		  updateFileCount();
+	  }
+
+	  function formatBytes(bytes) {
+	    if (bytes === 0) return '0KB';
+	    const k = 1024;
+	    const i = Math.floor(Math.log(bytes) / Math.log(k));
+	    const size = parseFloat((bytes / Math.pow(k, i)).toFixed(1));
+	    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+	    return `\${size} \${sizes[i]}`;
+	  }
+	
+	  function handleFileUpload(event) {
+	    const files = event.target.files;
+	    const fileListArea = document.getElementById('fileListArea');
+	    const allowedExtensions = [
+	  	  'pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt',
+	  	  'jpg', 'jpeg', 'png', 'gif', 'zip', 'hwp'
+	  	];
+	    const existingCount = document.querySelectorAll('input[name="existingFileIds"]').length; 
+	    const validExistingCount = existingCount - deletedFileIds.length;
+	    for (let i = 0; i < files.length; i++) {
+	    	
+	      const file = files[i];
+	      const extension = file.name.split('.').pop().toLowerCase();
+	      let rpext = '.'+ extension
+  	    let fileName = file.name.replace(rpext , '')
+    	     
+	      
+	      if (!allowedExtensions.includes(extension)) {
+	          const li = document.createElement('li');
+	          li.classList.add('is-error');
+	          li.innerHTML = ''
+	        	  + '<div class="in">'
+	        	  +   '<div class="file-name"  >' + fileName + ' [' + extension + ', ' + formatBytes(file.size) + ']</div>'
+	        	  +   '<div class="file-btn">'
+	        	  +     '<span class="ico-invalid error"><em class="sr-only">error</em></span>'
+	        	  +     '<button type="button" class="btn btn-txt ico-before ico-del sm h-auto" onclick="this.closest(\'li\').remove(); updateFileCount();">Delete</button>'
+	        	  +   '</div>'
+	        	  + '</div>'
+	        	  + '<p class="file-hint">Only the following file types can be uploaded:<br>'
+	        	  + 'pdf, doc, docx, xls, xlsx, ppt, pptx, txt, jpg, jpeg, png, gif, zip, hwp</p>';
+	
+	          fileListArea.appendChild(li);
+	          continue;
+	        }
+	
+	      if (file.size > 20 * 1024 * 1024) {
+	        const li = document.createElement('li');
+	        li.classList.add('is-error');
+	        li.innerHTML = ''
+	        	  + '<div class="in">'
+	        	  +   '<div class="file-name" >' + fileName + ' [' + extension + ', ' + formatBytes(file.size) + ']</div>'
+	        	  +   '<div class="file-btn">'
+	        	  +     '<span class="ico-invalid error"><em class="sr-only">error</em></span>'
+	        	  +     '<button type="button" class="btn btn-txt ico-before ico-del sm h-auto" onclick="deleteSingleFile(' + (uploadedFiles.length - 1) + ', this)">Delete</button>'
+	        	  +   '</div>'
+	        	  + '</div>'
+	        	  + '<p class="file-hint">The file size that can be registered has been exceeded.<br>'
+	        	  + 'Only files less than 20MB can be registered.</p>';
+	        fileListArea.appendChild(li);
+	        continue;
+	      }
+	      const totalCount = validExistingCount + uploadedFiles.length;
+	      if (totalCount >= 6) {
+	        alert("You can register up to 6 files including existing files.");
+	        break;
+	      }
+	
+	   // 업로드 성공 분기
+	      uploadedFiles.push(file);
+
+	      const li = document.createElement('li');
+	      li.dataset.fullname = file.name;      // ★ 원본 파일명(확장자 포함)
+	      li.dataset.size = String(file.size);  // ★ 파일 크기
+	      li.innerHTML =
+	        '<div class="in">' +
+	          '<div class="file-name">' + fileName + ' [' + extension + ', ' + formatBytes(file.size) + ']</div>' +
+	          '<div class="file-btn">' +
+	            '<button type="button" class="btn btn-txt ico-before ico-del sm h-auto" onclick="deleteUploadedFile(this)">Delete</button>' +
+	          '</div>' +
+	        '</div>';
+	      fileListArea.appendChild(li);
+
+	    }
+	    updateFileCount();
+	    event.target.value = '';
+	  }
+	  
+	function deleteSingleFile(index, button, fileId) {
+		 if (fileId) {
+		   deletedFileIds.push(fileId);
+		 } else {
+		   uploadedFiles.splice(index, 1);
+		 }
+		 button.closest('li').remove();
+		 updateFileCount();
+	}
+  function escapeForJs(str) {
+	  return str
+	    .replace(/\\/g, '\\\\') 
+	    .replace(/"/g, '\\"')   
+	    .replace(/'/g, "\\'");  
+	}
+
+  function updateSub() {
+	  const errorItems = document.querySelectorAll('#fileListArea li.is-error');
+	  if (errorItems.length > 0) {
+	    alert("There are invalid files in the attachment list. Please remove them before submitting.");
+	    return;
+	  }
+
+	  const tEl = document.querySelector("#consult_name");
+	  const dEl = document.querySelector("#description");
+	  const sEl = document.querySelector(".startdate");
+	  const eEl = document.querySelector(".enddate");
+	  const linkEl = document.querySelector("#link");
+
+	  
+	  const originalStart = (document.getElementById("origStart").value || '');
+	  const originalEnd   = (document.getElementById("origEnd").value   || '');
+	  const isStartChanged = (sEl.value || '') !== originalStart;
+	  const isEndChanged   = (eEl.value || '') !== originalEnd;
+	  const organizer =document.querySelector("#selectOrg").value;
+	  const title = tEl.value;
+	  const content = dEl.value.trim();
+	  const start = sEl.value;
+	  const end = eEl.value;
+	  const orgEl = document.getElementById("selectOrg");  
+	  const originalOrg = (document.getElementById("origOrg").value || '');
+	  const currentOrg  = (orgEl.value || '');
+	  const isOrganizerChanged = currentOrg !== originalOrg;
+	  const  getId =  document.querySelector("#getId").value;
+	  if (!organizer) {
+	    alert("Select an organizer.");
+	    citySelect.focus();
+	    return;
+	  }
+	  if (title === "") { alert("Please enter a title."); return false; }
+	  if (title.length > 150) { alert("The title must be no more than 100 characters."); return false; }
+	  if (title.length < 10) { alert("The title must be at least 10 characters long."); return false; }
+
+	  if (content === "") { alert("Please enter description."); return false; }
+	  if (content.length < 10) { alert("The description must be at least 10 characters."); return false; }
+	  if (content.length > 10000) { alert("The description must be no more than 2000 characters."); return false; }
+
+	  if (!start) { alert("Select Start Date & Time."); return; }
+	  if (!end)   { alert("Select End Date & Time."); return; }
+	  if (new Date(start) > new Date(end)) { alert("The End Date must be later than the Start Date."); return; }
+
+	  const originalTitle = (document.getElementById("origTitle").value || '').replace(/\r?\n/g, '');
+	  const originalDesc  = (document.getElementById("origDesc").value  || '').replace(/\r?\n/g, '');
+
+	  const currentTitle = (tEl.value || '').replace(/\r?\n/g, '');
+	  const currentDesc  = (dEl.value || '').replace(/\r?\n/g, '');
+
+	  const isTitleChanged       = currentTitle !== originalTitle;
+	  const isDescriptionChanged = currentDesc  !== originalDesc;
+
+	  const isFileChanged = uploadedFiles.length > 0 || deletedFileIds.length > 0;
+
+	  const originalLink = (document.getElementById("origLink")?.value || '');
+	  const currentLink  = (linkEl.value || '');
+	  const isLinkChanged = currentLink !== originalLink;
+	  
+	  
+	  if (!isTitleChanged && !isDescriptionChanged && !isFileChanged
+		      && !isOrganizerChanged && !isLinkChanged
+		      && !isStartChanged && !isEndChanged) {
+		    alert("There is no change to update.");
+		    return;
+		  }
+
+	  if (isTitleChanged)       tEl.value = tEl.value.replace(/\\/g, '\\');
+	  if (isDescriptionChanged) dEl.value = dEl.value.replace(/\\/g, '\\');
+
+	  const link = linkEl.value;
+	  if (link) {
+	    const urlPattern = /^(https?:\/\/)[^\s/$.?#].[^\s]*$/i;
+	    if (!urlPattern.test(link)) {
+	      alert("Please enter a valid URL starting with http:// or https://.");
+	      linkEl.focus(); return;
+	    }
+	    if (/\\/.test(link)) {
+	      alert("Backslashes (\\) are not allowed in the External Link.");
+	      linkEl.focus(); return;
+	    }
+	  }
+
+	  const safeTitle = escapeForJs(tEl.value);
+	  const safedescription = escapeForJs(dEl.value);
+
+	  const formData = new FormData();
+	  
+	  formData.append("id", document.querySelector("#getId").value);
+	  formData.append("eventTitle", safeTitle);
+	  formData.append("startDatetime", sEl.value);
+	  formData.append("endDatetime", eEl.value);
+	  formData.append("eventDescription", safedescription);
+	  formData.append("organizer", orgEl.value);
+	  formData.append("externalLink", linkEl.value);
+
+	  if (deletedFileIds.length > 0) {
+	    formData.append("deletedFileIds", deletedFileIds.join(","));
+	  }
+	  formData.append("fileGroupNo", document.getElementById("fileGroupNo").value);
+
+	  for (let i = 0; i < uploadedFiles.length; i++) {
+	    formData.append("uploadFiles", uploadedFiles[i]);
+	  }
+	  document.querySelectorAll('input[name="existingFileIds"]').forEach(function(input) {
+	    formData.append("existingFileIds", input.value);
+	  });
+
+	  var modifyUrl = '${pageContext.request.contextPath}/modify.do';
+
+	  axios.post(modifyUrl, formData, {
+		    headers: { 'Content-Type': 'multipart/form-data', 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
+		})
+		.then(function (res) {
+		    var ct = (res.headers && res.headers['content-type']) || '';
+		    var redirectedUrl = res.request && res.request.responseURL ? res.request.responseURL : '';
+		    var redirectedToLogin = redirectedUrl.indexOf('/login') !== -1; 
+		    var needLogin = (res.status === 401 || res.status === 403 ||
+		                     (res.headers && res.headers['x-login-required'] === 'true') ||
+		                     (res.data && res.data.reason === 'SESSION_EXPIRED') ||
+		                     redirectedToLogin); 
+
+		    if (needLogin) {
+		        alert('Session has expired. Please log in again.');
+		        location.href = '${pageContext.request.contextPath}/login.do?returnUrl=' + encodeURIComponent(location.href);
+		        return;
+		    }
+
+		    if (res.data && res.data.success) {
+		        /* redirectToDetail(); */
+		        alert("The event schedule has been successfully updated.")
+		            location.href =  '${pageContext.request.contextPath}/calendar.do';;
+		    	
+		    } else {
+		        alert((res.data && res.data.message) ? res.data.message : 'Unable to update the event at this time. Please try again later.');
+			    location.href = '${pageContext.request.contextPath}/calendar/detail.do?id=' + getId;
+		        if (res.data && res.data.redirectUrl) {
+		            location.href = '${pageContext.request.contextPath}' + res.data.redirectUrl;
+		        }
+		    }
+		})
+		.catch(function (error) {
+			
+		    if (error && error.response && (error.response.status === 401 || error.response.status === 403)) {
+		        alert('Session has expired. Please log in again.');
+		        location.href = '${pageContext.request.contextPath}/login.do?returnUrl=' + encodeURIComponent(location.href);
+		        return;
+		    }
+		    console.error('업데이트 실패:', error);
+		    alert('Unable to update the event at this time. Please try again later.');
+		    location.href = '${pageContext.request.contextPath}/calendar/detail.do?id=' + getId;
+	
+		});
+
+
+	}
+
+
+  function Deletevent() {
+    const form = document.getElementById("form");
+    if (confirm("Are you sure you want to delete it?")) {
+      form.action = "${pageContext.request.contextPath}/calendar/delete.do";
+      form.submit();
+      alert("The event has been deleted.")
+    }
+  }
+  
+  function fn_dw(el) {
+	//다운로드 버튼 이벤트
+	  const target = document.querySelector(".imgFileSaveLocate");
+	  // console.log("el",el)
+	  if (target) {
+	    const fileSaveLocate = el.dataset.fileSaveLocate;
+	    
+	    //console.log("fileSaveLocate : " + fileSaveLocate);
+	    location.href = "${pageContext.request.contextPath}/download.do?fileName=" + encodeURIComponent(fileSaveLocate);
+	  } 
+  }
+  
+    function fn_dwMulti() {
+   	  if (!fileList || fileList.length === 0) {
+   	    alert("No file to download.");
+   	    return;
+   	  }
+
+   	  if (fileList.length === 1) {
+   	    const file = fileList[0];
+   	    const url = contextPath +
+   	      '/download.do?fileName=' + encodeURIComponent(file.path) +
+   	      '&originalName=' + encodeURIComponent(file.name);
+   	    location.href = url;
+   	  } else {
+   	    const params = fileList.map(function(f) {
+   	      return 'fileNames=' + encodeURIComponent(f.path);
+   	    }).join("&");
+   	    const url = contextPath + '/downloadMulti.do?' + params;
+   	    location.href = url;
+   	  }
+    }
+
+</script>
+
+</body>

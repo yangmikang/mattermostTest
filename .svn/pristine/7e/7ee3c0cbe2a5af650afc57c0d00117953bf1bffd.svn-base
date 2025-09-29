@@ -1,0 +1,75 @@
+package kr.go.distep.main.service.impl;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import egovframework.rte.psl.dataaccess.util.EgovMap;
+
+@Mapper("mainMapper")
+
+public interface MainMapper {
+	
+	public String selectUserNm(String ssoId);
+	
+	/**  게시판 등록  **/
+	public void insertKabBoard(HashMap map);
+	
+	/**  게시판 수정  **/
+	public void updateKabBoard(HashMap map);
+	
+	/**  게시판 삭제  **/
+	public void deleteKabBoard(HashMap map);
+	
+	/** 게시글 목록 **/
+	public List<EgovMap> selectBoardList(Map param);
+		
+	/** 게시글 Count **/
+	public int selectBoardListCount(Map param);
+	
+	/** 조회수 수정 **/
+	public void updateBbsHits(String bbsId);
+
+	/** 게시글 상세 **/
+	public EgovMap selectBoardDetail(Map param);
+	
+	/** 덧글 목록 **/
+	public List<EgovMap> selectCommentList(Map param);
+	
+	/** 덧글 등록 **/
+	public void insertComment(Map param);
+	
+	/** 덧글 삭제 **/
+	public void updateCommentDeleteAt(String commentId);
+	
+	/** 덧글 수정 **/
+	public void updateComment(Map param);
+	
+	/**  좋아요 등록  **/
+	public void insertKabLike(Map param);
+	
+	/**  좋아요 삭제  **/
+	public void deleteKabLikeOne(Map param);
+	
+	/**  게시판 삭제에 따른 좋아요 삭제  **/
+	public void deleteKabLikeAll(HashMap map);
+	
+	/** 좋아요 체크 **/
+	public int selectChkKabLike(Map param);
+	
+	/**  첨부파일 등록  **/
+	public void insertKabAttachFile(HashMap map);
+	
+	/** 첨부파일 목록 **/
+	public List<EgovMap> selectKabAttachFileList(String bbsId);
+	
+	/**  첨부파일 삭제  **/
+	public void deleteKabAttachFile(HashMap map);
+	
+	/** 게시판 삭제시 덧글 삭제 **/
+	public void updateCommentDeleteAll(String bbsId);
+	
+	public List<HashMap<String, Object>> selectMenuList();
+	
+}

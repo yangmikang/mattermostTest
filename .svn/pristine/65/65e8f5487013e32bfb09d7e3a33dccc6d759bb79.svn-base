@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.go.distep.statis.service.impl.StatisMapper">
+
+	<resultMap id="statisResultMap"
+		type="kr.go.distep.statis.vo.StatisVo">
+		<result column="rnum" property="rnum" />
+		<result column="log_date" property="logDate" />
+		<result column="log_month" property="logMonth" />
+		<result column="startDate" property="startDate" />
+		<result column="endDate" property="endDate" />
+		<result column="date_group" property="date_group" />
+		<result column="group_key" property="group_key" />
+		<result column="role" property="role" />
+		<result column="statType" property="statType" />
+		<result column="cnt" property="cnt" />
+	</resultMap>
+<!-- 
+	<select id="getMonthlyTotalRequests" resultMap="statisResultMap"
+		parameterType="hashMap">
+		SELECT
+		ROW_NUMBER() OVER (ORDER BY log_month DESC) AS
+		rnum,
+		t.log_month,
+		t.request_count
+		FROM ( SELECT
+		DATE_FORMAT(log_time,
+		'%Y-%m') AS log_month,
+		COUNT(*) AS request_count
+		FROM request_log
+		GROUP
+		BY DATE_FORMAT(log_time, '%Y-%m')
+		) t
+		ORDER BY t.log_month DESC
+	</select>
+
+	<select id="getDailyTotalRequests" resultMap="statisResultMap"
+		parameterType="hashMap">
+		SELECT
+		ROW_NUMBER() OVER (ORDER BY DATE(log_time) DESC)
+		AS rnum,
+		DATE(log_time) AS log_date,
+		COUNT(*) AS request_count
+		FROM
+		request_log
+		GROUP BY log_date
+		ORDER BY log_date DESC
+	</select>
+ -->
+	<select id="getStatis" resultMap="statisResultMap" parameterType="hashMap">
+	  <choose>
+	    <!-- day -->
+	    <when test="dateUnit == 'day'">
+		  <![CDATA[
+		  WITH RECURSIVE calendar AS (
+		    SELECT DATE(#{startDate}) AS log_date
+		    UNION ALL
+		    SELECT DATE_ADD(log_date, INTERVAL 1 DAY)
+		    FROM calendar
+		    WHERE log_date < DATE(#{endDate})
+		  )
+		  ]]>
+		  SELECT
+		    ROW_NUMBER() OVER (
+		      ORDER BY
+		        c.log_date,
+		        COALESCE(r.group_key, 'Total')
+		    ) AS rnum,
+		    DATE_FORMAT(c.log_date, '%Y-%m-%d') AS date_group,
+		    COALESCE(r.group_key, '-') AS group_key,
+		    IFNULL(r.cnt, 0) AS cnt
+		  FROM calendar c
+		  LEFT JOIN (
+		    SELECT
+		      DATE(log_time) AS log_date,
+		      <choose>
+		        <when test="statType == 'city'"><![CDATA[ IFNULL(NULLIF(city_code,''),'N') ]]></when>
+		        <when test="statType == 'role'"><![CDATA[ IFNULL(NULLIF(role,''),'N') ]]></when>
+		        <otherwise><![CDATA[ 'Total' ]]></otherwise>
+		      </choose> AS group_key,
+		      COUNT(*) AS cnt
+		    FROM request_log
+		    <![CDATA[
+		      WHERE log_time >= CONCAT(#{startDate}, ' 00:00:00')
+		        AND log_time <=
+		          CASE
+		            WHEN CHAR_LENGTH(#{endDate}) = 10 THEN CONCAT(#{endDate}, ' 23:59:59')
+		            ELSE #{endDate}
+		          END
+		        AND IFNULL(NULLIF(role,''),'N') != 'A'
+		    ]]>
+		    GROUP BY
+		      DATE(log_time),
+		      <choose>
+		        <when test="statType == 'city'"><![CDATA[ IFNULL(NULLIF(city_code,''),'N') ]]></when>
+		        <when test="statType == 'role'"><![CDATA[ IFNULL(NULLIF(role,''),'N') ]]></when>
+		        <otherwise><![CDATA[ 'Total' ]]></otherwise>
+		      </choose>
+		  ) r ON c.log_date = r.log_date
+		</when>
+		<!-- month -->
+	    <when test="dateUnit == 'month'">
+	      SELECT
+	        ROW_NUMBER() OVER (ORDER BY DATE_FORMAT(log_time, '%Y-%m'),
+	                           <choose>
+	                             <when test="statType == 'total'"> 'Total' </when>
+	                             <when test="statType == 'city'"> IFNULL(NULLIF(city_code,''),'N') </when>
+	                             <when test="statType == 'role'"> IFNULL(NULLIF(role,''),'N') </when>
+	                             <otherwise> 'Total' </otherwise>
+	                           </choose>
+	        ) AS rnum,
+	        DATE_FORMAT(log_time, '%Y-%m') AS date_group,
+				        <choose>
+				          <when test="statType == 'total'"> 'Total' </when>
+				          <when test="statType == 'city'"> IFNULL(NULLIF(city_code,''),'N') </when>
+				          <when test="statType == 'role'"> IFNULL(NULLIF(role,''),'N') </when>
+				          <otherwise> 'Total' </otherwise>
+				        </choose> AS group_key,
+	        COUNT(*) AS cnt
+	      FROM request_log
+	      <![CDATA[
+	      WHERE log_time >= CONCAT(#{startDate}, ' 00:00:00')
+	        AND log_time <=
+	          CASE
+	            WHEN CHAR_LENGTH(#{endDate}) = 10 THEN CONCAT(#{endDate}, ' 23:59:59')
+	            ELSE #{endDate}
+	          END
+	      ]]>
+	        <if test="monthRadio != null and monthRadio != '' and monthRadio != 'total'">
+	          <![CDATA[ AND DATE_FORMAT(log_time, '%m') = #{monthRadio} ]]>
+	        </if>
+	      <![CDATA[ AND IFNULL(NULLIF(role,''),'N') != 'A' ]]>
+	      GROUP BY
+	        DATE_FORMAT(log_time, '%Y-%m'),
+	        <choose>
+	          <when test="statType == 'total'"> 'Total' </when>
+	          <when test="statType == 'city'"> IFNULL(NULLIF(city_code,''),'N') </when>
+	          <when test="statType == 'role'"> IFNULL(NULLIF(role,''),'N') </when>
+	          <otherwise> 'Total' </otherwise>
+	        </choose>
+	    </when>
+	    <!-- year -->
+	    <otherwise>
+	      SELECT
+	        ROW_NUMBER() OVER (ORDER BY DATE_FORMAT(log_time, '%Y'),
+	        <choose>
+	          <when test="statType == 'total'"> 'Total' </when>
+	          <when test="statType == 'city'"> IFNULL(NULLIF(city_code,''),'N') </when>
+	          <when test="statType == 'role'"> IFNULL(NULLIF(role,''),'N') </when>
+	          <otherwise> 'Total' </otherwise>
+	        </choose>
+	        ) AS rnum,
+	        DATE_FORMAT(log_time, '%Y') AS date_group,
+	        <choose>
+	          <when test="statType == 'total'"> 'Total' </when>
+	          <when test="statType == 'city'"> IFNULL(NULLIF(city_code,''),'N') </when>
+	          <when test="statType == 'role'"> IFNULL(NULLIF(role,''),'N') </when>
+	          <otherwise> 'Total' </otherwise>
+	        </choose> AS group_key,
+	        COUNT(*) AS cnt
+	      FROM request_log
+	      <![CDATA[
+	      WHERE log_time >= CONCAT(#{startDate}, ' 00:00:00')
+	        AND log_time <=
+	          CASE
+	            WHEN CHAR_LENGTH(#{endDate}) = 10 THEN CONCAT(#{endDate}, ' 23:59:59')
+	            ELSE #{endDate}
+	          END
+	        AND IFNULL(NULLIF(role,''),'N') != 'A'
+	      ]]>
+	      GROUP BY
+	        DATE_FORMAT(log_time, '%Y'),
+	        <choose>
+	          <when test="statType == 'total'"> 'Total' </when>
+	          <when test="statType == 'city'"> IFNULL(NULLIF(city_code,''),'N') </when>
+	          <when test="statType == 'role'"> IFNULL(NULLIF(role,''),'N') </when>
+	          <otherwise> 'Total' </otherwise>
+	        </choose>
+	    </otherwise>
+	  </choose>
+	</select>
+
+</mapper>

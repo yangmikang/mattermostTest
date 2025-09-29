@@ -1,0 +1,269 @@
+package kr.go.distep.calendar.web;
+
+import java.beans.PropertyEditorSupport;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import kr.go.distep.calendar.service.CalendarService;
+import kr.go.distep.calendar.vo.CalendarFileVO;
+import kr.go.distep.calendar.vo.CalendarVO;
+import kr.go.distep.cmmn.file.vo.FileGroupVO;
+import kr.go.distep.main.service.UploadService;
+import kr.go.distep.main.service.vo.BoardVo;
+import kr.go.distep.util.ArticlePage;
+import lombok.extern.slf4j.Slf4j;
+
+
+@Slf4j
+@Controller
+public class CalendarController {
+	
+	
+	@Autowired
+    UploadService uploadService;
+	    
+	@Resource(name = "calendarService")
+	private CalendarService calendarService;
+
+	private final String uploadDir = "C:/upload/calendar/"; // 서버에 맞게 수정하세요
+
+	@RequestMapping(value = "/calendar.do", method = RequestMethod.GET)
+	public String calendarPage() {
+	    return "calendar/calendar";
+	}
+	@RequestMapping(value = "/calendarCreate.do", method = RequestMethod.GET)
+	public String calendarDetailPage() {
+	    return "calendar/calendarCreate";
+	}
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public String calendarList(Model model) throws Exception {
+		List<CalendarVO> calendarList = calendarService.getCalendarList();
+		model.addAttribute("calendarList", calendarList);
+		return "calendar/calendarList";
+	}
+
+	/*
+	 * @RequestMapping(value = "/detail.do/{id}", method = RequestMethod.GET) public
+	 * String calendarDetail(@PathVariable("id") int id, Model model) throws
+	 * Exception { CalendarVO calendar = calendarService.getCalendar(id);
+	 * model.addAttribute("calendar", calendar); return "calendar/calendarDetail"; }
+	 */
+	
+	@RequestMapping(value = "/calendar/detail.do", method = RequestMethod.GET)
+	public String detail( CalendarVO calendar, Model model) {
+		calendar = calendarService.detail(calendar); // board 테이블에서 조회됨
+
+	    log.info(">> fileGroupNo: {}", calendar.getFileGroupNo()); // 디버깅용
+
+	    /*if (calendar.getFileGroupNo() > 0) {
+	        FileGroupVO fileGroupVO = calendarService.getFileGroupWithDetails(calendar.getFileGroupNo());
+	        calendar.setFileGroupVO(fileGroupVO);
+	        log.info("fileDetailVOList: {}", fileGroupVO.getFileDetailVOList());
+	    }*/
+	    if (calendar.getFileGroupNo() > 0) {
+	        FileGroupVO fileGroupVO = uploadService.getFileGroupWithDetails(calendar.getFileGroupNo());
+	        calendar.setFileGroupVO(fileGroupVO);
+	        log.info("fileDetailVOList: {}", fileGroupVO.getFileDetailVOList());
+	    }
+	
+	    log.info("calendar체킁" +calendar );
+	    
+	    model.addAttribute("calendar", calendar);
+	    return "calendar/calendarDetail";
+	}
+
+
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	public String calendarRegisterForm() {
+		return "calendar/calendarRegister";
+	}
+
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public String calendarRegister(CalendarVO calendar, @RequestParam("files") List<MultipartFile> files)
+			throws Exception {
+		
+		if (files != null && !files.isEmpty()) {
+			for (MultipartFile multipartFile : files) {
+				if (!multipartFile.isEmpty()) {
+					String originalFileName = multipartFile.getOriginalFilename();
+					String uuid = UUID.randomUUID().toString();
+					String saveFileName = uuid + "_" + originalFileName;
+
+					File destFile = new File(uploadDir + saveFileName);
+					destFile.getParentFile().mkdirs(); // 폴더 없으면 생성
+					multipartFile.transferTo(destFile);
+
+					CalendarFileVO fileVO = new CalendarFileVO();
+					fileVO.setFileName(originalFileName);
+					fileVO.setFileSize((int) multipartFile.getSize());
+					fileVO.setFilePath(uploadDir + saveFileName);
+
+					calendar.getFileList().add(fileVO);
+				}
+			}
+		}
+
+		calendarService.registerCalendar(calendar);
+		return "redirect:/calendar/list";
+	}
+
+	@RequestMapping(value = "/modify/{id}", method = RequestMethod.GET)
+	public String calendarModifyForm(@PathVariable("id") int id, Model model) throws Exception {
+		CalendarVO calendar = calendarService.getCalendar(id);
+		model.addAttribute("calendar", calendar);
+		return "calendar/calendarModify";
+	}
+
+	@RequestMapping(value = "/modify.do", method = RequestMethod.POST)
+	public String calendarModify(CalendarVO calendar,
+	                             @RequestParam(value = "uploadFiles", required = false) MultipartFile[] uploadFiles,
+	                             @RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnailFile,
+	                             @RequestParam(value = "deletedFileIds", required = false) String deletedFileIds)
+	        throws Exception {
+
+	    calendar.setUploadFiles(uploadFiles);
+	    calendar.setThumbnailFile(thumbnailFile); // 썸네일 세팅
+	    calendar.setDeletedFileIds(deletedFileIds);
+
+	    int result = calendarService.modifyCalendar(calendar);
+
+	    return "redirect:/calendar.do";
+	}
+
+
+
+//	@RequestMapping(value = "/remove/{id}", method = RequestMethod.POST)
+//	public String calendarRemove(@PathVariable("id") int id) throws Exception {
+//		calendarService.removeCalendar(id);
+//		return "redirect:/calendar/list";
+//	}
+	
+		@RequestMapping(value="/calendar/delete.do",method = RequestMethod.POST)
+		public String deleteCm(CalendarVO calendar) throws Exception {
+			
+			int result =this.calendarService.removeCalendar(calendar);
+			log.info("resutl " + result);
+			return "redirect:/calendar.do";
+			
+			
+		}
+	
+		@RequestMapping(value = "/calendar/register.do", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+		@ResponseBody
+		public String calendarAjaxRegister(
+		    @ModelAttribute CalendarVO calendar,
+		    @RequestParam(value = "uploadFiles", required = false) MultipartFile[] uploadFiles,
+		    @RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnailFile,
+		    HttpSession session
+		) throws Exception {
+
+		    // 세션 사용자 ID (선택)
+		    // String userId = (String) session.getAttribute("userId");
+		    // calendar.setId(userId);
+
+		    // 파일 VO에 주입
+		    calendar.setUploadFiles(uploadFiles);
+		    calendar.setThumbnailFile(thumbnailFile);
+
+		    calendarService.registerCalendar(calendar);
+
+		    return "redirect:/calendar/list";
+		}
+
+
+	@RequestMapping(value = "/calendar/events.do", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Map<String, Object>> getCalendarEvents() throws Exception {
+	    List<CalendarVO> list = calendarService.getCalendarList();
+	    List<Map<String, Object>> result = new ArrayList<>();
+	    int getTotal = this.calendarService.getTotal(new HashMap<>());
+
+	    for (CalendarVO vo : list) {
+	        Map<String, Object> map = new HashMap<>(); // ← 여기에 위치해야 함
+	        map.put("id", vo.getId());
+	        map.put("title", vo.getEventTitle());
+	        map.put("start", vo.getStartDatetime());
+	        map.put("end", vo.getEndDatetime());
+	        map.put("description", vo.getEventDescription());
+	        map.put("organizer", vo.getOrganizer());
+	        map.put("location", vo.getLocation());
+	        map.put("contact", vo.getContact());
+	        map.put("eventStatus", vo.getEventStatus());
+	        map.put("getTotal", getTotal);
+	        result.add(map);
+	    }
+
+	    return result;
+	}
+	@ResponseBody
+	@RequestMapping(value = "/calendar/listAjax.do", method = RequestMethod.POST)
+	public ArticlePage<CalendarVO> listAjax(@RequestBody Map<String, Object> map) {
+		int getTotal = this.calendarService.getTotal(map);
+		int currentPage = 1;
+		if (map.get("currentPage") != null) {
+			currentPage = Integer.parseInt(map.get("currentPage").toString());
+		}
+		map.put("currentPage", currentPage);
+		
+		List<CalendarVO> VOList = this.calendarService.list(map);
+		
+		ArticlePage<CalendarVO> articlePage = new ArticlePage<CalendarVO>(getTotal, currentPage, 2, VOList,null,"ajax");
+		return articlePage;
+	}
+	
+	@RequestMapping(value = "/calendar/updateTitle.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String updateTitle(@RequestBody CalendarVO vo) {
+		int result = calendarService.updateTitle(vo);
+	    return result > 0 ? "success" : "fail";
+	}
+	
+	@RequestMapping(value = "/calendar/updateDate.do" , method = RequestMethod.POST)
+	@ResponseBody 
+	public String updateDate(@RequestBody CalendarVO vo) { 
+		int result =calendarService.updateDates(vo); // vo.id, vo.startDatetime, vo.endDatetime
+		return result > 0 ? "success" : "fail"; 
+	 }
+	 
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+	    dateFormat.setLenient(false);
+	    binder.registerCustomEditor(java.util.Date.class, new PropertyEditorSupport() {
+	        @Override
+	        public void setAsText(String text) throws IllegalArgumentException {
+	            try {
+	                setValue(dateFormat.parse(text));
+	            } catch (Exception e) {
+	                setValue(null);
+	            }
+	        }
+	    });
+}
+
+
+}

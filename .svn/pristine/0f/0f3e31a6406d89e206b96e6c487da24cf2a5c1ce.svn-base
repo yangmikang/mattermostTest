@@ -1,0 +1,191 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<!-- 컨테이너 영역 -->
+		<div id="container">
+
+			<div class="page-title-wrap visual img-members">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-wrap" aria-label="breadcrumb">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Network</a></li>
+							<li><a href="#" class="txt">County of Montgomery, MD</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<!-- 페이지 타이틀 영역 -->
+					<div class="visual-area">
+						<h2 class="h-tit">County of Montgomery, MD</h2>
+						<p>Members</p>
+					</div>
+				<!-- //페이지 타이틀 영역 -->
+				</div>
+			</div>  
+			
+
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">	
+				<!-- 섹션 컨텐츠 -->
+				 <div class="gini-cont-wrap gap20 cont-box cont-network">
+					<div class="gini-cont-box">
+						<h3 class="area-tit ico ico-location-2"><a href=""></a>County of Montgomery, MD</h3>
+						<div class="row cont100">
+							<div class="cont-left cont50 memb_view">
+								<div class="city-view-box">
+									<div class="city-view-box-in">
+										<div class="city-view-ico">
+											<i class="item-ico ico-eng">
+												<img src="${pageContext.request.contextPath}/img/component/common/img-symbol-montgomery.png" title="symbol montgomery">
+											</i>
+										</div>
+										<div class="city-view-img-box">
+											<span class="city-view-img"><img src="${pageContext.request.contextPath}/img/component/common/membe_montgomery_view.jpg" title="County of Montgomery"></span>  
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="cont-right cont50">
+								<div class="tbl_wrap">
+									<ul class="list-tableType type2">
+								<li><span class="title ico-area">Location</span><span class="value">Adjacent to Washington, D.C.</span></li>
+								  <li><span class="title ico-population">Population</span><span class="value">1,063,881 (2024 estimate)</span></li>
+								  <li><span class="title ico-grdp">GRDP</span><span class="value">$106.7 billion (2022)</span></li>
+								  <li><span class="title ico-area">Area</span><span class="value">493.1 square miles</span></li>
+								  <li><span class="title ico-rnd">R&amp;D</span>
+								    <span class="value">
+								      One of the leading regions for research in biotechnology, IT, and public health.
+								    </span>
+								  </li>
+								  <li><span class="title ico-key-industries">Key Industries</span>
+								    <span class="value"> 
+								      Top 3 U.S. Biohealth Cluster; AI, Cyber, Cleantech & IT; Advanced Tech, Hospitality Tech and Hospitality HQ
+								    </span>
+								  </li>
+								  <li><span class="title ico-significant">Significant</span>
+								    <span class="value">
+								      Home to US federal agencies for health & IT standards (e.g. NIH, FDA, NIST, NCCoE) & many firms and research orgs.<br><br>
+										Highly educated population, with 60% of adults holding a bachelor’s degree or higher.<br><br>
+										Highly diverse population with 16%+ residents from Asia including many with family in Korea<br><br>
+										9 University System of MD schools; mock cGMP & other applied tech training at Montgomery College and BioHub<br><br>  
+										Intl Soft Landing & Innovation Grants    
+								    </span>
+								  </li>
+								</ul>
+								</div>
+							</div>	
+						</div>
+						<div class="gini-cont-box gap-16">
+							<h3 class="area-tit">Strategic Industries</h3>
+							<div class="grid cols-4">
+						        <article class="card city biohealth">
+						          <div>
+						            <b>Biotechnology</b>
+						          </div>
+						        </article>
+						        <article class="card city quantum">
+						          <div>
+						            <b>Advanced Technology</b>
+						          </div>
+						        </article>
+						        <article class="card city information-technology">
+						          <div>
+						            <b>Information Technology</b>
+						          </div>
+						        </article>
+   						        <article class="card city IT">
+						          <div>
+						            <b>AI, IT</b>
+						          </div>
+						        </article>
+					      	</div>
+				      	</div>
+						<div class="row cont100">
+							<div class="cont-left cont50">
+								<div class="city-media">
+									<img src="${pageContext.request.contextPath}/img/component/common/biotech_industry.png" title="montgomery" style="aspect-ratio:10/5;">
+								</div>
+							</div>
+							<div class="cont-right cont50">
+								<div class="grid cols-2">
+									<article class="card center">
+										<!-- <p>Montgomery County Economic Development Corporation</p> -->
+										<img src="${pageContext.request.contextPath}/img/component/common/logo-thinkmoco.svg" title="Montgomery County Economic Development Corporation">
+						          	</article>
+									<article class="card center">
+										<p>바이오헬스혁신센터</p>
+										<%-- <img src="${pageContext.request.contextPath}/img/component/common/img-dortmund-th.png" title="Business Exchange"> --%>
+						          	</article>
+						          	<article class="card center">
+										<img src="${pageContext.request.contextPath}/img/component/common/logo-shadygrove.svg" title="The Universities at Shady Grove">
+						          	</article>
+									<article class="card center">
+										<!-- <p>Montgomery Collge</p> -->
+										<img src="${pageContext.request.contextPath}/img/component/common/logo-mc.svg" title="Montgomery Collge">
+						          	</article>
+								</div>
+							</div>
+						</div>
+				      	<div class="gini-cont-box">
+					      	<ul class="card-list">
+								<li>
+									<div class="img-wrap">
+										<img src="${pageContext.request.contextPath}/img/pattern/content/Brookside-Gardens.jpg" title="Brookside Gardens">
+										<div class="list-conts" style="height:auto;">
+											<h4 class="card_tit">Brookside Gardens</h4>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class="img-wrap">
+										<img src="${pageContext.request.contextPath}/img/pattern/content/Glenstone Museum.jpg" title="Glenstone Museum">
+										<div class="list-conts" style="height:auto;">
+											<h4 class="card_tit">Glenstone Museum</h4>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class="img-wrap">
+										<img src="${pageContext.request.contextPath}/img/pattern/content/Great Falls at C&O Canal National Historical Park.jpg" title="Great Falls at C&O Canal National Historical Park">
+										<div class="list-conts" style="height:auto;">
+											<h4 class="card_tit">Great Falls at C&O Canal National Historical Park</h4>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class="img-wrap">
+										<img src="${pageContext.request.contextPath}/img/pattern/content/Josiah-Henson-Museum-Park.jpg" title="Josiah Henson Museum & Park">
+										<div class="list-conts" style="height:auto;">
+											<h4 class="card_tit">Josiah Henson Museum & Park</h4>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class="img-wrap">
+										<img src="${pageContext.request.contextPath}/img/pattern/content/NIH.jpg" title="NIH">
+										<div class="list-conts" style="height:auto;">
+											<h4 class="card_tit">NIH</h4>
+										</div>
+									</div>
+								</li>
+								<li>
+									<div class="img-wrap">
+										<img src="${pageContext.request.contextPath}/img/pattern/content/Pennyfield-Lock.jpg" title="Pennyfield Lock">
+										<div class="list-conts" style="height:auto;">
+											<h4 class="card_tit">Pennyfield Lock</h4>
+										</div>
+									</div>
+								</li>
+							</ul>
+			      		</div>
+					</div>
+				 </div>
+				<!-- //섹션 컨텐츠 -->
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 -->
+</html>

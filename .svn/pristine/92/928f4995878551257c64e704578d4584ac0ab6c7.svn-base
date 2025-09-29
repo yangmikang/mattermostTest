@@ -1,0 +1,85 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<!-- ÄÁÅ×ÀÌ³Ê ¿µ¿ª -->
+		<div id="container">
+
+			<div class="page-title-wrap visual img-members">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-wrap" aria-label="ºê·¹µåÅ©·³">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">About GINI</a></li>
+							<li><a href="#" class="txt">Overview</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<div class="visual-area">
+						<h2 class="h-tit">Overview</h2>
+					<p>Purpose of GINI¡¯s Establishment</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- ÄÁÅÙÃ÷ ¿µ¿ª -->
+			<div class="inner">
+				<!-- ¼½¼Ç ÄÁÅÙÃ÷ -->
+				 <div class="gini-cont-wrap gap20 cont-box text-center">
+					<div class="area-group">
+						<h3 class="area-tit">About GINI </h3>
+					</div>
+					<div class="row cont100">
+						<div class="cont-about">
+							<div class="img-box">
+								<img src="${pageContext.request.contextPath}/img/component/common/MAIN_VISUAL_white.png" alt="main image">
+							</div>
+							<div class="story-box">
+								<h4 class="sub-tit">Meeting Frequency</h4>
+								<p class="desc">Following the successful hosting of the UCLG World Congress in 2022 and the Global Innopolis Forum in 2023, the City of Daejeon initiated the Global Innopolis Network Initiative (GINI), building on its legacy as a center for international dialogue and innovation. GINI was formally established during the Leaders Assembly at its inaugural ceremony on September 3, 2024, in Daejeon, Republic of Korea.</p>
+							</div>
+						</div>
+						<div class="area-group">
+							<div class="mission-box">
+								<h4 class="sub-tit">Mission</h4>
+								<ul>
+									<li>Global Challenges</li>
+									<li>GINI's Core Approach</li>
+									<li class="mission-field">
+										<ul>
+											<li class="ico-science">Science</li>
+											<li class="ico-tech">Technology</li>
+											<li class="ico-innov">Urban Innovation</li>
+										</ul>
+									</li>
+									<li>Inter-city Cooperation</li>
+									<li>Solutions & Innovatio</li>
+									<li>Sustainable Economic Development</li>
+								</ul>
+								<p class="desc">GINI is committed to advancing science, technology, and urban innovation to address global challenges and promote sustainable economic development through inter-city cooperation. </p>
+							</div>
+							<ol class="list-num bg-list">
+								<li>Joint response to global urban issues through collaborative research and policy exchange</li>
+								<li>Implementation of science and technology-based economic revitalization programs</li>
+								<li>Promotion of exchange in business, science and technology, knowledge, and human resources</li>
+							</ol>
+						</div>
+						<!-- //cont-right -->
+					</div>
+					
+				
+					
+
+					
+				 </div>
+				<!-- //¼½¼Ç ÄÁÅÙÃ÷ -->
+
+					
+
+			</div>
+			<!-- //ÄÁÅÙÃ÷ ¿µ¿ª -->
+		</div>
+		<!-- //ÄÁÅ×ÀÌ³Ê ¿µ¿ª -->
+</html>

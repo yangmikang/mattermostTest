@@ -1,0 +1,75 @@
+﻿@charset "utf-8";
+
+.comment_wrap {margin-top:30px; width:100%;max-width:1400px;background:#fff;}
+/*댓글작성*/
+.commentBody{padding:0 15px 10px 10px;color:#666;background:#fff;}
+.commentBody .login_sns button > span {text-indent:-1000px; font-size:0; line-height:0;}
+.commentBody .login_sns dt{ background:url(../images/sub/arrow_bg.png) no-repeat 0 15px; padding:10px; float:left;}
+.commentBody .login_sns .btnF { background-position:0 0; }
+.commentBody .login_sns .btnT { background-position:-30px 0; }
+.commentBody .login_sns .btnK { background-position:-60px 0; }
+.commentBody .write{ position:relative; clear:both; border:1px solid #dcdcdc; overflow:hidden; background:#fafafa; margin-bottom:8px;}
+.commentBody .write p.pr_img{ position:absolute; top:0; left:0; width:94px; height:88px;}
+.commentBody .write dl{ height:88px; clear:both;} /** overflow:hidden; 삭제 **/
+.commentBody .write dl dt{ background:#fff url(../images/sub/arrow_bg.png) no-repeat 10px 11px;  padding:7px 0 7px 20px; font-size:14px; color:#444; }
+.commentBody .write dl dd{ border-top:1px solid #dcdcdc; border-bottom:1px solid #dcdcdc; height:54px;overflow-y:scroll;}
+.commentBody .write dl dd.textarea textarea{width:98%; border:0px; overflow: hidden; padding:1%; font-size:15px;}
+.commentBody .write dl dd.textarea textarea:disabled { background-color: #fafafa; }
+.commentBody p.TextCount{ clear:both; text-align:right; padding:6px 0}
+.commentBody p.TextCount strong{ color:#0099a2;}
+.commentBody p.TextCount span{ margin-right:15px;}
+
+/*보내기버튼*/
+.btn_grp a.btn.Ty01 {background:#0099a2;}
+.btn_grp a.btn.Ty02 {margin-left:10px;background:#585858;}
+.btn_grp a.btn {display: inline-block;color: #fff !important;font-family: 'Nanum';font-size: 16px;line-height: 17px;padding: 5px 25px 6px;margin-bottom: 2px;text-align: center;vertical-align: middle;}
+
+/*댓글리스트 : 대댓글*/
+.ReplyBody{color:#666; background:#fff;}
+.ReplyBody p.total_re{ background:url(../images/sub/arrow_bg.png) no-repeat 0 -26px; padding:10px; margin:0 0 0 10px; }
+.ReplyBody p.total_re strong{ color:#cc3333;}
+.ReplyBody .Reply{ position:relative; border:1px solid #dcdcdc; padding:5px 0; margin-bottom:25px; font-size:12px;}
+.ReplyBody .Reply .Re_list{ display:flex;flex-wrap:wrap;margin:0;}
+.ReplyBody .Reply .Re_list > li{ position:relative;width:calc(100% - 45px);margin:10px 0 10px 20px; border-top:1px dashed #ccc; padding:10px 0;} /** 프로필 사진 삭제로 수정 원본: width:calc(100% - 45px);margin:10px 0 10px 74px; **/
+.ReplyBody .Reply .Re_list > li:first-child{ border-top:0; margin-top:0}
+.ReplyBody .Reply .Re_list > li p.pr_img{ position:absolute; top:12px; left:-65px; width:94px; height:50px;}
+.ReplyBody .Reply dl{ overflow:hidden; clear:both;}
+.ReplyBody .Reply dl dt { overflow:hidden;}
+.ReplyBody .Reply dl dt p{ float:left; margin-right:10px; line-height:26px;word-break:break-all;}
+.ReplyBody .Reply dl dt p.name{ font-weight:bold; }
+.ReplyBody .Reply dl dd{ clear:both; padding:5px 0; }
+.ReplyBody .Reply dl dd p.ReplyText{margin-bottom:10px;line-height:1.5rem;word-break:break-all;}
+/*대댓글입력*/
+.ReplyBody .write dl{clear:both; border:1px solid #dcdcdc; margin-top:5px; }
+.ReplyBody .write dl dt{ background:#fafafa; padding:7px 10px; font-size:12px; color:#444; font-weight:bold;}
+.ReplyBody .write dl dd{ border-top:1px solid #dcdcdc; height:54px;overflow-y:scroll;}
+.ReplyBody .write dl dd.textarea textarea{width:98%; border:0px; overflow: hidden; padding:1%; font-size:12px;}
+.ReplyBody .write dl dd.textarea textarea:disabled { background-color: #fafafa; }
+.ReplyBody p.TextCount{ clear:both; text-align:right; padding:6px 0; border:1px solid #dcdcdc; border-top:0; margin-bottom:8px;}
+.ReplyBody p.TextCount strong{ color:#0099a2;}
+.ReplyBody p.TextCount span{ margin-right:15px;}
+/*대댓글*/
+.Re_re{ background:#fafafa; padding:10px 20px 5px;  margin-top:5px;}
+.Re_re li{ border-top:1px dashed #ccc; padding:10px 0 5px; margin:10px 0; overflow:hidden;}
+.Re_re li:first-child{ border-top:0; margin-top:0}
+/*대댓글 리스트*/
+.Re_re p.name{ font-weight:bold; float:left; margin-right:10px; color:#555; clear:both; }
+.Re_re p.time{ float:left;}
+.Re_re p.ReplyText{ clear:both; float:left;}
+/*답글-삭제버튼*/
+.ReplyBody .Reply button.btnRe { display:inline-block; width:51px; height:19px; background:url("../images/sub/ico_re.png") no-repeat 0 0;}
+.ReplyBody .Reply button.btnRe > span { text-indent:-1000px; font-size:0; line-height:0;}
+.btnDel{ background:url(../images/sub/btn_del.png) no-repeat 0 1px; padding-left:13px; margin-left:20px; color:#666; font-size:11px; display:block; width:40px; height:14px; vertical-align:middle; display:inline-block}
+.btnUpdate{ background:url(../images/sub/btn_del.png) no-repeat 0 1px; padding-left:13px; color:#666; font-size:11px; display:block; width:40px; height:14px; vertical-align:middle; display:inline-block}
+@media (max-width:1080px) {
+    .ReplyBody .write dl dd.textarea textarea {overflow-y:auto;}
+}
+
+@media (max-width:480px) {
+    .pr_img {display:none;}
+    .ReplyBody .Reply .Re_list > li {width:100%;margin:0;padding:15px;}
+    .commentBody .write dl dd.textarea textarea {min-height:48px;}
+}
+@media (max-width:430px) {
+    .commentBody .write dl dd.textarea textarea {padding:0 1%;}
+}

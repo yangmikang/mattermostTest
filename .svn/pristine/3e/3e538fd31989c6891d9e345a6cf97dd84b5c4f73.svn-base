@@ -1,0 +1,184 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/jsp/cmmn/tagLib.jsp" %>
+<link rel="stylesheet" href="<c:url value='/summernote/summernote-lite.css' />">
+<script type="text/javascript" src="<c:url value='/summernote/summernote-lite.js'/>" ></script>
+<script type="text/javascript" src="<c:url value='/summernote/summernote-ko-KR.min.js'/>" ></script>
+<style>
+.filebox .upload-name {
+    display: inline-block;
+    height: 40px;
+    padding: 0 10px;
+    vertical-align: middle;
+    border: 1px solid #dddddd;
+    width: 20%;
+    color: #000;
+    background-color: white;
+}
+.filebox label {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    vertical-align: middle;
+    background-color: #999999;
+    cursor: pointer;
+    height: 23px;
+    margin-left: 10px;
+}
+.filebox input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+</style>
+<script>
+$(document).ready(function(e){
+	$('.summernote').summernote({
+		height: 200,
+		lang: "ko-KR",
+		toolbar: [
+		    ['style', ['style']],
+		    ['font', ['bold', 'underline', 'clear']],
+		    ['fontname', ['fontname']],
+		    ['fontsize', ['fontsize']],
+		    ['color', ['color']],
+		    ['para', ['paragraph']],
+		    ['height', ['height']],
+		    ['table', ['table']],
+		    ['insert', []],
+		    ['view', ['codeview']],
+		    ['help', ['help']]
+		  ]
+      });
+	
+	var fileName = '${fileList[0].attachFileNm}';
+	
+	if (fileName != ''){
+		$('#oldFileName').text(fileName);
+		$('#oldFileName').append("<a href='javascript:fn_delete();' style='padding-left: 5px;'><img src='<c:url value='/images/sub/ico_close_bk.png' />' style='width:10px;'></a>");
+	}
+	
+	$("#fileUpload").on('change',function(){
+		  var fileName = $(this)[0].files[0].name;
+		  $(".upload-name").val(fileName);
+		});
+});
+//등록
+function fn_save(){
+	var cmd = $('#cmd').val();
+	var title = $('#title').val();
+	var contents = $('#contents').val();
+	
+	if(title == '' || title == null){
+		alert("제목을 입력해주세요.");
+		$('#title').focus();
+		return false;
+	}
+	
+	if(contents == '' || contents == null){
+		alert("내용을 입력해주세요.");
+		$('#contents').focus();
+		return false;
+	}
+	
+	if(cmd == 'update'){
+		$('#boardInfoForm').attr('action',"<c:url value='/update.do'/>");
+	}else{
+		$('#boardInfoForm').attr('action',"<c:url value='/write.do'/>");
+	}
+	$('#boardInfoForm').submit();
+}
+//첨부파일 삭제
+function fn_delete(){
+	var bbsId = $('#bbsId').val();
+	var oldFileSaveNm = $('#oldFileSaveNm').val();
+	$.ajax({
+		url: "/distep/deleteFile.do",
+		type: 'POST',
+		data: {bbsId : bbsId, oldFileSaveNm : oldFileSaveNm},
+		success: function(result){
+			alert("첨부파일이 삭제되었습니다.");
+			location.reload();
+		},
+		error: function(e){
+			console.log(e);
+		}
+	});
+}
+
+function validation(file) {
+	
+	 var file_path = file.value;
+	
+	 var reg = /(.*?)\.(hwp|doc|docx|ppt|pptx|xls|xlsx|txt|csv|jpg|jpeg|gif|png|bmp|pdf)$/;
+	   // 허용되지 않은 확장자일 경우
+		if (file_path != "" && (file_path.match(reg) == null || reg.test(file_path) == false)) {
+			//초기화
+			$(".upload-name").val("");
+			$("#fileUpload").val("");
+			alert("hwp, doc, docx, ppt, pptx, xls, xlsx, txt, csv, jpg, jpeg, gif, png, bmp, pdf 파일만 업로드 가능합니다.");
+		}
+
+	}
+</script>
+<!-- 테이블영역 -->
+	
+    <div class="board_wrap">
+        <div class="board_title">
+            <strong>공지사항(Notice)</strong>
+        </div>
+        <div class="board_write_wrap">
+            <form action="<c:url value='/write.do'/>" method="post" name="boardInfoForm" id="boardInfoForm" enctype="multipart/form-data">
+            <input type="hidden" id="userId"   name="userId"   value="${ssUsr.ssoUserId}" />	<!-- id  -->
+            <input type="hidden" id="userName" name="userName" value="${ssUsr.ssoUserNm}" />	<!-- name  -->
+            <input type="hidden" id="bbsId" name="bbsId" value="${detail.bbsId }" />	
+            <input type="hidden" id="oldFileSaveNm" name="oldFileSaveNm" value="${fileList[0].attachFileSaveNm}" />
+            <input type="hidden" id="cmd" name="cmd" value="${cmd}" />	
+            <div class="board_write">
+                <div class="title">
+                    <dl>
+                        <dt>제목(Title)</dt>
+                        <dd><input type="text" id="title" name ="title" placeholder="제목 입력" maxlength="300" value="${detail.title}"></dd>
+                    </dl>
+                </div>
+                <div class="info">
+                    <dl>
+                        <dt>글쓴이(Writer)</dt>
+                        <dd><c:if test="${cmd eq 'update' }"><c:out value='${ detail.userName }'/></c:if><c:if test="${cmd ne 'update' }"><c:out value='${ ssUsr.ssoUserNm }'/></c:if></dd>
+                    </dl>
+                </div>
+                <div class="cont" style="background-color: white;">
+                    <textarea class="summernote" id="contents" name="contents" placeholder="내용 입력" maxlength="3000">${detail.contents}</textarea>
+                </div>
+                <c:if test="${!empty fileList[0].attachFileSaveNm }">
+	                <div class="title">
+	                	<dl>
+	                        <dt>기존 첨부파일(Attachments)</dt>
+	                        <dd id="oldFileName">
+	                        </dd>
+	                    </dl>
+	            	</div>
+            	</c:if>
+                <div class="title filebox">
+                	<dl>
+                        <dt>첨부파일(Attachments)</dt>
+                        <dd>
+						    <input class="upload-name" value="첨부파일" placeholder="첨부파일" disabled="disabled">
+						    <label for="fileUpload">파일찾기(Open File)</label> 
+						    <input type="file" id="fileUpload" name="fileUpload" accept=".hwp, .doc, .docx, .ppt, .pptx, .xls, .xlsx, .txt, .csv, .jpg, .jpeg, .gif, .png, .bmp, .pdf" onChange="validation(this);">
+		                </label>
+                        </dd>
+                    </dl>
+            	</div>
+            </div>
+            </form>
+            <div class="bt_wrap">
+                <a href="#" onClick="fn_save();" class="on"><c:if test="${cmd eq 'update' }">수정(Modify)</c:if><c:if test="${cmd ne 'update' }">등록(Write)</c:if></a>
+                <a href="<c:url value='/index.do'/>">취소(Cancel)</a>
+            </div>
+        </div>
+    </div>
+	<!-- //테이블영역 -->

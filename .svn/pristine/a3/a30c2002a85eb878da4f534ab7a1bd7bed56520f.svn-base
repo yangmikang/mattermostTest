@@ -1,0 +1,100 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<!-- 컨테이너 영역 -->
+		<div id="container">
+			<!-- breadcrumb -->
+			<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+				<ol class="breadcrumb">
+					<li class="home"><a href="#" class="txt">Home</a></li>
+					<li><a href="#" class="txt">Network</a></li>
+					<li><a href="#" class="txt">Dortmund</a></li>
+				</ol>
+			</nav>
+			<!-- breadcrumb -->
+
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				<!-- 페이지 타이틀 영역 -->
+				<div class="page-title-wrap">
+					<h2 class="h-tit">Dortmund</h2>
+					<p>Members</p>
+				</div>
+				<!-- //페이지 타이틀 영역 -->
+				<!-- 섹션 컨텐츠 -->
+				 <div class="gini-cont-wrap gap20 cont-box cont-network">
+					<div class="gini-cont-box">
+						<h3 class="area-tit"><a href=""><i class="item-ico ico-germ"></i><i class="sr-only">link</i></a>City of Dortmund</h3>
+						<div class="row cont100">
+							<div class="cont-left cont50 memb_view">
+								<div class="img-box img-dortmund"></div>
+								<!-- 해당 도시에 따라 아이디를 넣어주세요 deajeon : .img-deajeon, dortmund : .img-dortmund, malaga : .img-malaga, County of Montgomery, MD : .img-montgomery, City of Seattle : .img-seattle, Quebec Province : .img-quebec, Hisnchu : .img-hisnchu -->
+							</div>
+							<div class="cont-right cont50">
+								<div class="tbl_wrap">
+									<ul class="list-tableType">
+										<li><span class="title">Population</span><span class="value">612,065 (City); 11.3M (Metro, Rhine-Ruhr)</span></li>
+										<li><span class="title">GRDP</span><span class="value">€44,816 per capita (2022, +5.93%)</span></li>
+										<li><span class="title">Key Industries</span><span class="value">ICT, Micro/Nanotechnology, Biomedicine, Logistics, Robotics, Hydrogen, Productiontechnoloy</span></li>
+										<li><span class="title">Transport</span><span class="value">Major rail and road hub, international airport, and port linking to the North Sea</span></li>
+										<li><span class="title">Education & Research</span><span class="value">50,000 students at 7 universities, 19 research institutes, including Max-Planck, Leibniz, and Fraunhofer Institutes</span></li>
+										<li><span class="title">Innovative Ecosystem</span><span class="value">Home to TZDO with 200 startups and Ruhrvalley tech companies, European Capital of Innovation (iCapital 2021), comprehensive start-up support ecosystem</span></li>
+										<li><span class="title">Heritage</span><span class="value">Rich industrial history in steel, coal, and beer; ranked as one of Germany's most livable cities; cultural hotspot and sports city (BVB soccer club)</span></li>
+									</ul>
+								</div>	
+							</div>
+						</div>
+						<div class="">
+							<h4 class="sub-tit">Strategic Industries</h4>
+							
+								<ol class="list-num">
+									<li>IT: Digital transformation and innovation in logistics, software engineering, and data science; anchored by Digital Hub Logistics clusters; annual tech festival #diwodo</li>
+									<li>Biotechnology: Home to the Competence Center for Biomedicine and Biotechnology, focusing on drug discovery, molecular research, and biotechnological applications.</li>
+									<li>Hydrogen: Centered around H2-Ruhr Hydrogen Network (90 members); promoting hydrogen research, production, and industrial applications.</li>
+									<li>Production technology: Home to well-known industry leaders and numerous “hidden champions”</li>
+								</ol>
+							
+						</div>
+							<h4 class="sub-tit">Competence Centres</h4>
+							<div class="row cont100">
+								<div class="cont-left">
+									<div class="img-box member-map">
+										<img src="${pageContext.request.contextPath}/img/component/common/membe_dortmund.png" alt="dortmund 지도">
+										<!-- <img src="../resources/img/component/common/membe_dortmund.png" alt="dortmund 지도">
+											<img src="../resources/img/component/common/membe_malaga.png" alt="malaga 지도">
+											<img src="../resources/img/component/common/membe_montgomery.png" alt="montgomery 지도">
+											<img src="../resources/img/component/common/membe_seattle.png" alt="seattle 지도">
+											<img src="../resources/img/component/common/membe_quebec.png" alt="quebec 지도"> 
+											hisnchu는 자료 없음
+											-->
+									</div>
+								</div>
+								<div class="cont-right">
+									<ul class="list-bulet">
+										<li>6 Competence Centers: Over 200 Companies, 100,000 Square meters</li>
+										<li>Technology Centre</li>
+										<li>Tech Start-up Hub; Biomedice and drug research</li>
+										<li>BMZ; Software</li>
+										<li>B1st; Logistics</li>
+										<li>e-port Production technology</li>
+										<li>ZfP; Micro and Nano technology</li>
+										<li>MST factory</li>
+									</ul>
+								</div>
+							</div>
+						
+					</div>
+					
+
+					
+				 </div>
+				<!-- //섹션 컨텐츠 -->
+
+					
+
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 --> 
+</html>

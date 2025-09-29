@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+	<definition name="main"	template="/WEB-INF/jsp/layout/UserLayout.jsp">
+		<put-attribute name="title"	value="GINI" />
+		<put-attribute name="userHHeader"	value="/WEB-INF/jsp/layout/UserHHeader.jsp" />	
+		<put-attribute name="userContents"	value="/WEB-INF/jsp/main/mainPage.jsp" />
+		<put-attribute name="userFooter"	value="/WEB-INF/jsp/layout/UserFooter.jsp" />
+	</definition>
+	
+	
+	<definition name="user/*"   extends="main">
+		<put-attribute name="userContents" value="/WEB-INF/jsp/user/{1}.jsp" />
+	</definition>
+	
+	<definition name="view/*"   extends="main">
+		<put-attribute name="userContents" value="/WEB-INF/jsp/view/{1}.jsp" />
+	</definition>
+	
+	<definition name="board/*"   extends="main">
+		<put-attribute name="userContents" value="/WEB-INF/jsp/board/{1}.jsp" />
+	</definition>
+	
+	<definition name="calendar/*"   extends="main">
+		<put-attribute name="userContents" value="/WEB-INF/jsp/calendar/{1}.jsp" />
+	</definition>
+	
+	<!-- API -->
+	<definition name="json/*" extends="main"> 
+		<put-attribute name="content" value="/WEB-INF/jsp/{1}.jsp"></put-attribute>
+	</definition>
+	
+</tiles-definitions>
+
+

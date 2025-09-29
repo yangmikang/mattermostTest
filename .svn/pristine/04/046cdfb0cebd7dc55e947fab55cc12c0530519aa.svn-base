@@ -1,0 +1,22 @@
+package kr.go.distep.user.service;
+
+import java.io.IOException;
+import java.util.List;
+
+import kr.go.distep.user.vo.UserVO;
+
+public interface UserService {
+	
+	void register(UserVO userVO) throws IOException, Exception;
+
+	boolean checkUserId(String userId) throws IOException, Exception;
+
+	UserVO findByUserId(String userId) throws IOException, Exception;
+
+	List<UserVO> getUserList(int offset,int size) throws IOException, Exception;
+
+	int getUserCount() throws IOException, Exception;
+
+	void updateUserRole(String id, String role);
+	
+}

@@ -1,0 +1,562 @@
+package kr.go.distep.calendar.web;
+
+import java.beans.PropertyEditorSupport;
+import java.io.File;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import kr.go.distep.calendar.service.CalendarService;
+import kr.go.distep.calendar.vo.CalendarFileVO;
+import kr.go.distep.calendar.vo.CalendarVO;
+import kr.go.distep.cmmn.file.vo.FileGroupVO;
+import kr.go.distep.main.service.UploadService;
+import kr.go.distep.user.service.UserService;
+import kr.go.distep.user.vo.UserVO;
+import kr.go.distep.util.ArticlePage;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Controller
+public class CalendarController {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    UploadService uploadService;
+
+    @Resource(name = "calendarService")
+    private CalendarService calendarService;
+
+    private final String uploadDir = "C:/upload/calendar/"; // 서버에 맞게 수정
+
+    private static final DateTimeFormatter F_DB       = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter F_FP       = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+    private static final DateTimeFormatter F_OUT_ISO  = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"); // API용
+    private static final DateTimeFormatter F_OUT_LIST = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");      // 리스트 표시용
+
+    private static final ZoneId DEFAULT_ZONE = ZoneId.of("Asia/Seoul");
+    
+    // UTC로 표준화시엔  ZoneOffset.UTC로 변경 필요
+    private static final ZoneId STORAGE_ZONE = DEFAULT_ZONE;
+
+    private ZoneId resolveViewerZone(HttpServletRequest req, CalendarVO vo) {
+        String tz = (req != null) ? req.getParameter("tz") : null;
+        if (tz == null || tz.trim().isEmpty()) tz = (req != null) ? req.getParameter("clientTimeZone") : null;
+        if ((tz == null || tz.trim().isEmpty()) && vo != null) tz = vo.getClientTimeZone();
+        if ((tz == null || tz.trim().isEmpty()) && vo != null) tz = vo.getEventTz();
+        if (tz == null || tz.trim().isEmpty()) tz = DEFAULT_ZONE.getId();
+        try { return ZoneId.of(tz); } catch (Exception e) { return DEFAULT_ZONE; }
+    }
+
+    /* 요청 바디에서 타임존 결정 */
+    private ZoneId resolveViewerZone(Map<String, Object> body) {
+        String tz = body == null ? null : String.valueOf(body.get("tz"));
+        if (tz == null || tz.trim().isEmpty() || "null".equalsIgnoreCase(tz)) {
+            tz = body == null ? null : String.valueOf(body.get("clientTimeZone"));
+        }
+        if (tz == null || tz.trim().isEmpty() || "null".equalsIgnoreCase(tz)) tz = DEFAULT_ZONE.getId();
+        try { return ZoneId.of(tz); } catch (Exception e) { return DEFAULT_ZONE; }
+    }
+
+    /* 문자열 -> Instant 저장 표준 타임존으로 해석 */
+    private Instant parseToInstant(String s) {
+        if (s == null) return null;
+        String t = s.trim();
+        if (t.isEmpty()) return null;
+        LocalDateTime ldt;
+        try { ldt = LocalDateTime.parse(t, F_DB); }
+        catch (Exception e1) {
+            try { ldt = LocalDateTime.parse(t, F_FP); } catch (Exception e2) { return null; }
+        }
+        return ldt.atZone(STORAGE_ZONE).toInstant();
+    }
+
+    private Instant startInstant(CalendarVO vo) {
+        if (vo.getStartDateObj() != null) return vo.getStartDateObj().toInstant();
+        return parseToInstant(vo.getStartDatetime());
+    }
+    private Instant endInstant(CalendarVO vo) {
+        if (vo.getEndDateObj() != null) return vo.getEndDateObj().toInstant();
+        return parseToInstant(vo.getEndDatetime());
+    }
+
+    /* 상태 계산 */
+    private String calcStatus(ZonedDateTime sLocal, ZonedDateTime eLocal, ZoneId zone) {
+        ZonedDateTime now = ZonedDateTime.now(zone);
+        if (!now.isBefore(sLocal) && now.isBefore(eLocal)) return "ONGOING";
+        if (now.isBefore(sLocal)) return "UPCOMING";
+        return "COMPLETED";
+    }
+
+    /* 리스트  응답용: VO의 표시 문자열 상태를 뷰어 타임존 기준으로 */
+    private void localizeForList(CalendarVO vo, ZoneId viewerZone) {
+        Instant s = startInstant(vo), e = endInstant(vo);
+        if (s == null || e == null) return;
+        ZonedDateTime sLocal = s.atZone(viewerZone);
+        ZonedDateTime eLocal = e.atZone(viewerZone);
+        vo.setStartDatetime(sLocal.format(F_OUT_LIST));
+        vo.setEndDatetime(eLocal.format(F_OUT_LIST));
+        vo.setEventStatus(calcStatus(sLocal, eLocal, viewerZone));
+    }
+
+    /* 상세 화면용  */
+    private void fillDetailModel(Model model, CalendarVO vo, ZoneId viewerZone) {
+        Instant s = startInstant(vo), e = endInstant(vo);
+        if (s == null || e == null) return;
+        ZonedDateTime sLocal = s.atZone(viewerZone);
+        ZonedDateTime eLocal = e.atZone(viewerZone);
+        model.addAttribute("viewerTimeZone", viewerZone.getId());
+        model.addAttribute("startLocalView",  sLocal.format(F_OUT_LIST));
+        model.addAttribute("endLocalView",    eLocal.format(F_OUT_LIST));
+        model.addAttribute("startLocalInput", sLocal.format(F_FP));     
+        model.addAttribute("endLocalInput",   eLocal.format(F_FP));
+        model.addAttribute("eventStatusLocal", calcStatus(sLocal, eLocal, viewerZone));
+    }
+
+    /* 풀캘린더 API용  */
+    private Map<String, Object> toEventMap(CalendarVO vo, ZoneId viewerZone, int getTotal) {
+        Instant s = startInstant(vo), e = endInstant(vo);
+        if (s == null || e == null) return null;
+        ZonedDateTime sLocal = s.atZone(viewerZone);
+        ZonedDateTime eLocal = e.atZone(viewerZone);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("id", vo.getId());
+        map.put("title", vo.getEventTitle());
+        map.put("start", sLocal.format(F_OUT_ISO));
+        map.put("end",   eLocal.format(F_OUT_ISO));
+        map.put("description", vo.getEventDescription());
+        map.put("organizer", vo.getOrganizer());
+        map.put("location", vo.getLocation());
+        map.put("contact", vo.getContact());
+        map.put("eventStatus", calcStatus(sLocal, eLocal, viewerZone));
+        map.put("getTotal", getTotal);
+        map.put("vo", vo);
+        map.put("externalLink", vo.getExternalLink());
+        return map;
+    }
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public String calendarList(Model model) throws Exception {
+        List<CalendarVO> calendarList = calendarService.getCalendarList();
+        model.addAttribute("calendarList", calendarList);
+        return "calendar/calendarList";
+    }
+
+    @RequestMapping(value="/calendar.do",method = RequestMethod.GET)
+    public String autt(HttpSession session,
+                       RedirectAttributes redirectAttributes, HttpServletRequest request, Model model) {
+
+        UserVO user = (UserVO) session.getAttribute("loggedInUser");
+
+        String masterCode = "E01";
+        String userType = "N";
+        String userYn = "N";
+        String fileuserYn = "N";
+        String apprYn = "";
+        HashMap<String, String> param = new HashMap<String, String>();
+
+        if (user != null) {
+            apprYn = user.getAppr_yn();
+
+            if ("Y".equals(apprYn)) {
+                userType = user.getRole();
+            } else {
+                userType = "G";
+            }
+
+            param.put("userType", userType);
+            param.put("boardMasterCode", masterCode);
+            userYn = calendarService.getBoarUpdateAuth(param);
+            fileuserYn = calendarService.getBoarFileAuth(param);
+        }else { 
+         	userType = "G";
+         	param.put("userType", userType);
+            param.put("boardMasterCode", masterCode);
+                  
+            userYn = calendarService.getBoarUpdateAuth(param);
+      		
+            fileuserYn = calendarService.getBoarFileAuth(param);	
+        	
+        	
+        }
+        model.addAttribute("fileuserYn", fileuserYn);
+        model.addAttribute("userYn", userYn);
+        model.addAttribute("userType", userType);
+
+        return "calendar/calendar";
+    }
+
+    @RequestMapping(value="/calendarCreate.do",method = RequestMethod.GET)
+    public String calendarCreate(HttpSession session,
+                                 RedirectAttributes redirectAttributes, HttpServletRequest request, Model model) {
+
+        UserVO user = (UserVO) session.getAttribute("loggedInUser");
+
+        String masterCode = "E01";
+        String userType = user.getRole();
+
+        HashMap<String, String> param = new HashMap<String, String>();
+        param.put("userType", userType);
+        param.put("boardMasterCode", masterCode);
+
+        String userYn = calendarService.getBoarUpdateAuth(param);
+        model.addAttribute("userYn", userYn);
+
+        return "calendar/calendarCreate";
+    }
+
+    @RequestMapping(value = "/calendar/detail.do", method = RequestMethod.GET)
+    public String detail(CalendarVO calendar, Model model, HttpSession session,
+                         RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        // 기본 데이터 조회
+        calendar = calendarService.detail(calendar);
+        if (calendar == null) {
+            return "redirect:/calendar.do";
+        }
+
+        // 파일 그룹 로딩
+        if (calendar.getFileGroupNo() > 0) {
+            FileGroupVO fileGroupVO = uploadService.getFileGroupWithDetails(calendar.getFileGroupNo());
+            calendar.setFileGroupVO(fileGroupVO);
+            log.info("fileDetailVOList: {}", fileGroupVO != null ? fileGroupVO.getFileDetailVOList() : null);
+        }
+
+        // 권한 처리
+        UserVO user = (UserVO) session.getAttribute("loggedInUser");
+        String masterCode = "E01";
+        String userType = "N";
+        String userYn = "N";
+        String fileuserYn = "N";
+
+        HashMap<String, String> param = new HashMap<String, String>();
+        if (user != null) {
+            userType = user.getRole();
+            param.put("userType", userType);
+            param.put("boardMasterCode", masterCode);
+            userYn = calendarService.getBoarUpdateAuth(param);
+            fileuserYn = calendarService.getBoarFileAuth(param);
+        }else { 
+         	userType = "G";
+         	param.put("userType", userType);
+            param.put("boardMasterCode", masterCode);
+                  
+            userYn = calendarService.getBoarUpdateAuth(param);
+      		
+            fileuserYn = calendarService.getBoarFileAuth(param);	
+        	
+        	
+        }
+        model.addAttribute("fileuserYn", fileuserYn);
+        model.addAttribute("userYn", userYn);
+        model.addAttribute("userType", userType);
+
+        ZoneId viewerZone = resolveViewerZone(request, calendar);
+        fillDetailModel(model, calendar, viewerZone);
+
+        model.addAttribute("calendar", calendar);
+        return "calendar/calendarDetail";
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String calendarRegisterForm() {
+        return "calendar/calendarRegister";
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public String calendarRegister(CalendarVO calendar, @RequestParam("files") List<MultipartFile> files)
+            throws Exception {
+
+        if (files != null && !files.isEmpty()) {
+            for (MultipartFile multipartFile : files) {
+                if (!multipartFile.isEmpty()) {
+                    String originalFileName = multipartFile.getOriginalFilename();
+                    String uuid = UUID.randomUUID().toString();
+                    String saveFileName = uuid + "_" + originalFileName;
+
+                    File destFile = new File(uploadDir + saveFileName);
+                    destFile.getParentFile().mkdirs(); // 폴더 없으면 생성
+                    multipartFile.transferTo(destFile);
+
+                    CalendarFileVO fileVO = new CalendarFileVO();
+                    fileVO.setFileName(originalFileName);
+                    fileVO.setFileSize((int) multipartFile.getSize());
+                    fileVO.setFilePath(uploadDir + saveFileName);
+
+                    calendar.getFileList().add(fileVO);
+                }
+            }
+        }
+
+        calendarService.registerCalendar(calendar);
+        return "redirect:/calendar/list";
+    }
+
+    @RequestMapping(value = "/modify/{id}", method = RequestMethod.GET)
+    public String calendarModifyForm(@PathVariable("id") int id, Model model) throws Exception {
+        CalendarVO calendar = calendarService.getCalendar(id);
+        model.addAttribute("calendar", calendar);
+        return "calendar/calendarModify";
+    }
+
+    @RequestMapping(value = "/modify.do", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> calendarModify(CalendarVO calendar,
+                                              @RequestParam(value = "uploadFiles", required = false) MultipartFile[] uploadFiles,
+                                              @RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnailFile,
+                                              @RequestParam(value = "deletedFileIds", required = false) String deletedFileIds,
+                                              HttpServletRequest request) throws Exception {
+
+        Map<String, Object> res = new HashMap<String, Object>();
+
+        calendar.setUploadFiles(uploadFiles);
+        calendar.setThumbnailFile(thumbnailFile);
+        calendar.setDeletedFileIds(deletedFileIds);
+
+        int result = calendarService.modifyCalendar(calendar);
+
+        if (result > 0) {
+            res.put("success", true);
+        } else {
+            res.put("success", false);
+            res.put("message", "Update failed: No rows updated.");
+        }
+
+        return res;
+    }
+
+    @RequestMapping(value="/calendar/delete.do",method = RequestMethod.POST)
+    public String deleteCm(CalendarVO calendar) throws Exception {
+        int result = this.calendarService.removeCalendar(calendar);
+        log.info("resutl " + result);
+        return "redirect:/calendar.do";
+    }
+
+    @RequestMapping(
+            value = "/calendar/register.do",
+            method = RequestMethod.POST,
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    @ResponseBody
+    public Map<String, Object> calendarAjaxRegister(
+            @ModelAttribute CalendarVO calendar,
+            @RequestParam(value = "uploadFiles", required = false) MultipartFile[] uploadFiles,
+            @RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnailFile,
+            HttpSession session,
+            javax.servlet.http.HttpServletResponse resp) { 
+
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            UserVO user = (UserVO) session.getAttribute("loggedInUser");
+            if (user == null || user.getId() == null || user.getId().trim().isEmpty()) {
+                resp.setStatus(401);
+                result.put("success", false);
+                result.put("message", "Login required.");
+                result.put("redirectUrl", "/login.do");
+                return result;
+            }
+
+            final String startStr = calendar.getStartDatetime() == null ? "" : calendar.getStartDatetime().trim();
+            final String endStr   = calendar.getEndDatetime() == null ? "" : calendar.getEndDatetime().trim();
+
+            if (startStr.isEmpty() || endStr.isEmpty()) {
+                resp.setStatus(400);
+                result.put("success", false);
+                result.put("error", "INVALID_PARAM");
+                result.put("message", "Start and end datetime are required.");
+                return result;
+            }
+
+            DateTimeFormatter F = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            String tzStr = (calendar.getClientTimeZone() == null || calendar.getClientTimeZone().trim().isEmpty())
+                    ? "Asia/Seoul" : calendar.getClientTimeZone().trim();
+            ZoneId userZone = ZoneId.of(tzStr);
+
+            LocalDateTime startLdt;
+            LocalDateTime endLdt;
+            try {
+                startLdt = LocalDateTime.parse(startStr, F);
+                endLdt   = LocalDateTime.parse(endStr,   F);
+            } catch (java.time.format.DateTimeParseException dtpe) {
+                resp.setStatus(400);
+                result.put("success", false);
+                result.put("error", "DATETIME_PARSE");
+                result.put("message", "Invalid datetime format. Expected format: yyyy-MM-dd'T'HH:mm");
+                return result;
+            }
+
+            LocalDate todayLocal = LocalDate.now(userZone);
+            LocalDate sLocal = startLdt.atZone(userZone).toLocalDate();
+            LocalDate eLocal = endLdt.atZone(userZone).toLocalDate();
+            if (sLocal.isAfter(todayLocal)) calendar.setEventStatus("UPCOMING");
+            else if ((sLocal.isEqual(todayLocal) || sLocal.isBefore(todayLocal)) && eLocal.isAfter(todayLocal))
+                calendar.setEventStatus("ONGOING");
+            else calendar.setEventStatus("COMPLETED");
+
+            calendar.setStartDateObj(Timestamp.valueOf(startLdt));
+            calendar.setEndDateObj(Timestamp.valueOf(endLdt));
+            try { calendar.setEventTz(userZone.getId()); } catch (Exception ignore) {}
+
+            calendar.setUserId(user.getId());
+            calendar.setUploadFiles(uploadFiles);
+            calendar.setThumbnailFile(thumbnailFile);
+
+            calendarService.registerCalendar(calendar);
+
+            result.put("success", true);
+            result.put("redirectUrl", "/calendar.do");
+            return result;
+
+        } catch (org.springframework.web.multipart.MaxUploadSizeExceededException ex) {
+            resp.setStatus(413); 
+            result.put("success", false);
+            result.put("error", "FILE_TOO_LARGE");
+            result.put("message", "Uploaded file size exceeds the allowed limit.");
+            return result;
+
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            resp.setStatus(400);
+            result.put("success", false);
+            result.put("error", "DATA_INTEGRITY");
+            result.put("message", "Input value exceeds allowed length or violates database constraints.");
+            return result;
+
+        } catch (Exception ex) {
+            // 마지막 방어막
+            resp.setStatus(500); 
+            result.put("success", false);
+            result.put("error", "INTERNAL_ERROR");
+            result.put("message", "An unexpected server error occurred.");
+            return result;
+        }
+    }
+
+    @RequestMapping(value = "/calendar/events.do", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Map<String, Object>> getCalendarEvents(HttpServletRequest request) throws Exception {
+        List<CalendarVO> list = calendarService.getCalendarList();
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+        int getTotal = this.calendarService.getTotal(new HashMap<String, Object>());
+
+        ZoneId viewerZone = resolveViewerZone(request, null);
+
+        for (CalendarVO vo : list) {
+            if (vo.getFileGroupNo() > 0) {
+                FileGroupVO fileGroupVO = uploadService.getFileGroupWithDetails(vo.getFileGroupNo());
+                vo.setFileGroupVO(fileGroupVO);
+                log.info("fileDetailVOList: {}", fileGroupVO != null ? fileGroupVO.getFileDetailVOList() : null);
+            }
+            Map<String, Object> ev = toEventMap(vo, viewerZone, getTotal);
+            if (ev != null) result.add(ev);
+        }
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/calendar/listAjax.do", method = RequestMethod.POST)
+    public ArticlePage<CalendarVO> listAjax(@RequestBody Map<String, Object> map) {
+        int getTotal = this.calendarService.getTotal(map);
+        int currentPage = 1;
+        if (map.get("currentPage") != null) {
+            currentPage = Integer.parseInt(String.valueOf(map.get("currentPage")));
+        }
+        map.put("currentPage", currentPage);
+
+        ZoneId viewerZone = resolveViewerZone(map);
+
+        List<CalendarVO> VOList = this.calendarService.list(map);
+
+        for (CalendarVO vo : VOList) {
+            if (vo.getFileGroupNo() > 0) {
+                FileGroupVO fileGroupVO = uploadService.getFileGroupWithDetails(vo.getFileGroupNo());
+                vo.setFileGroupVO(fileGroupVO);
+                map.put("vo", vo);
+            }
+            // 응답용
+            localizeForList(vo, viewerZone);
+        }
+
+        return new ArticlePage<CalendarVO>(getTotal, currentPage, 2, VOList, null, "ajax");
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/calendar/mainlistAjax.do", method = RequestMethod.POST)
+    public List<CalendarVO> mainlistAjax(@RequestBody Map<String, Object> map) {
+        int getTotal = this.calendarService.getTotal(map);
+        map.put("getTotal", getTotal);
+
+        ZoneId viewerZone = resolveViewerZone(map);
+
+        List<CalendarVO> VOList = this.calendarService.mainlist(map);
+
+        for (CalendarVO vo : VOList) {
+            // 응답용
+            localizeForList(vo, viewerZone);
+        }
+
+        return VOList;
+    }
+
+    @RequestMapping(value = "/calendar/updateTitle.do", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateTitle(@RequestBody CalendarVO vo) {
+        int result = calendarService.updateTitle(vo);
+        return result > 0 ? "success" : "fail";
+    }
+
+    @RequestMapping(value = "/calendar/updateDate.do" , method = RequestMethod.POST)
+    @ResponseBody
+    public String updateDate(@RequestBody CalendarVO vo) {
+        int result = calendarService.updateDates(vo);
+        return result > 0 ? "success" : "fail";
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(java.util.Date.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                try {
+                    setValue(dateFormat.parse(text));
+                } catch (Exception e) {
+                    setValue(null);
+                }
+            }
+        });
+    }
+}

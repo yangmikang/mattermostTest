@@ -1,0 +1,115 @@
+package kr.go.distep.calendar.service.impl;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import kr.go.distep.calendar.service.CalendarService;
+import kr.go.distep.calendar.vo.CalendarFileVO;
+import kr.go.distep.calendar.vo.CalendarVO;
+import kr.go.distep.main.service.UploadService;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service("calendarService")
+public class CalendarServiceImpl implements CalendarService {
+	
+   @Autowired
+    private UploadService uploadService;
+
+	
+	@Resource(name="calendarMapper")
+    private CalendarMapper calendarMapper;
+
+	@Override
+	@Transactional
+	public int registerCalendar(CalendarVO calendar) throws Exception {
+	    try {
+	        MultipartFile[] uploadFiles = calendar.getUploadFiles();
+
+	        // 🔹 업로드 파일이 존재하고, 실제 업로드된 파일이 1개 이상인 경우만 업로드 처리
+	        if (uploadFiles != null && Arrays.stream(uploadFiles)
+	                .anyMatch(file -> file != null && !file.isEmpty())) {
+
+	            long fileGroupNo = this.uploadService.multiImageUpload(uploadFiles);
+	            calendar.setFileGroupNo(fileGroupNo);
+	        }
+
+	        log.info("insertCalendar 실행 직전 파라미터: {}", calendar);
+
+	        int result = calendarMapper.insertCalendar(calendar); 
+	        log.info("insertCalendar insert result: {}", result);
+	        return result;
+
+	    } catch (Exception e) {
+	        log.error("uploadFiles 중 예외 발생: {}", e.getMessage(), e);
+	        throw new RuntimeException("calendarInsert 실패", e);
+	    }
+	}
+
+    @Override
+    @Transactional
+    public int modifyCalendar(CalendarVO calendar) throws Exception {
+        // 기존 파일 삭제 후 새로 등록
+        calendarMapper.deleteCalendarFilesByCalendarId(calendar.getId());
+
+        if (calendar.getFileList() != null) {
+            for (CalendarFileVO file : calendar.getFileList()) {
+                file.setCalendarId(calendar.getId());
+                calendarMapper.insertCalendarFile(file);
+            }
+        }
+
+        return calendarMapper.updateCalendar(calendar);
+    }
+
+    @Override
+    @Transactional
+    public int removeCalendar(int id) throws Exception {
+        return calendarMapper.deleteCalendar(id);
+    }
+
+    @Override
+    public CalendarVO getCalendar(int id) throws Exception {
+        CalendarVO calendar = calendarMapper.selectCalendar(id);
+        if (calendar != null) {
+            calendar.setFileList(calendarMapper.selectFilesByCalendarId(id));
+        }
+        return calendar;
+    }
+
+    @Override
+    public List<CalendarVO> getCalendarList() throws Exception {
+        return calendarMapper.selectCalendarList();
+    }
+
+	@Override
+	public int getTotal(Map<String, Object> getTotal) {
+		return calendarMapper.getTotal(getTotal);
+	}
+
+	@Override
+	public List<CalendarVO> list(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return calendarMapper.list(map);
+	}
+
+	@Override
+	public int updateTitle(CalendarVO vo) {
+		return calendarMapper.updateTitle(vo);
+		
+	}
+
+	@Override
+	public int updateDates(CalendarVO vo) {
+		return calendarMapper.updateDates(vo);
+	}
+
+}

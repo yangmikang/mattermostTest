@@ -1,0 +1,129 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<!-- 컨테이너 영역 -->
+		<div id="container">
+
+			<div class="page-title-wrap visual img-members">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Network</a></li>
+							<li><a href="#" class="txt">County of Montgomery, MD</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<!-- 페이지 타이틀 영역 -->
+					<div class="visual-area">
+						<h2 class="h-tit">County of Montgomery, MD</h2>
+						<p>Members</p>
+					</div>
+				<!-- //페이지 타이틀 영역 -->
+				</div>
+			</div>  
+			
+
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				
+				<!-- 섹션 컨텐츠 -->
+				 <div class="gini-cont-wrap gap20 cont-box cont-network">
+					<div class="gini-cont-box">
+						<h3 class="area-tit ico ico-location"><a href=""></a>County of Montgomery, MD</h3>
+						<!-- 독일 : ico-germ, 스페인 : ico-span, 미국 : ico-eng, 프랑스 : .ico-fren, 캐나다 : .ico-canada, 대만 : .ico-taiwan -->
+						<div class="row cont100">
+							<div class="cont-left cont50 memb_view">
+								<div class="city-view-box">
+									<div class="city-view-box-in">
+										<div class="city-view-ico">
+											<i class="item-ico ico-eng"></i>
+										</div>
+										<div class="city-view-img-box">
+											<span class="city-view-img"><img src="${pageContext.request.contextPath}/img/component/common/membe_montgomery_view.jpg" alt=""></span>  
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="cont-right cont50">
+								<div class="tbl_wrap">
+									<ul class="list-tableType type2">
+								<li><span class="title">Location</span><span class="value">Adjacent to Washington, D.C.</span></li>
+								  <li><span class="title">Population</span><span class="value">1,063,881 (2024 estimate)</span></li>
+								  <li><span class="title">GRDP</span><span class="value">$106.7 billion (2022)</span></li>
+								  <li><span class="title">Area</span><span class="value">493.1 square miles</span></li>
+								  <li><span class="title">R&amp;D</span>
+								    <span class="value">
+								      One of the leading regions for research in biotechnology, IT, and public health.
+								    </span>
+								  </li>
+								  <li><span class="title">Key Industries</span>
+								    <span class="value">
+								      Top 3 U.S. Biohealth Cluster; AI, Cyber, Cleantech & IT; Advanced Tech, Hospitality Tech and Hospitality HQ
+								    </span>
+								  </li>
+								  <li><span class="title">Significant</span>
+								    <span class="value">
+								      Home to US federal agencies for health & IT standards (e.g. NIH, FDA, NIST, NCCoE) & many firms and research orgs.<br><br>
+										Highly educated population, with 60% of adults holding a bachelor’s degree or higher.<br><br>
+										Highly diverse population with 16%+ residents from Asia including many with family in Korea<br><br>
+										9 University System of MD schools; mock cGMP & other applied tech training at Montgomery College and BioHub<br><br>  
+										Intl Soft Landing & Innovation Grants    
+								    </span>
+								  </li>
+							</ul>
+								</div>
+							</div>	
+						</div>
+						<div class="bg-imgType type02">
+							<div class="bg-white">
+								<h4 class="sub-tit ico-bullet2">Strategic Industries</h4>
+								<ol class="list-num">
+									<li>Biotechnology: Center of #3 US BioHealth cluster; leading research organizations and companies In cell and gene therapy, vaccines, diagnostics, and medtech. Plenty of wet lab and biotech manufacturing space for companies of all sizes.</li>
+									<li>Advanced Technology: Research and manufacturing capabilities in multiple advanced technology fields including satellite, radar, CHIPs, medical devices, health IT, and IoT.</li>
+									<li>Information Technology: Expertise in AI/VR for drug discovery and precision medicine & AI in Other industry sectors - new AI Innovation Center</li>
+									<li>Innovation centers with wet lab, office, and coworking spaee in all sectors (biotech,AI,and IT).</li>
+								</ol>
+							</div>
+						</div>
+						<div class="bg-color-box"> 
+							<div class="network-align gini-cont-box"> 
+							<h4 class="sub-tit ico-bullet2">Federal Agencies in Biotech</h4>
+							<div class="row cont100">
+								<div class="cont-left cont50">
+									<div class="img-box member-map">
+										<img src="${pageContext.request.contextPath}/img/component/common/membe_montgomery.png" alt="montgomery">
+										<!-- <img src="${pageContext.request.contextPath}/img/component/common/membe_dortmund.png" alt="dortmund 지도">
+										<img src="${pageContext.request.contextPath}/img/component/common/membe_malaga.png" alt="malaga 지도">
+										<img src="${pageContext.request.contextPath}/img/component/common/membe_montgomery.png" alt="montgomery 지도">
+										<img src="${pageContext.request.contextPath}/img/component/common/membe_seattle.png" alt="seattle 지도">
+										<img src="${pageContext.request.contextPath}/img/component/common/membe_quebec.png" alt="quebec 지도"> 
+										hisnchu는 자료 없음
+										-->
+										
+									</div>
+								</div> 
+<!-- 								<div class="cont-right cont50"> -->
+<!-- 									<ul class="list-line"> -->
+<!-- 										<li><span class="title">Employee</span><span class="value">91,886</span></li> -->
+<!-- 										<li><span class="title">PhD Researchers</span><span class="value">17,604</span></li> -->
+<!-- 										<li><span class="title">Technology Transfer</span><span class="value">2,015</span></li> -->
+<!-- 										<li><span class="title">Government-funded Research Institutes</span><span class="value">26</span></li> -->
+<!-- 										<li><span class="title">Research Companies</span><span class="value">447</span></li> -->
+<!-- 										<li><span class="title">High-Tech Companies</span><span class="value">135</span></li> -->
+<!-- 									</ul> -->
+<!-- 								</div> -->
+							</div>
+						</div>
+						</div>
+					</div>
+				 </div>
+				<!-- //섹션 컨텐츠 -->
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 -->
+</html>

@@ -1,0 +1,624 @@
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<style>
+thead {
+	background-color: #f9f9f9;
+	border: 1px solid #ddd !important;
+}
+
+tr {
+	padding: 12px;
+	text-align: center;
+	font-weight: 650;
+	width: 100%;
+	border-collapse: collapse;
+	font-family: 'Segoe UI', sans-serif;
+	font-size: 11pt;
+	color: #4c4c4c !important;
+	border: 1px solid #ddd !important;
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+tbody  th {
+	border: 1px solid #ddd !important;
+	font-weight: normal !important;
+}
+
+th {
+	padding: 5px;
+}
+
+.section-title {
+	text-align: center;
+	font-size: 20px;
+	font-weight: 600;
+	color: #333;
+	margin: 30px 0 20px;
+	position: relative;
+}
+
+.section-title::after {
+	content: "";
+	display: block;
+	width: 50px;
+	height: 3px;
+	background-color: #ddd;
+	margin: 8px auto 0;
+	border-radius: 2px;
+}
+
+.search-box {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.datepicker {
+	width: 40%;
+}
+
+.select-box {
+	font-weight: 400 !important;
+	text-align: center;
+	height: 50px;
+}
+
+.form-conts {
+	display: flex;
+}
+.box-white{
+margin-bottom: 5%;
+}
+
+.dir_date, .month {
+  transition: all 0.3s ease-in-out;
+  opacity: 1;
+  height: auto;
+}
+.hidden {
+  display: none !important;
+}
+
+.active {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+}
+
+</style>
+<body>
+	<div id="container">
+		<div class="page-title-wrap visual img-joint">
+			<div class="visual-filter"></div>
+			<div class="inner">
+				<!-- breadcrumb -->
+				<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+					<ol class="breadcrumb">
+						<li class="home"><a href="${pageContext.request.contextPath}/index.do" class="txt">Home</a></li>
+						<li><a href="${pageContext.request.contextPath}/userStats.do" class="txt">User Usage Statistics</a></li>
+					</ol>
+				</nav>
+				<!-- breadcrumb -->
+				<!-- 페이지 타이틀 영역 -->
+				<div class="visual-area">
+					<h2 class="h-tit">User Usage Statistics</h2>
+				</div>
+				<!-- //페이지 타이틀 영역 -->
+
+			</div>
+		</div>
+		<!-- 로그인 영역 -->
+		<div class="inner">
+			<div class="conts-area">
+				<div class="conts-wrap">
+					<!-- 통계 조회 필터 영역 -->
+					<div class="box-white">
+					  <div class="search-box" style="padding: 24px; border: 1px solid #ccc; border-radius: 6px; background: #fafafa;">
+					    <div style="display: flex; flex-direction: column; gap: 16px;">
+					
+					      <!-- 통계 유형 -->
+					      <div style="display: flex; align-items: center; gap: 8px;">
+					        <label for="statType" style="width: 180px;"><strong>Statistics Type</strong></label>
+					        <select id="statType" class="form-select sm">
+					          <option value="" disabled >Select type</option>
+					          <option value="total">Total</option>
+					          <option value="city">City</option>
+					          <option value="role">Authority</option>
+					        </select>
+					      </div>
+					
+					      <!-- 연도 선택 -->
+					      <div style="display: flex; align-items: center; gap: 8px;">
+					        <label for="yearSelect" style="width: 180px;"><strong>Year</strong></label>
+					        <select id="yearSelect" class="form-select sm">
+					          <option value="" disabled>Select year</option>
+					          <option value="total">Total</option>
+					          <c:forEach begin="2024" end="2025" var="y">
+					            <option value="${y}">${y}</option>
+					          </c:forEach>
+					        </select>
+					      </div>
+					
+					      <!-- 월 선택 -->
+					      <div class="month hidden" style="display: flex; align-items: center; gap: 8px;">
+					        <label for="monthSelect" style="width: 180px;"><strong>Month</strong></label>
+					        <select id="monthSelect" class="form-select sm" >
+					          <option value="" disabled>Select month</option>
+					          <option value="total" selected="selected">Total</option>
+					          <c:forEach begin="1" end="12" var="m">
+					            <option value="<fmt:formatNumber value='${m}' pattern='00' />">
+					              <fmt:formatNumber value='${m}' pattern='00' />
+					            </option>
+					          </c:forEach>
+					        </select>
+					      </div>
+					
+					      <!-- 단위 선택 -->
+					      <div style="display: flex; align-items: center; gap: 8px;">
+					        <label style="width: 150px;"><strong>Date Unit</strong></label>
+					        <div class="form-check sm">
+					          <input type="radio" name="dateUnit" id="Year" value="year" checked>
+					          <label for="Year">Year</label>
+					        </div>
+					        <div class="form-check sm">
+					          <input type="radio" name="dateUnit" id="Month" value="month">
+					          <label for="Month">Month</label>
+					        </div>
+					        <div class="form-check sm">
+					          <input type="radio" name="dateUnit" id="dtdir" value="">
+					          <label for="dtdir">Date directly</label>
+					        </div>
+					      </div>
+					
+					      <!-- 날짜 범위 -->
+					      <div class="dir_date hidden" style="display: flex; align-items: center; gap: 8px;">
+					        <label style="width: 150px;"><strong>Date Range</strong></label>
+					        <input type="date" id="startDateInput"
+											class="form-select sm datepicker startdate flatpickr-input active"
+											placeholder="Select date"> <span>-</span> <input
+											type="date" id="endDateInput"
+											class="form-select sm datepicker startdate flatpickr-input active"
+											placeholder="Select date"> </div>
+					
+					      <!-- 버튼 영역 -->
+					      <div style="display: flex; justify-content: center; gap: 12px; margin-top: 12px;">
+					        <button type="button" onclick="resetFn()" class="btn primary">Reset</button>
+					        <button type="button" onclick="loadStatistics()" class="btn primary">Retrieve</button>
+					      </div>
+					    </div>
+					  </div>
+						<h2 class="section-title">Usage Statistics</h2>
+					
+						<!-- 통계 chart -->
+						<div class="chart-section" style="display: none;">
+							<div  id="noDataMessage" style="display: none;width: 100%;justify-content: center;">No data found.</div>
+							<canvas id="usageChart" height="100"></canvas>
+						</div>
+						<!-- 통계 table -->
+						<div class="tab-cont-box">
+							<table class="tbl col data">
+								<thead>
+									<tr>
+										<th>&nbsp;</th>
+										<th>Log Date</th>
+										<th>Log Group</th>
+										<th>Request Count</th>
+									</tr>
+								</thead>
+								<tbody id="monthlyByRoleTbody" >
+									<tr>
+										<td colspan="4" style="text-align: center;" class="select-box">Select
+											the conditions for statistics.</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		
+<!-- 스크립트 라이브러리 -->		
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+	/* input date en  */
+	flatpickr("#startDateInput", {
+		  dateFormat: "Y-m-d",
+		});
+	
+	flatpickr("#endDateInput", {
+	  dateFormat: "Y-m-d",
+	});
+
+</script>
+<script>
+	let usageChart = null;
+	
+	
+	// radio 버튼 이벤트 설정
+	const dateUnitRadios = document.querySelectorAll('input[name="dateUnit"]');
+	dateUnitRadios.forEach(function(radio) {
+		  radio.addEventListener('change', function () {
+		    // 날짜 입력 초기화
+		    let startDt = document.getElementById('startDateInput').value
+		    startDt.value = '';
+		    document.getElementById('endDateInput').value = '';
+
+		    // 모두 숨기기
+		    document.querySelector('.month').classList.remove('active');
+		    document.querySelector('.month').classList.add('hidden');
+		    document.querySelector('.dir_date').classList.remove('active');
+		    document.querySelector('.dir_date').classList.add('hidden');
+
+		    // 조건에 따라 보여주기
+		    if (this.id === 'Month') {
+		      const monthBox = document.querySelector('.month');
+		      monthBox.classList.remove('hidden');
+		      monthBox.classList.add('active');
+		    }
+
+		    if (this.id === 'dtdir') {
+		      document.getElementById('monthSelect').value = 'total';
+		      document.getElementById('statType').value = 'total';
+
+		      const dirBox = document.querySelector('.dir_date');
+		      dirBox.classList.remove('hidden');
+		      dirBox.classList.add('active');
+
+		     
+		      // 다른 라디오 해제
+		      document.querySelectorAll('input[name="dateUnit"]').forEach(function(r) {
+		        if (r.id !== 'dtdir') r.checked = false;
+		      });
+		    }
+
+		    if (this.id === 'Year') {
+		      document.getElementById('monthSelect').value = 'total';
+		    }
+		  });
+		});
+
+	// 날짜 직접입력 시 select 초기화
+	document.getElementById('startDateInput').addEventListener('change', function () {
+	  document.getElementById('yearSelect').value = 'total';
+	  document.getElementById('statType').value = 'total';
+	});
+	document.getElementById('endDateInput').addEventListener('change', function () {
+	  document.getElementById('yearSelect').value = 'total';
+	  document.getElementById('statType').value = 'total';
+	});
+ 
+	// 연도 선택 시 날짜 초기화
+	document.getElementById('yearSelect').addEventListener('change', function () {
+	  if (this.value !== '') {
+	    document.getElementById('startDateInput').value = '';
+	    document.getElementById('endDateInput').value = '';
+	  }
+	});
+
+	// reset 버튼 함수
+	function resetFn() {
+	  document.getElementById('statType').value = 'total';
+	  document.getElementById('yearSelect').value = 'total';
+	  document.getElementById('monthSelect').value = 'total';
+	  document.querySelectorAll('input[name="dateUnit"]').forEach(function(r) {
+	    r.checked = false;
+	  });
+
+	  document.querySelector('input[name="dateUnit"][value="year"]').checked = true;
+
+	  document.getElementById('startDateInput').value = '';
+	  document.getElementById('endDateInput').value = '';
+
+	  document.querySelector('.month').classList.remove('active');
+	  document.querySelector('.month').classList.add('hidden');
+	  document.querySelector('.dir_date').classList.remove('active');
+	  document.querySelector('.dir_date').classList.add('hidden');
+	}
+
+		
+		
+	/* 통계 표 or 그래프 출력 */
+	function loadStatistics() {
+	  const checkedRadio = document.querySelector('input[name="dateUnit"]:checked');
+	  const dtdir = document.querySelector('#dtdir:checked');
+	  const dateUnit = checkedRadio ? checkedRadio.value : '';
+	  const selectedYear = document.getElementById('yearSelect').value;
+	  const monthRadio = document.getElementById('monthSelect').value;
+	  const startDateInput = document.getElementById('startDateInput').value;
+	  const endDateInput = document.getElementById('endDateInput').value;
+	  const statType = document.getElementById('statType').value;
+	  const chartS = document.querySelector('.chart-section');
+	  
+	  
+	  if(dtdir){
+		  if(!startDateInput && startDateInput == '' && !endDateInput && endDateInput == ''){
+			  alert("Please select the date you wish to enter directly.")
+	    	  return;
+			  
+		  }
+		  if(!startDateInput && startDateInput == '' ){
+	    	  alert("Please enter the start date.")
+	    	  return;
+	      }else if(!endDateInput && endDateInput == ''){
+	    	  alert("Please enter an end date.")
+	    	  return;
+	      }
+	    	  
+		  
+		  
+	  }
+	  if (!statType) {
+	    alert("Please select a statistics type.");
+	    return;
+	  }
+	
+	  // 직접입력인데 날짜 입력 누락
+	  if (dateUnit === '' && !selectedYear) {
+	    if (document.getElementById('dtdir').checked && (!startDateInput || !endDateInput)) {
+	      alert("Please select both start and end dates for 'Date directly' option.");
+	      return;
+	    }
+	  }
+		if (document.getElementById('dtdir').checked) {
+	  // 날짜 유효성 체크
+	  if (startDateInput && endDateInput && new Date(startDateInput) > new Date(endDateInput)) {
+	    alert("End date must be after start date.");
+	    return;
+	  }
+	  if (startDateInput && !endDateInput) {
+	    alert("Please select an end date.");
+	    return;
+	  }
+	  if (!startDateInput && endDateInput) {
+	    alert("Please select a start date.");
+	    return;
+	  }
+		}
+	  // 화면 출력용 chart 영역 보이기
+	  chartS.style.display = "block";
+
+	  const requestData = { statType };
+	  // 월 단위 선택 시: 연도 + 월 필수
+	/*   if (dateUnit === 'month') {
+		
+	  requestData.dateUnit = 'month';
+
+	  if (selectedYear === 'total' && monthRadio === 'total') {
+		 // alert("FEfefe")
+	    requestData.startDate = '2000-01-01';
+	    requestData.endDate = '2099-12-31 23:59:59';
+	  }else {
+	    const paddedMonth = monthRadio.padStart(2, '0');
+	    const lastDay = new Date(parseInt(selectedYear), parseInt(paddedMonth), 0).getDate();
+	    requestData.startDate = `\${selectedYear}-\${paddedMonth}-01`;
+	    requestData.endDate = `\${selectedYear}-\${paddedMonth}-\${lastDay} 23:59:59`;
+	    requestData.monthRadio = paddedMonth;
+	  }
+	} */
+
+	if (dateUnit === 'month') {
+		  requestData.dateUnit = 'month';
+		  // 전체 전체
+		  if (selectedYear === 'total') {
+		    requestData.startDate = '2000-01-01';
+		    requestData.endDate = '2099-12-31 23:59:59';
+		  }
+		  
+		  // 전체 연도 + 특정 월
+		  else if (selectedYear === 'total' && monthRadio !== 'total') {
+		    const paddedMonth = monthRadio.padStart(2, '0');
+		    const lastDay = new Date(2099, parseInt(paddedMonth), 0).getDate(); 
+		    requestData.startDate = `2000-\${paddedMonth}-01`;
+		    requestData.endDate = `2099-\${paddedMonth}-\${lastDay} 23:59:59`;
+		    requestData.monthRadio = paddedMonth;
+		  }
+
+		  // 특정 연도 + 전체 월
+		  else if (monthRadio === 'total') {
+		    requestData.startDate = `\${selectedYear}-01-01`;
+		    requestData.endDate = `\${selectedYear}-12-31 23:59:59`;
+		  }
+
+		  // 특정 연도 + 특정 월
+		  else {
+		    const paddedMonth = monthRadio.padStart(2, '0');
+		    const lastDay = new Date(parseInt(selectedYear), parseInt(paddedMonth), 0).getDate();
+		    requestData.startDate = `\${selectedYear}-\${paddedMonth}-01`;
+		    requestData.endDate = `\${selectedYear}-\${paddedMonth}-\${lastDay} 23:59:59`;
+		    requestData.monthRadio = paddedMonth;
+		  }
+		}
+if(dateUnit === 'year'){
+	 if (selectedYear === 'total') {
+		// alert("fefefefe")
+		    requestData.startDate = '2000-01-01';
+		    requestData.endDate = '2099-12-31 23:59:59';
+		  }
+	
+}
+
+console.log("requewts" , requestData) 
+	if (document.getElementById('dtdir').checked) {
+		  
+		  if (!startDateInput || !endDateInput) {
+		    alert("Please select both start and end dates for direct input.");
+		    return;
+		  }
+
+		  requestData.dateUnit = 'day';
+		  requestData.startDate = startDateInput;
+		  requestData.endDate = endDateInput + ' 23:59:59';
+		}
+		else if (dateUnit === 'month') {
+		  requestData.dateUnit = 'month';
+		  
+		  if (selectedYear === 'total' && monthRadio === 'total') {
+		    requestData.startDate = '2000-01-01';
+		    requestData.endDate = '2099-12-31 23:59:59';
+		  } else if (selectedYear === 'total' && monthRadio !== 'total') {
+		    const paddedMonth = monthRadio.padStart(2, '0');
+		    const lastDay = new Date(2099, parseInt(paddedMonth), 0).getDate(); 
+		    requestData.startDate = `2000-\${paddedMonth}-01`;
+		    requestData.endDate = `2099-\${paddedMonth}-\${lastDay} 23:59:59`;
+		    requestData.monthRadio = paddedMonth;
+		  } else if (monthRadio === 'total') {
+		    requestData.startDate = `\${selectedYear}-01-01`;
+		    requestData.endDate = `\${selectedYear}-12-31 23:59:59`;
+		  } else {
+		    const paddedMonth = monthRadio.padStart(2, '0');
+		    const lastDay = new Date(parseInt(selectedYear), parseInt(paddedMonth), 0).getDate();
+		    requestData.startDate = `\${selectedYear}-${paddedMonth}-01`;
+		    requestData.endDate = `\${selectedYear}-\${paddedMonth}-\${lastDay} 23:59:59`;
+		    requestData.monthRadio = paddedMonth;
+		  }
+		}
+		else if (dateUnit === 'year' &&  selectedYear != 'total') {
+		  if (!selectedYear) {
+		    alert("Please select a year.");
+		    return;
+		  }
+		  requestData.dateUnit = 'year';
+		  requestData.startDate = `\${selectedYear}-01-01`;
+		  requestData.endDate = `\${selectedYear}-12-31 23:59:59`;
+		}
+
+		/* 
+		  else {
+		    alert("Please select a valid date range or year.");
+		    return;
+		  } */
+		console.log("requestData",requestData)
+		  // 요청 보내기
+		  axios.post(`${pageContext.request.contextPath}/getStatis.do`, requestData)
+		    .then(res => {
+		      const data = res.data;
+		      const tbody = document.querySelector("#monthlyByRoleTbody");
+		      tbody.innerHTML = '';
+
+     
+	
+	      const roleMap = {
+	        'A': 'Administrator',
+	        'C': 'Government',
+	        'G': 'General',
+	        'O': 'Institution',
+	        'N': 'Anonymous',
+	        '01': 'Daejeon',
+	        '02': 'Dortmund',
+	        '03': 'Malaga',
+	        '04': 'Montgomery County',
+	        '05': 'Seattle',
+	        '06': 'Quebec',
+	        '07': 'GINI Secretariat',
+	        '99': 'Other City',
+	      };
+	
+	      const labels = [];
+	      const datasetMap = {};
+	
+	      let tby = '';
+	
+	      data.forEach(function(row) {
+	    	  const label = row.date_group;
+	    	  const key = row.group_key || 'N';
+	    	  const count = row.cnt;
+	
+	    	  if (!labels.includes(label)) labels.push(label);
+	    	  if (!datasetMap[key]) datasetMap[key] = Array(labels.length - 1).fill(0);
+	    	  datasetMap[key].push(count);
+	
+	    	  const displayKey = roleMap[key] || key;
+	
+	    	  tby += 
+	    	    '<tr>' +
+	    	      '<th scope="row">' + row.rnum + '</th>' +
+	    	      '<th>' + label + '</th>' +
+	    	      '<th>' + displayKey + '</th>' +
+	    	      '<th>' + count.toLocaleString() + '</th>' +
+	    	    '</tr>';
+	    	});
+	
+	      // 길이 맞추기
+	     Object.keys(datasetMap).forEach(function(key) {
+		  if (datasetMap[key].length < labels.length) {
+		    var diff = labels.length - datasetMap[key].length;
+		    datasetMap[key] = datasetMap[key].concat(Array(diff).fill(0));
+		  }
+			});
+	
+	      tbody.innerHTML = tby;
+	
+	      const chartDatasets = Object.entries(datasetMap).map(function(entry, idx) {
+	    	  const key = entry[0];
+	    	  const values = entry[1]; 
+	    	  const colors = ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f', '#edc948'];
+	
+	    	  return {
+	    	    label: roleMap[key] || key,
+	    	    backgroundColor: colors[idx % colors.length],
+	    	    data: values,
+	    	    borderWidth: 1
+	    	  };
+	    	});
+	      
+	      /* chart 데이터가 없을때 no data ui 표시  */
+	      if (data.length === 0) {
+	          tbody.innerHTML = '<tr><td colspan="4" class="select-box" style="text-align:center;">-</td></tr>';
+	          if (usageChart) usageChart.destroy();
+	          
+	          const chartSection = document.querySelector('.chart-section');
+	          const noData = document.getElementById('noDataMessage');
+	          const canvas = document.getElementById('usageChart');
+	
+	          if (chartSection && noData && canvas) {
+	            chartSection.style.display = 'block';   
+	            noData.style.display = 'flex';         
+	            canvas.style.display = 'none';          
+	          }
+	          return;
+	      }else{
+	          const canvas = document.getElementById('usageChart');
+	          const noData = document.getElementById('noDataMessage');
+	    	  noData.style.display = 'none';
+	          canvas.style.display = 'block';          
+	      }
+	      
+	      const ctx = document.getElementById('usageChart').getContext('2d');
+	      if (usageChart) usageChart.destroy();
+	
+	      usageChart = new Chart(ctx, {
+	        type: 'bar',
+	        data: {
+	          labels: labels,
+	          datasets: chartDatasets
+	        },
+	        options: {
+	          responsive: true,
+	          plugins: {
+	            legend: { position: 'top' },
+	            title: {
+	              display: true,
+	              text: 'User Request Statistics'
+	            }
+	          }
+	        }
+	      });
+	    	
+	    })
+	    .catch(err => {
+	      console.error('통계 조회 실패:', err);
+	    });
+	}
+
+</script>
+</body>

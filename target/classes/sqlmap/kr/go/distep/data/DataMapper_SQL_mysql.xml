@@ -1,0 +1,788 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.go.distep.data.service.impl.DataMapper">
+	
+	<!-- 연구수행주체 코드 조회 -->
+	<select id="selectRschExecSujList" parameterType="map" resultType="egovMap"> 		
+		SELECT CD, CD_NM 
+		FROM TB_SYSTEM_CD
+		WHERE GRP_CD = 'IA006'
+		AND STD_CD_YN = 'Y'
+		ORDER BY CD
+	</select>
+	
+	<!-- 지역 코드 조회 -->
+	<select id="selectRegnSlctList" parameterType="map" resultType="egovMap"> 		
+		SELECT CD, CD_NM FROM TB_SYSTEM_CD
+		WHERE GRP_CD = 'IA007'
+		AND STD_CD_YN = 'Y'
+		AND CD NOT IN ('17', '19')
+		ORDER BY CD
+	</select>
+	
+	<!-- 과학기술표준분류 대분류 조회 -->
+	<select id="selectRschAreaCls1List" parameterType="map" resultType="egovMap"> 		
+		SELECT *
+		FROM TB_CLASS_CD
+		WHERE 1=1
+		AND CLASS_GRP = 'TB0001'
+		AND KIND_CD != '99'
+		AND DATE_FORMAT(NOW(), '%Y') BETWEEN DATE_FORMAT(VALIDITY_FROM_DT, '%Y') AND DATE_FORMAT(VALIDITY_TO_DT, '%Y')
+		AND CHAR_LENGTH(CLASS_CD) = 2
+		ORDER BY CLASS_SEQ
+	</select>
+		
+	
+	<!-- 과학기술표준분류 중/소분류 조회 -->
+	<select id="selectRschAreaCls23List" parameterType="String" resultType="egovMap"> 		
+		SELECT *
+		FROM TB_CLASS_CD
+		WHERE 1=1
+		AND CLASS_GRP = 'TB0001'
+		AND KIND_CD != '99'
+		AND DATE_FORMAT(NOW(), '%Y') BETWEEN DATE_FORMAT(VALIDITY_FROM_DT, '%Y') AND DATE_FORMAT(VALIDITY_TO_DT, '%Y')
+		AND UPPER_CLASS_CD = #{classCd}   --상위 CLASS_CD
+		ORDER BY CLASS_SEQ
+	</select>
+		
+	
+	<!-- 6T분류  대분류 조회 -->
+	<select id="selectT6techBCdList" parameterType="map" resultType="egovMap"> 		
+		SELECT *
+		FROM TB_SYSTEM_CD
+		WHERE 1=1
+		AND GRP_CD = 'IA001'  --6T분류
+		AND SUBSTRING(CD, 3, 4) = '0000'
+		ORDER BY CD
+	</select>
+		
+	
+	<!-- 6T분류  중/소분류 조회 -->
+	<select id="selectT6techMSCdList" parameterType="String" resultType="egovMap"> 		
+		SELECT *
+		FROM TB_SYSTEM_CD
+		WHERE 1=1
+		AND GRP_CD = 'IA001'  --6T분류
+		AND UPPER_CD = #{cd} --상위CD
+		ORDER BY CD
+	</select>
+	
+	<!-- 중점과학기술  대분류 조회 -->
+	<select id="selectNatStrtTechBCdList" parameterType="map" resultType="egovMap"> 		
+		SELECT *
+		FROM TB_SYSTEM_CD
+		WHERE 1=1
+		AND GRP_CD = 'IA008'    --중점과학기술분류
+		AND DATE_FORMAT(NOW(), '%Y') BETWEEN SUBSTRING(OPTION1, 1, 4) AND SUBSTRING(OPTION2, 1, 4)
+		AND SUBSTRING(CD, 3, 4) = '0000'
+		ORDER BY CD
+	</select>
+		
+	
+	<!-- 중점과학기술  중/소분류 조회 -->
+	<select id="selectNatStrtTechMSCdList" parameterType="String" resultType="egovMap"> 		
+		SELECT *
+		FROM TB_SYSTEM_CD
+		WHERE 1=1
+		AND GRP_CD = 'IA008'    --중점과학기술분류
+		AND DATE_FORMAT(NOW(), 'YYYY') BETWEEN SUBSTRING(OPTION1,1,4) AND SUBSTRING(OPTION2,1,4)
+		AND UPPER_CD = #{cd} --상위CD
+		ORDER BY CD
+	</select>
+	
+	<!-- 신청데이터 항목 조회 -->
+	<select id="selectApplDataList" parameterType="String" resultType="egovMap"> 		
+		SELECT * 
+		FROM AS_APPLDATA_ITEM
+		WHERE 1=1
+		AND DIV = #{applDataCd}
+		--AND SN <![CDATA[<=]]> 150
+		ORDER BY SN
+	</select>
+	
+	<!-- 데이터추출(과제) 조회  -->
+	<select id="selectPjtList" parameterType="map" resultType="egovMap"> 	
+		SELECT *
+        FROM(
+		<include refid="applDataCndNm"></include>
+		<include refid="applDataCnd"></include>
+	</select>
+	
+	<!-- 과제 차트 데이터 -->
+	<select id="selectPjtChartList" parameterType="map" resultType="egovMap"> 	
+		SELECT STAN_YR as stanyear
+				, ROUND(SUM(GOV_IVT_RNDCO_AMT)/1000000) as GOV_IVT_RNDCO_AMT
+				, SUM((PRSCHER_GNDR_M_CNT + PRSCHER_GNDR_F_CNT)) as PRSCHER_CNT
+				, COUNT(PJT_ID) as PJT_CNT
+				<if test="cmd == 'phase'">, RND_PHASE_CD, RND_PHASE_NM as value_nm</if>
+				<if test="cmd == 'org'">, RSCH_EXEC_SUJ_CD, RSCH_EXEC_SUJ_NM as value_nm</if>
+				<if test="cmd == 'sciCnt'">, DECODE(SCI_SLCT_CD,'01','SCI','02','비SCI') as value_nm</if>
+				<if test="cmd == 'ptntRstCnt'">, DECODE(IFNULL(IPR_REGIST_NAT_NM,'대한민국'),'대한민국','국내','해외') || ' ' || IPR_REGIST_TYPE_NM as value_nm</if>
+		FROM (
+				<include refid="applDataCndNm"></include>
+				<include refid="applDataCnd"></include>
+		<if test="cmd == 'phase'"> AND RND_PHASE_CD is not null</if>
+		<if test="cmd == 'org'"> AND RSCH_EXEC_SUJ_CD is not null</if>
+	    GROUP BY STAN_YR
+	    		<if test="cmd == 'phase'">, RND_PHASE_CD, RND_PHASE_NM</if>
+	    		<if test="cmd == 'org'">, RSCH_EXEC_SUJ_CD, RSCH_EXEC_SUJ_NM</if>
+	    		<if test="cmd == 'sciCnt'">, SCI_SLCT_CD</if>
+	    		<if test="cmd == 'ptntRstCnt'">, DECODE(IFNULL(IPR_REGIST_NAT_NM,'대한민국'),'대한민국','국내','해외') || ' ' || IPR_REGIST_TYPE_NM</if>
+	    ORDER BY STAN_YR
+	</select>
+	
+	<!-- 과제 필터링된 합계 데이터 -->
+	<select id="selectPjtFilterSumData" parameterType="map" resultType="egovMap"> 	
+		SELECT ROUND(SUM(GOV_IVT_RNDCO_AMT)/100000000) as all_amt, COUNT(PJT_ID) as all_pjt
+		FROM (
+		<include refid="applDataCndNm"></include>
+		<include refid="applDataCnd"></include>
+	</select>
+	
+	<!-- 과제 필터링 없는 합계 데이터 -->
+	<select id="selectSumChartData" parameterType="map" resultType="egovMap">
+		SELECT STAN_YR as stanyear, ROUND(SUM(GOV_IVT_RNDCO_AMT)/1000000) as GOV_IVT_RNDCO_AMT, SUM((PRSCHER_GNDR_M_CNT + PRSCHER_GNDR_F_CNT)) as PRSCHER_CNT, COUNT(PJT_ID) as PJT_CNT
+		FROM AS_PJT_PROG_INFO
+		WHERE STAN_YR IN 
+		<foreach collection="chkYears_list" item="item" index="index" open="(" close=")" separator=",">
+    		#{item}
+	    </foreach>
+		GROUP BY STAN_YR
+		ORDER BY STAN_YR
+	</select>
+	
+	<!-- 데이터추출(과제) 건수 조회  -->
+	<select id="selectPjtCnt" parameterType="map" resultType="int"> 	
+		SELECT count(*) FROM (
+		<include refid="applDataCndCntNm"></include>
+		<include refid="applDataCnd"></include>
+	</select>
+	
+	<!-- 데이터추출(논문) 조회  -->
+	<select id="selectPaperList" parameterType="map" resultType="egovMap"> 
+	</select>
+	
+	<!-- 데이터추출(논문) 건수 조회  -->
+	<select id="selectPaperCnt" parameterType="map" resultType="int"> 	
+	</select>
+	
+	<!-- 데이터추출(특허) 조회  -->
+	<select id="selectIprList" parameterType="map" resultType="egovMap"> 
+	</select>
+	
+	<!-- 데이터추출(특허) 건수 조회  -->
+	<select id="selectIprCnt" parameterType="map" resultType="int"> 	
+	</select>
+	
+	<!-- 데이터추출(과제) 필터별 건수 조회  -->
+	<select id="selectfilterApplDataCntList" parameterType="map" resultType="egovMap">
+	 WITH XTEMP AS (
+		 SELECT RSCH_MGNT_ORG_NM,PJT_PRFRM_ORG_STD_NM,STAN_YR, RNDCO_AMT FROM(
+		 SELECT RSCH_MGNT_ORG_NM,PJT_PRFRM_ORG_STD_NM,C.STAN_YR, RNDCO_AMT
+		 FROM(
+		 SELECT RSCH_MGNT_ORG_NM,PJT_PRFRM_ORG_STD_NM,A.STAN_YR, A.PJT_ID
+				, CASE WHEN GOV_IVT_RNDCO_AMT <![CDATA[<]]> 50000000 then 'C1'
+		       WHEN GOV_IVT_RNDCO_AMT <![CDATA[>]]> 50000000 AND GOV_IVT_RNDCO_AMT <![CDATA[<]]> 100000000  then 'C2'
+		       WHEN GOV_IVT_RNDCO_AMT <![CDATA[>=]]> 100000000 AND GOV_IVT_RNDCO_AMT <![CDATA[<]]> 300000000  then 'C3'
+		       WHEN GOV_IVT_RNDCO_AMT <![CDATA[>=]]> 300000000 AND GOV_IVT_RNDCO_AMT <![CDATA[<]]> 500000000  then 'C4'
+		       WHEN GOV_IVT_RNDCO_AMT <![CDATA[>=]]> 500000000 AND GOV_IVT_RNDCO_AMT <![CDATA[<]]> 1000000000  then 'C5'
+		       WHEN GOV_IVT_RNDCO_AMT <![CDATA[>=]]> 1000000000 AND GOV_IVT_RNDCO_AMT <![CDATA[<]]> 5000000000  then 'C6'
+		       ELSE 'C7'
+		       END as RNDCO_AMT
+		 <choose>
+			<when test ="applDataType.equals('pjt')">
+				FROM AS_PJT_PROG_INFO A
+				WHERE 1=1
+			</when>
+			<when test ="applDataType.equals('paper')">
+				FROM AS_PJT_PROG_INFO A, AS_PAPER_INFO D
+		        WHERE 1 = 1
+		        AND A.PJT_ID = D.PJT_ID
+		        AND A.STRT_TECH_CD IS NULL
+			</when>
+			<when test ="applDataType.equals('ipr')">
+				FROM AS_PJT_PROG_INFO A, AS_IPR_INFO D
+		        WHERE 1 = 1
+		        AND A.PJT_ID = D.PJT_ID
+		        AND A.STRT_TECH_CD IS NULL
+			</when>
+		</choose>
+		<include refid="applDataCnd"></include>
+	 )
+	SELECT RSCH_MGNT_ORG_NM code_cd, cnt , '1' as ord , 'management' as code 
+    FROM 
+        (  
+            SELECT RSCH_MGNT_ORG_NM, COUNT (1) AS cnt
+            FROM XTEMP
+            WHERE 1 = 1
+            GROUP BY RSCH_MGNT_ORG_NM
+            ORDER BY cnt DESC
+        )
+        WHERE ROWNUM <![CDATA[<=]]> 20
+ 
+    UNION ALL
+    SELECT PJT_PRFRM_ORG_STD_NM as code_cd, cnt , '2' as ord , 'conduct' as code 
+    FROM 
+        (  
+            SELECT PJT_PRFRM_ORG_STD_NM, COUNT (1) AS cnt
+            FROM XTEMP
+            WHERE 1 = 1
+            GROUP BY PJT_PRFRM_ORG_STD_NM
+            ORDER BY cnt DESC
+        )
+        WHERE ROWNUM <![CDATA[<=]]> 20
+ 
+    UNION ALL
+    SELECT STAN_YR as code_cd, cnt , '3' as ord , 'year' as code 
+    FROM
+        (
+            SELECT  STAN_YR, COUNT (1) cnt , '3' as ord , 'year' as code 
+            FROM XTEMP
+            WHERE 1 = 1
+            GROUP BY STAN_YR
+            ORDER BY STAN_YR DESC
+        )
+
+    UNION ALL
+    SELECT RNDCO_AMT as code_cd, cnt, '4' as ord , 'amt' as code
+    FROM
+        (
+            SELECT RNDCO_AMT, COUNT (1) cnt, '4' as ord , 'amt' as code 
+            FROM XTEMP
+            WHERE 1 = 1
+            GROUP BY RNDCO_AMT
+            ORDER BY RNDCO_AMT DESC
+        )
+	</select>
+	
+	
+	
+	<!-- 데이터추출(과제) 기준연도별 건수 조회  -->
+	<select id="selectStanYrCntList" parameterType="map" resultType="egovMap"> 
+		SELECT STAN_YR, count(1) cnt 
+		FROM (
+		<include refid="applDataCndNm"></include>
+		<include refid="applDataCnd"></include>
+		GROUP BY STAN_YR
+		ORDER BY STAN_YR DESC
+	</select>
+	
+	<!-- 데이터추출(과제) 정부투자연구비 규모 건수 조회  -->
+	<select id="selectGovIvtRndcoAmtCntList" parameterType="map" resultType="egovMap">
+		SELECT RNDCO_AMT, COUNT(1) cnt FROM
+		(
+		<include refid="applDataCndNm"></include>
+		<include refid="applDataCnd"></include>
+		GROUP BY RNDCO_AMT
+		ORDER BY RNDCO_AMT
+	</select>
+	
+	<!-- 데이터추출(과제) 과제수행기관 건수 조회  -->
+	<select id="selectPjtPrfrmOrgStdNmCntList" parameterType="map" resultType="egovMap">
+	SELECT * FROM(
+	SELECT PJT_PRFRM_ORG_STD_NM, count(1) as cnt FROM
+	(
+		<include refid="applDataCndNm"></include>
+		<include refid="applDataCnd"></include>
+    GROUP BY PJT_PRFRM_ORG_STD_NM
+	ORDER BY cnt DESC
+	) WHERE ROWNUM <![CDATA[<=]]>20
+	</select>
+	
+	<!-- 데이터추출(과제) 과제관리기관 건수 조회  -->
+	<select id="selectRschMgntOrgNmCntList" parameterType="map" resultType="egovMap">
+	SELECT * FROM(
+	SELECT RSCH_MGNT_ORG_NM, count(1) as cnt FROM
+	(
+		<include refid="applDataCndNm"></include>
+	    <include refid="applDataCnd"></include>
+    GROUP BY RSCH_MGNT_ORG_NM
+	ORDER BY cnt DESC
+	) WHERE ROWNUM <![CDATA[<=]]>20
+	</select>
+	
+	<!-- sampleExcel -->
+	<select id="selectSampleExcelDown" parameterType="map" resultType="egovMap"> 		
+		SELECT CD_NM AS TITLE_NM, CD_EXPLAN, GRP_CD
+		FROM TB_SYSTEM_CD
+		WHERE 1=1
+		AND GRP_CD = 'IA008'    --중점과학기술분류
+		AND DATE_FORMAT(NOW(), 'YYYY') BETWEEN SUBSTRING(OPTION1,1,4) AND SUBSTRING(OPTION2,1,4)
+		AND SUBSTRING(CD,3,6) = '0000'
+		ORDER BY CD
+	</select>
+	
+	<insert id="insertUserAppldataCnd" parameterType="map" useGeneratedKeys="true" keyProperty="SEQ" keyColumn="SEQ">
+		<selectKey resultType="int" keyProperty="seq" order="BEFORE">
+			SELECT IFNULL(MAX(seq), 0) + 1 FROM AS_USER_APPLDATA_CND
+		</selectKey>
+		INSERT INTO AS_USER_APPLDATA_CND (
+			SEQ, TYPE, USER_ID, RSCH_EXEC_SUJ_CD, RSCH_EXEC_SUJ_NM, REGN_SLCT_CD, REGN_SLCT_NM, RSCH_AREA_CD, 
+			NAT_STRT_TECH_CD, T6TECH_CD, SEARCH_KWRD, CHK_STANYRS, CHK_PJT_ITEM, CHK_PAPER_ITEM, 
+			CHK_IPR_ITEM, ALL_APPLDATA_CND_NM, REGIST_DT, KEYWORD_ITEM1, KEYWORD_ITEM2, KEYWORDCND_ITEM, 
+			PURPOSE, REQUEST_CN, RELATED_NOTICE_FILE_ATTCH_FILE, DATA_REQUEST_FORM_ATTCH_FILE, SIGN_STAT_CD, 
+			BLNG_ORG_CD, CHK_PJT_ITEM_NM, CHK_PAPER_ITEM_NM, CHK_IPR_ITEM_NM,CHK_APPL_DATA_CD, BLNG_ORG_NM
+			)
+		VALUES (
+				 #{seq}
+				,#{type}
+				,#{userId}
+				,#{rschExecSujCd}
+				,#{rschExecSujNm}
+				,#{regnSlctCd}
+				,#{regnSlctNm}
+				,#{rschAreaCd}
+				,#{natStrtTechCd}
+				,#{t6techCd}
+				,#{searchKeyword}
+				,#{chkYears}
+				,#{pjtItem}
+				,#{paperItem}
+				,#{iprItem}
+				,#{allAppldataCndNm}
+				, NOW()
+				,#{keywordItem1}
+				,#{keywordItem2}
+				,#{keywordCndItem}
+				,#{purpose}
+			    ,#{requestCn}
+		 	    ,#{relatedNoticeFileAttchFile}
+			    ,#{dataRequestFormAttchFile}
+			    ,#{signStatCd}
+			    ,#{blngOrgCd}
+			    ,#{pjtItemNm}
+			    ,#{paperItemNm}
+			    ,#{iprItemNm}
+			    ,#{chkApplDataCd}
+			    ,#{blngOrgNm}
+			)
+	</insert>
+	
+	<insert id="insertEtcUserAppldataCnd" parameterType="map" useGeneratedKeys="true" keyProperty="SEQ" keyColumn="SEQ">
+		<selectKey resultType="int" keyProperty="seq" order="BEFORE">
+			SELECT IFNULL(MAX(seq), 0) + 1 FROM AS_USER_APPLDATA_CND
+		</selectKey>
+		INSERT INTO AS_USER_APPLDATA_CND (
+			SEQ, TYPE, USER_ID, RSCH_EXEC_SUJ_CD, RSCH_EXEC_SUJ_NM, REGN_SLCT_CD, REGN_SLCT_NM, RSCH_AREA_CD, 
+			NAT_STRT_TECH_CD, T6TECH_CD, SEARCH_KWRD, CHK_STANYRS, CHK_PJT_ITEM, CHK_PAPER_ITEM, 
+			CHK_IPR_ITEM, ALL_APPLDATA_CND_NM, REGIST_DT, KEYWORD_ITEM1, KEYWORD_ITEM2, KEYWORDCND_ITEM, 
+			PURPOSE, REQUEST_CN, RELATED_NOTICE_FILE_ATTCH_FILE, DATA_REQUEST_FORM_ATTCH_FILE, SIGN_STAT_CD, 
+			BLNG_ORG_CD, TITLE
+			)
+		VALUES (
+				 #{seq}
+				,#{type}
+				,#{userId}
+				,#{rschExecSujCd}
+				,#{rschExecSujNm}
+				,#{regnSlctCd}
+				,#{regnSlctNm}
+				,#{rschAreaCd}
+				,#{natStrtTechCd}
+				,#{t6techCd}
+				,#{searchKeyword}
+				,#{chkYears}
+				,#{pjtItem}
+				,#{paperItem}
+				,#{iprItem}
+				,#{allAppldataCndNm}
+				, NOW()
+				,#{keywordItem1}
+				,#{keywordItem2}
+				,#{keywordcndItem}
+				,#{purpose}
+			    ,#{requestCn}
+		 	    ,#{relatedNoticeFileAttchFile}
+			    ,#{dataRequestFormAttchFile}
+			    ,#{signStatCd}
+			    ,#{blngOrgCd}
+			    ,#{title}
+			)
+	</insert>
+	
+	<!-- 추출데이터 조건 -->
+	<sql id="applDataCnd">
+		<if test="blngOrgCd != null and blngOrgCd != ''" >
+				AND A.SPCLTY_ORG_CD  = #{blngOrgCd}
+		</if>
+		<if test="rschExecSujCd_list != null and rschExecSujCd_list != ''" >
+				AND A.RSCH_EXEC_SUJ_CD IN
+				<foreach collection="rschExecSujCd_list" item="item" index="index" open="(" close=")" separator=",">
+			    	#{item}
+			    </foreach>
+		</if>
+		<if test="chkYears_list != null and chkYears_list != ''" >
+				AND A.STAN_YR IN
+				<foreach collection="chkYears_list" item="item" index="index" open="(" close=")" separator=",">
+			    	#{item}
+			    </foreach>
+		</if>
+		<if test="regnSlctCd_list != null and regnSlctCd_list != ''" >
+			AND A.REGN_SLCT_CD IN
+		    <foreach collection="regnSlctCd_list" item="item" index="index" open="(" close=")" separator=",">
+	    		#{item}
+		    </foreach>
+	    </if>
+		<if test="rschAreaCd_list != null and rschAreaCd_list != ''" >
+			AND RSCH_AREA_SCLS1_CD IN
+		    <foreach collection="rschAreaCd_list" item="item" index="index" open="(" close=")" separator=",">
+	    		#{item}
+		    </foreach>
+	    </if>
+	    <if test="natStrtTechCd_list != null and natStrtTechCd_list != ''" >
+			AND NAT_STRT_TECH_SCLS_CD IN
+		    <foreach collection="natStrtTechCd_list" item="item" index="index" open="(" close=")" separator=",">
+	    		#{item}
+		    </foreach>
+	    </if>
+	    <if test="t6techCd_list != null and t6techCd_list != ''" >
+			AND T6TECH_SCLS_CD IN
+		    <foreach collection="t6techCd_list" item="item" index="index" open="(" close=")" separator=",">
+	    		#{item}
+		    </foreach>
+	    </if>
+	    <if test="keywordItem2_list != null and keywordItem2_list != ''" >
+	    AND (
+		    <if test="keywordCndItem.equals('AND')" >
+		     <foreach collection="searchKeyword_list" item="searchKeyword" index="index" separator="AND">
+			    <foreach collection="keywordItem2_list" item="keywordItem" index="index" separator="OR">
+			    	  <if test="keywordItem.equals('DTPR_PROG_NM')" >
+			    	  	contains(DTPR_PROG_NM, '%'||#{searchKeyword}||'%' ) <![CDATA[>]]> 0
+			    	  </if>
+			    	  <if test="keywordItem.equals('KOR_PJT_NM')" >
+							contains(A.KOR_PJT_NM, '%'||#{searchKeyword}||'%' ) <![CDATA[>]]> 0
+			    	  </if>
+			    	  <if test="keywordItem.equals('BZ_NM')" >
+							contains(A.BZ_NM, '%'||#{searchKeyword}||'%' ) <![CDATA[>]]> 0
+			    	  </if>
+			    	  <if test="keywordItem.equals('KOR_KYWD')" >
+			    	  		contains(KOR_KYWD, '%'||#{searchKeyword}||'%' ) <![CDATA[>]]> 0
+			    	  </if>
+			    	  <if test="keywordItem.equals('ENG_KYWD')" >
+			    	  		contains(ENG_KYWD, '%'||#{searchKeyword}||'%' ) <![CDATA[>]]> 0
+			    	  </if>
+				</foreach>
+			 </foreach>
+		    </if>
+		    <if test="keywordCndItem.equals('OR')" >
+		     <foreach collection="searchKeyword_list" item="searchKeyword" index="index" separator="OR">
+			    <foreach collection="keywordItem2_list" item="keywordItem" index="index" separator="OR">
+			    	  <if test="keywordItem.equals('DTPR_PROG_NM')" >
+			    	  		contains(DTPR_PROG_NM, '%'||#{searchKeyword}||'%' ) <![CDATA[>]]> 0
+			    	  </if>
+			    	  <if test="keywordItem.equals('KOR_PJT_NM')" >
+			    	  		contains(A.KOR_PJT_NM, '%'||#{searchKeyword}||'%' ) <![CDATA[>]]> 0
+			    	  </if>
+			    	  <if test="keywordItem.equals('BZ_NM')" >
+			    	  		contains(A.BZ_NM, '%'||#{searchKeyword}||'%' ) <![CDATA[>]]> 0
+			    	  </if>
+			    	  <if test="keywordItem.equals('KOR_KYWD')" >
+			    	  		contains(KOR_KYWD, '%'||#{searchKeyword}||'%' ) <![CDATA[>]]> 0
+			    	  </if>
+			    	  <if test="keywordItem.equals('ENG_KYWD')" >
+			    	  		contains(ENG_KYWD, '%'||#{searchKeyword}||'%' ) <![CDATA[>]]> 0
+			    	  </if>
+				</foreach>
+			 </foreach>
+		    </if>
+	    )
+	    </if>
+		) C, (SELECT RSCH_GOAL_ABSTRACT, RSCH_ABSTRACT, EXP_EFCT_ABSTRACT, PJT_ID FROM AS_PJT_ABSTRACT_INFO 
+		WHERE 1=1
+		<if test="chkYears_list != null and chkYears_list != ''" >
+			AND STAN_YR IN
+				<foreach collection="chkYears_list" item="item" index="index" open="(" close=")" separator=",">
+			    	#{item}
+			    </foreach>
+		</if>
+		<if test="keywordItem1_list != null and keywordItem1_list != ''" >
+		AND(
+			<if test="keywordCndItem.equals('AND')" >
+		     <foreach collection="searchKeyword_list" item="searchKeyword" index="index" separator="AND">
+			    <foreach collection="keywordItem1_list" item="keywordItem" index="index" separator="OR">
+			    	  <if test="keywordItem.equals('RSCH_GOAL_ABSTRACT')" >
+			    	    INSTR (RSCH_GOAL_ABSTRACT, #{searchKeyword}) <![CDATA[>]]> 0
+			    	  </if>
+			    	  <if test="keywordItem.equals('RSCH_ABSTRACT')" >
+			    	  	INSTR (RSCH_ABSTRACT, #{searchKeyword}) <![CDATA[>]]> 0
+			    	  </if>
+			    	  <if test="keywordItem.equals('EXP_EFCT_ABSTRACT')" >
+			    	  	INSTR (EXP_EFCT_ABSTRACT, #{searchKeyword}) <![CDATA[>]]> 0
+			    	  </if>
+				</foreach>
+			 </foreach>
+		    </if>
+		    <if test="keywordCndItem.equals('OR')" >
+		     <foreach collection="searchKeyword_list" item="searchKeyword" index="index" separator="OR">
+			    <foreach collection="keywordItem1_list" item="keywordItem" index="index" separator="OR">
+			    	  <if test="keywordItem.equals('RSCH_GOAL_ABSTRACT')" >
+			    	    INSTR (RSCH_GOAL_ABSTRACT, #{searchKeyword}) <![CDATA[>]]> 0
+			    	  </if>
+			    	  <if test="keywordItem.equals('RSCH_ABSTRACT')" >
+			    	  	INSTR (RSCH_ABSTRACT, #{searchKeyword}) <![CDATA[>]]> 0
+			    	  </if>
+			    	  <if test="keywordItem.equals('EXP_EFCT_ABSTRACT')" >
+			    	  	INSTR (EXP_EFCT_ABSTRACT, #{searchKeyword}) <![CDATA[>]]> 0
+			    	  </if>
+				</foreach>
+			 </foreach>
+		    </if>
+		)
+		</if>
+			) B			
+			WHERE 1=1
+			AND C.PJT_ID = B.PJT_ID(+)
+		)
+		WHERE 1=1
+	    <if test="excelYn.equals('N')" >
+	    	AND ROWNUM <![CDATA[<=]]>10
+	    </if>
+	    <if test="excelYn.equals('O')" >
+	    	AND ROWNUM <![CDATA[<=]]>1000
+	    </if>
+	    <include refid="applDataFilterCnd"/>
+	</sql>
+	
+	<!-- 추출데이터 필터 조건 -->
+	<sql id="applDataFilterCnd">
+		<if test="chkStanYr_list != null and chkStanYr_list != ''" >
+		AND STAN_YR IN
+			<foreach collection="chkStanYr_list" item="item" index="index" open="(" close=")" separator=",">
+		    	#{item}
+		    </foreach>
+	    </if>
+	    <if test="chkRndcoAmt_list != null and chkRndcoAmt_list != ''" >
+		AND RNDCO_AMT IN
+			<foreach collection="chkRndcoAmt_list" item="item" index="index" open="(" close=")" separator=",">
+		    	#{item}
+		    </foreach>
+	    </if>
+	    <if test="chkPjtPrfrmOrgStd_list != null and chkPjtPrfrmOrgStd_list != ''" >
+		AND PJT_PRFRM_ORG_STD_NM IN
+			<foreach collection="chkPjtPrfrmOrgStd_list" item="item" index="index" open="(" close=")" separator=",">
+		    	#{item}
+		    </foreach>
+	    </if>
+	    <if test="chkRschMgntOrg_list != null and chkRschMgntOrg_list != ''" >
+		AND RSCH_MGNT_ORG_NM IN
+			<foreach collection="chkRschMgntOrg_list" item="item" index="index" open="(" close=")" separator=",">
+		    	#{item}
+		    </foreach>
+	    </if>
+	</sql>
+	
+	<!-- 추출데이터 컬럼명 -->
+	<sql id="applDataCndNm">
+	SELECT 
+	<choose>
+		<when test ="applDataType.equals('pjt')">
+			BZ_ID, BZ_NM,PROG_CHRCT_NM,MSTR_NM,DTPR_PROG_NM,STAN_YR,CONT_PJT_YN,KOR_PJT_NM,ENG_PJT_NM,C.PJT_ID,PJT_NO,PRE_PJT_NO,PRE_PJT_ID
+	        ,DATE_FORMAT(TOT_RSCH_START_DT,'YYYY/MM/DD HH:MI') TOT_RSCH_START_DT
+            ,DATE_FORMAT(TOT_RSCH_END_DT,'YYYY/MM/DD HH:MI') TOT_RSCH_END_DT
+            ,DATE_FORMAT(TSYR_RSCH_START_DT,'YYYY/MM/DD HH:MI') TSYR_RSCH_START_DT
+            ,DATE_FORMAT(TSYR_RSCH_END_DT,'YYYY/MM/DD HH:MI') TSYR_RSCH_END_DT
+	        ,RSCH_MGNT_ORG_NM,SPCLTY_ORG_NM,MAIN_CORPR_SLCT_NM,REGN_SLCT_NM,BASIC_LCGV_NM,SNT_STD_CLS_CD
+	        ,RSCH_AREA_LCLS1_CD,RSCH_AREA_LCLS1_NM,RSCH_AREA_MCLS1_CD,RSCH_AREA_MCLS1_NM,RSCH_AREA_SCLS1_CD,RSCH_AREA_SCLS1_NM,RSCH_AREA1_WEIGHT,RSCH_AREA_LCLS2_CD
+	        ,RSCH_AREA_LCLS2_NM,RSCH_AREA_MCLS2_CD,RSCH_AREA_MCLS2_NM,RSCH_AREA_SCLS2_CD,RSCH_AREA_SCLS2_NM,RSCH_AREA2_WEIGHT,RSCH_AREA_LCLS3_CD,RSCH_AREA_LCLS3_NM
+	        ,RSCH_AREA_MCLS3_CD,RSCH_AREA_MCLS3_NM,RSCH_AREA_SCLS3_CD,RSCH_AREA_SCLS3_NM,RSCH_AREA3_WEIGHT,NST_RVSN_STAN_RSCH_AREA_LCLS1_CD,NST_RVSN_STAN_RSCH_AREA_LCLS1_NM
+	        ,NST_RVSN_STAN_RSCH_AREA_MCLS1_CD,NST_RVSN_STAN_RSCH_AREA_MCLS1_NM,NST_RVSN_STAN_RSCH_AREA_SCLS1_CD,NST_RVSN_STAN_RSCH_AREA_SCLS1_NM,NST_RVSN_STAN_RSCH_AREA_LCLS2_CD
+	        ,NST_RVSN_STAN_RSCH_AREA_LCLS2_NM,NST_RVSN_STAN_RSCH_AREA_MCLS2_CD,NST_RVSN_STAN_RSCH_AREA_MCLS2_NM,NST_RVSN_STAN_RSCH_AREA_SCLS2_CD,NST_RVSN_STAN_RSCH_AREA_SCLS2_NM
+	        ,NST_RVSN_STAN_RSCH_AREA_LCLS3_CD,NST_RVSN_STAN_RSCH_AREA_LCLS3_NM,NST_RVSN_STAN_RSCH_AREA_MCLS3_CD,NST_RVSN_STAN_RSCH_AREA_MCLS3_NM,NST_RVSN_STAN_RSCH_AREA_SCLS3_CD
+	        ,NST_RVSN_STAN_RSCH_AREA_SCLS3_NM,APPL_AREA_CLS1_NM,APPL_AREA1_WEIGHT,APPL_AREA_CLS2_NM,APPL_AREA2_WEIGHT,APPL_AREA_CLS3_NM,APPL_AREA3_WEIGHT,GT_CLS_CD,GT_CLS_NM
+	        ,T6TECH_LCLS_CD,T6TECH_LCLS_NM,T6TECH_MCLS_CD,T6TECH_MCLS_NM,T6TECH_SCLS_CD,T6TECH_SCLS_NM,NAT_STRT_TECH_LCLS_CD,NAT_STRT_TECH_LCLS_NM,NAT_STRT_TECH_MCLS_CD
+	        ,NAT_STRT_TECH_MCLS_NM,NAT_STRT_TECH_SCLS_CD,NAT_STRT_TECH_SCLS_NM,KOR_KYWD,ENG_KYWD,MSTR_LCLS_NM,MSTR_MCLS_NM,MSTR_SCLS_NM,RND_PHASE_NM,RSCH_DATA_MGNT_PLAN_WRITE_TRGT_PJT_YN
+	        ,RND_CHRCT_SLCT_NM,RND_PJT_CHRCT_NM,DTL_PJT_SPPRT_TYPE_NM,PJT_PRFRM_ORG_NM,PJT_PRFRM_ORG_STD_NM,RSCH_EXEC_SUJ_NM,PRFRM_ORG_BNO,CLBS_CD,PJT_PRFRM_ORG_ADDR,GOV_IVT_RNDCO_AMT
+	        ,PRIV_RNDCO_LGOV_CASH_AMT,PRIV_RNDCO_LGOV_ACTL_AMT,PRIV_RNDCO_UNIV_CASH_AMT,PRIV_RNDCO_UNIV_ACTL_AMT,PRIV_RNDCO_ETC_CASH_AMT,PRIV_RNDCO_ETC_ACTL_AMT
+	        ,PRIV_RNDCO_LGENP_CASH_AMT,PRIV_RNDCO_LGENP_ACTL_AMT,PRIV_RNDCO_ENMS_CASH_AMT,PRIV_RNDCO_ENMS_ACTL_AMT,PRIV_RNDCO_SMENP_CASH_AMT,PRIV_RNDCO_SMENP_ACTL_AMT
+	        ,PRIV_RNDCO_HSPT_CASH_AMT,PRIV_RNDCO_HSPT_ACTL_AMT,PRIV_RNDCO_SUM_AMT,LBCST_CASH_AMT,LBCST_ACTL_AMT,DLCST_CASH_AMT,DLCST_ACTL_AMT,IDL_AMT,CM_RNDCO_AMT,MTCST_AMT
+	        ,PRIV_RNDCO_TOT_CASH_AMT,PRIV_RNDCO_TOT_ACTL_AMT,TOT_RNDCO_CACH_AMT,TOT_RNDCO_ACTL_AMT,REAL_TOT_RNDCO_AMT,RSCH_MNGR_NM,PRSCHER_GNDR_M_CNT,PRSCHER_GNDR_F_CNT
+	        ,PRTCP_DEGREE_PHD_CNT,PRSCHER_DEGREE_MS_PRSN_CNT,PRTCP_DEGREE_LTB_CNT,PRSCHER_MAJOR_NS_PRSN_CNT,PRTCP_MAJOR_ENGN_CNT,PRSCHER_MAJOR_AF_PRSN_CNT,PRTCP_MAJOR_MNH_CNT
+	        ,PRSCHER_MAJOR_HMSL_CNT,PRTCP_MAJOR_ETC_CNT, RND_PHASE_CD, RSCH_EXEC_SUJ_CD, B.RSCH_GOAL_ABSTRACT, B.RSCH_ABSTRACT, B.EXP_EFCT_ABSTRACT,RNDCO_AMT
+		</when>
+		<when test ="applDataType.equals('paper')">
+			 BZ_ID,BZ_NM,PROG_CHRCT_NM,MSTR_NM,DTPR_PROG_NM,C.STAN_YR,CONT_PJT_YN,KOR_PJT_NM,ENG_PJT_NM,C.PJT_ID,PJT_NO,PRE_PJT_NO,PRE_PJT_ID
+			,DATE_FORMAT(TOT_RSCH_START_DT,'YYYY/MM/DD HH:MI') TOT_RSCH_START_DT
+            ,DATE_FORMAT(TOT_RSCH_END_DT,'YYYY/MM/DD HH:MI') TOT_RSCH_END_DT
+            ,DATE_FORMAT(TSYR_RSCH_START_DT,'YYYY/MM/DD HH:MI') TSYR_RSCH_START_DT
+            ,DATE_FORMAT(TSYR_RSCH_END_DT,'YYYY/MM/DD HH:MI') TSYR_RSCH_END_DT
+	        ,RSCH_MGNT_ORG_NM,SPCLTY_ORG_NM,MAIN_CORPR_SLCT_NM,REGN_SLCT_NM,BASIC_LCGV_NM,SNT_STD_CLS_CD
+	        ,RSCH_AREA_LCLS1_CD,RSCH_AREA_LCLS1_NM,RSCH_AREA_MCLS1_CD,RSCH_AREA_MCLS1_NM,RSCH_AREA_SCLS1_CD,RSCH_AREA_SCLS1_NM,RSCH_AREA1_WEIGHT,RSCH_AREA_LCLS2_CD
+	        ,RSCH_AREA_LCLS2_NM,RSCH_AREA_MCLS2_CD,RSCH_AREA_MCLS2_NM,RSCH_AREA_SCLS2_CD,RSCH_AREA_SCLS2_NM,RSCH_AREA2_WEIGHT,RSCH_AREA_LCLS3_CD,RSCH_AREA_LCLS3_NM
+	        ,RSCH_AREA_MCLS3_CD,RSCH_AREA_MCLS3_NM,RSCH_AREA_SCLS3_CD,RSCH_AREA_SCLS3_NM,RSCH_AREA3_WEIGHT,NST_RVSN_STAN_RSCH_AREA_LCLS1_CD,NST_RVSN_STAN_RSCH_AREA_LCLS1_NM
+	        ,NST_RVSN_STAN_RSCH_AREA_MCLS1_CD,NST_RVSN_STAN_RSCH_AREA_MCLS1_NM,NST_RVSN_STAN_RSCH_AREA_SCLS1_CD,NST_RVSN_STAN_RSCH_AREA_SCLS1_NM,NST_RVSN_STAN_RSCH_AREA_LCLS2_CD
+	        ,NST_RVSN_STAN_RSCH_AREA_LCLS2_NM,NST_RVSN_STAN_RSCH_AREA_MCLS2_CD,NST_RVSN_STAN_RSCH_AREA_MCLS2_NM,NST_RVSN_STAN_RSCH_AREA_SCLS2_CD,NST_RVSN_STAN_RSCH_AREA_SCLS2_NM
+	        ,NST_RVSN_STAN_RSCH_AREA_LCLS3_CD,NST_RVSN_STAN_RSCH_AREA_LCLS3_NM,NST_RVSN_STAN_RSCH_AREA_MCLS3_CD,NST_RVSN_STAN_RSCH_AREA_MCLS3_NM,NST_RVSN_STAN_RSCH_AREA_SCLS3_CD
+	        ,NST_RVSN_STAN_RSCH_AREA_SCLS3_NM,APPL_AREA_CLS1_NM,APPL_AREA1_WEIGHT,APPL_AREA_CLS2_NM,APPL_AREA2_WEIGHT,APPL_AREA_CLS3_NM,APPL_AREA3_WEIGHT,GT_CLS_CD,GT_CLS_NM
+	        ,T6TECH_LCLS_CD,T6TECH_LCLS_NM,T6TECH_MCLS_CD,T6TECH_MCLS_NM,T6TECH_SCLS_CD,T6TECH_SCLS_NM,NAT_STRT_TECH_LCLS_CD,NAT_STRT_TECH_LCLS_NM,NAT_STRT_TECH_MCLS_CD
+	        ,NAT_STRT_TECH_MCLS_NM,NAT_STRT_TECH_SCLS_CD,NAT_STRT_TECH_SCLS_NM,KOR_KYWD,ENG_KYWD,MSTR_LCLS_NM,MSTR_MCLS_NM,MSTR_SCLS_NM,RND_PHASE_NM,RSCH_DATA_MGNT_PLAN_WRITE_TRGT_PJT_YN
+	        ,RND_CHRCT_SLCT_NM,RND_PJT_CHRCT_NM,DTL_PJT_SPPRT_TYPE_NM,PJT_PRFRM_ORG_NM,PJT_PRFRM_ORG_STD_NM,RSCH_EXEC_SUJ_NM,PRFRM_ORG_BNO,CLBS_CD,PJT_PRFRM_ORG_ADDR,GOV_IVT_RNDCO_AMT
+	        ,PRIV_RNDCO_LGOV_CASH_AMT,PRIV_RNDCO_LGOV_ACTL_AMT,PRIV_RNDCO_UNIV_CASH_AMT,PRIV_RNDCO_UNIV_ACTL_AMT,PRIV_RNDCO_ETC_CASH_AMT,PRIV_RNDCO_ETC_ACTL_AMT
+	        ,PRIV_RNDCO_LGENP_CASH_AMT,PRIV_RNDCO_LGENP_ACTL_AMT,PRIV_RNDCO_ENMS_CASH_AMT,PRIV_RNDCO_ENMS_ACTL_AMT,PRIV_RNDCO_SMENP_CASH_AMT,PRIV_RNDCO_SMENP_ACTL_AMT
+	        ,PRIV_RNDCO_HSPT_CASH_AMT,PRIV_RNDCO_HSPT_ACTL_AMT,PRIV_RNDCO_SUM_AMT,LBCST_CASH_AMT,LBCST_ACTL_AMT,DLCST_CASH_AMT,DLCST_ACTL_AMT,IDL_AMT,CM_RNDCO_AMT,MTCST_AMT
+	        ,PRIV_RNDCO_TOT_CASH_AMT,PRIV_RNDCO_TOT_ACTL_AMT,TOT_RNDCO_CACH_AMT,TOT_RNDCO_ACTL_AMT,REAL_TOT_RNDCO_AMT,RSCH_MNGR_NM,PRSCHER_GNDR_M_CNT,PRSCHER_GNDR_F_CNT
+	        ,PRTCP_DEGREE_PHD_CNT,PRSCHER_DEGREE_MS_PRSN_CNT,PRTCP_DEGREE_LTB_CNT,PRSCHER_MAJOR_NS_PRSN_CNT,PRTCP_MAJOR_ENGN_CNT,PRSCHER_MAJOR_AF_PRSN_CNT,PRTCP_MAJOR_MNH_CNT
+	        ,PRSCHER_MAJOR_HMSL_CNT,PRTCP_MAJOR_ETC_CNT
+	        ,B.RSCH_GOAL_ABSTRACT,B.RSCH_ABSTRACT,B.EXP_EFCT_ABSTRACT
+	        ,DTL_RST_MGNT_NO,RST_ID,RST_OC_YR,DOI,ISSN,ISBN
+	        ,SCI_SLCT_NM,CO_PAPER_HM_NM,CONTRIBUTE_RT,PAPER_TYPE_SLCT_NM,PAPER_START_PG,PAPER_NM,PAPER_END_PG,PAPER_REGIST_NO
+	        ,PAPER_HM_NM,PRCD_HOST_NAT_CD,PRCD_HOST_NAT_NM,DMABR_SLCT_NM,PRCD_NM,PRCD_PST_DT,JRNL_NM,JRNL_VOL_NO,JRNL_IMPACT_FACTOR,JRNL_PUB_DT
+	        ,RNDCO_AMT,RND_PHASE_CD, RSCH_EXEC_SUJ_CD, SCI_SLCT_CD
+		</when>
+		<when test ="applDataType.equals('ipr')">
+		 	BZ_ID,BZ_NM,PROG_CHRCT_NM,MSTR_NM,DTPR_PROG_NM,C.STAN_YR,CONT_PJT_YN,KOR_PJT_NM,ENG_PJT_NM,C.PJT_ID,PJT_NO,PRE_PJT_NO,PRE_PJT_ID
+	        ,DATE_FORMAT(TOT_RSCH_START_DT,'YYYY/MM/DD HH:MI') TOT_RSCH_START_DT
+            ,DATE_FORMAT(TOT_RSCH_END_DT,'YYYY/MM/DD HH:MI') TOT_RSCH_END_DT
+            ,DATE_FORMAT(TSYR_RSCH_START_DT,'YYYY/MM/DD HH:MI') TSYR_RSCH_START_DT
+            ,DATE_FORMAT(TSYR_RSCH_END_DT,'YYYY/MM/DD HH:MI') TSYR_RSCH_END_DT
+	        ,RSCH_MGNT_ORG_NM,SPCLTY_ORG_NM,MAIN_CORPR_SLCT_NM,REGN_SLCT_NM,BASIC_LCGV_NM,SNT_STD_CLS_CD
+	        ,RSCH_AREA_LCLS1_CD,RSCH_AREA_LCLS1_NM,RSCH_AREA_MCLS1_CD,RSCH_AREA_MCLS1_NM,RSCH_AREA_SCLS1_CD,RSCH_AREA_SCLS1_NM,RSCH_AREA1_WEIGHT,RSCH_AREA_LCLS2_CD
+	        ,RSCH_AREA_LCLS2_NM,RSCH_AREA_MCLS2_CD,RSCH_AREA_MCLS2_NM,RSCH_AREA_SCLS2_CD,RSCH_AREA_SCLS2_NM,RSCH_AREA2_WEIGHT,RSCH_AREA_LCLS3_CD,RSCH_AREA_LCLS3_NM
+	        ,RSCH_AREA_MCLS3_CD,RSCH_AREA_MCLS3_NM,RSCH_AREA_SCLS3_CD,RSCH_AREA_SCLS3_NM,RSCH_AREA3_WEIGHT,NST_RVSN_STAN_RSCH_AREA_LCLS1_CD,NST_RVSN_STAN_RSCH_AREA_LCLS1_NM
+	        ,NST_RVSN_STAN_RSCH_AREA_MCLS1_CD,NST_RVSN_STAN_RSCH_AREA_MCLS1_NM,NST_RVSN_STAN_RSCH_AREA_SCLS1_CD,NST_RVSN_STAN_RSCH_AREA_SCLS1_NM,NST_RVSN_STAN_RSCH_AREA_LCLS2_CD
+	        ,NST_RVSN_STAN_RSCH_AREA_LCLS2_NM,NST_RVSN_STAN_RSCH_AREA_MCLS2_CD,NST_RVSN_STAN_RSCH_AREA_MCLS2_NM,NST_RVSN_STAN_RSCH_AREA_SCLS2_CD,NST_RVSN_STAN_RSCH_AREA_SCLS2_NM
+	        ,NST_RVSN_STAN_RSCH_AREA_LCLS3_CD,NST_RVSN_STAN_RSCH_AREA_LCLS3_NM,NST_RVSN_STAN_RSCH_AREA_MCLS3_CD,NST_RVSN_STAN_RSCH_AREA_MCLS3_NM,NST_RVSN_STAN_RSCH_AREA_SCLS3_CD
+	        ,NST_RVSN_STAN_RSCH_AREA_SCLS3_NM,APPL_AREA_CLS1_NM,APPL_AREA1_WEIGHT,APPL_AREA_CLS2_NM,APPL_AREA2_WEIGHT,APPL_AREA_CLS3_NM,APPL_AREA3_WEIGHT,GT_CLS_CD,GT_CLS_NM
+	        ,T6TECH_LCLS_CD,T6TECH_LCLS_NM,T6TECH_MCLS_CD,T6TECH_MCLS_NM,T6TECH_SCLS_CD,T6TECH_SCLS_NM,NAT_STRT_TECH_LCLS_CD,NAT_STRT_TECH_LCLS_NM,NAT_STRT_TECH_MCLS_CD
+	        ,NAT_STRT_TECH_MCLS_NM,NAT_STRT_TECH_SCLS_CD,NAT_STRT_TECH_SCLS_NM,KOR_KYWD,ENG_KYWD,MSTR_LCLS_NM,MSTR_MCLS_NM,MSTR_SCLS_NM,RND_PHASE_NM,RSCH_DATA_MGNT_PLAN_WRITE_TRGT_PJT_YN
+	        ,RND_CHRCT_SLCT_NM,RND_PJT_CHRCT_NM,DTL_PJT_SPPRT_TYPE_NM,PJT_PRFRM_ORG_NM,PJT_PRFRM_ORG_STD_NM,RSCH_EXEC_SUJ_NM,PRFRM_ORG_BNO,CLBS_CD,PJT_PRFRM_ORG_ADDR,GOV_IVT_RNDCO_AMT
+	        ,PRIV_RNDCO_LGOV_CASH_AMT,PRIV_RNDCO_LGOV_ACTL_AMT,PRIV_RNDCO_UNIV_CASH_AMT,PRIV_RNDCO_UNIV_ACTL_AMT,PRIV_RNDCO_ETC_CASH_AMT,PRIV_RNDCO_ETC_ACTL_AMT
+	        ,PRIV_RNDCO_LGENP_CASH_AMT,PRIV_RNDCO_LGENP_ACTL_AMT,PRIV_RNDCO_ENMS_CASH_AMT,PRIV_RNDCO_ENMS_ACTL_AMT,PRIV_RNDCO_SMENP_CASH_AMT,PRIV_RNDCO_SMENP_ACTL_AMT
+	        ,PRIV_RNDCO_HSPT_CASH_AMT,PRIV_RNDCO_HSPT_ACTL_AMT,PRIV_RNDCO_SUM_AMT,LBCST_CASH_AMT,LBCST_ACTL_AMT,DLCST_CASH_AMT,DLCST_ACTL_AMT,IDL_AMT,CM_RNDCO_AMT,MTCST_AMT
+	        ,PRIV_RNDCO_TOT_CASH_AMT,PRIV_RNDCO_TOT_ACTL_AMT,TOT_RNDCO_CACH_AMT,TOT_RNDCO_ACTL_AMT,REAL_TOT_RNDCO_AMT,RSCH_MNGR_NM,PRSCHER_GNDR_M_CNT,PRSCHER_GNDR_F_CNT
+	        ,PRTCP_DEGREE_PHD_CNT,PRSCHER_DEGREE_MS_PRSN_CNT,PRTCP_DEGREE_LTB_CNT,PRSCHER_MAJOR_NS_PRSN_CNT,PRTCP_MAJOR_ENGN_CNT,PRSCHER_MAJOR_AF_PRSN_CNT,PRTCP_MAJOR_MNH_CNT
+	        ,PRSCHER_MAJOR_HMSL_CNT,PRTCP_MAJOR_ETC_CNT
+	        ,B.RSCH_GOAL_ABSTRACT,B.RSCH_ABSTRACT,B.EXP_EFCT_ABSTRACT
+			,DTL_RST_MGNT_NO,RST_ID,RST_OC_YR,CONTRIBUTE_RT,REGIST_NO,CLPR_NO,IPR_REGIST_TYPE_CD,IPR_REGIST_NAT_CD
+			,IPR_REGIST_DT,APLY_NO,IPR_APPLICANT_REGISTOR_NM,IPR_APPLICANT_REGISTOR_SSN,IPR_INVENTION_NM,IPR_FRGN_APP_YN
+			,RNDCO_AMT,RND_PHASE_CD, RSCH_EXEC_SUJ_CD, IPR_REGIST_TYPE_NM, IPR_REGIST_NAT_NM
+		</when>
+	</choose>
+	FROM(
+		SELECT 
+		A.BZ_ID,A.BZ_NM,PROG_CHRCT_NM,A.MSTR_NM,DTPR_PROG_NM,A.STAN_YR,CONT_PJT_YN,A.KOR_PJT_NM,ENG_PJT_NM,A.PJT_ID,A.PJT_NO,PRE_PJT_NO,PRE_PJT_ID,TOT_RSCH_START_DT
+	        ,TOT_RSCH_END_DT,TSYR_RSCH_START_DT,TSYR_RSCH_END_DT,RSCH_MGNT_ORG_NM,SPCLTY_ORG_NM,MAIN_CORPR_SLCT_NM,A.REGN_SLCT_NM,BASIC_LCGV_NM,SNT_STD_CLS_CD
+	        ,RSCH_AREA_LCLS1_CD,RSCH_AREA_LCLS1_NM,RSCH_AREA_MCLS1_CD,RSCH_AREA_MCLS1_NM,RSCH_AREA_SCLS1_CD,RSCH_AREA_SCLS1_NM,RSCH_AREA1_WEIGHT,RSCH_AREA_LCLS2_CD
+	        ,RSCH_AREA_LCLS2_NM,RSCH_AREA_MCLS2_CD,RSCH_AREA_MCLS2_NM,RSCH_AREA_SCLS2_CD,RSCH_AREA_SCLS2_NM,RSCH_AREA2_WEIGHT,RSCH_AREA_LCLS3_CD,RSCH_AREA_LCLS3_NM
+	        ,RSCH_AREA_MCLS3_CD,RSCH_AREA_MCLS3_NM,RSCH_AREA_SCLS3_CD,RSCH_AREA_SCLS3_NM,RSCH_AREA3_WEIGHT,NST_RVSN_STAN_RSCH_AREA_LCLS1_CD,NST_RVSN_STAN_RSCH_AREA_LCLS1_NM
+	        ,NST_RVSN_STAN_RSCH_AREA_MCLS1_CD,NST_RVSN_STAN_RSCH_AREA_MCLS1_NM,NST_RVSN_STAN_RSCH_AREA_SCLS1_CD,NST_RVSN_STAN_RSCH_AREA_SCLS1_NM,NST_RVSN_STAN_RSCH_AREA_LCLS2_CD
+	        ,NST_RVSN_STAN_RSCH_AREA_LCLS2_NM,NST_RVSN_STAN_RSCH_AREA_MCLS2_CD,NST_RVSN_STAN_RSCH_AREA_MCLS2_NM,NST_RVSN_STAN_RSCH_AREA_SCLS2_CD,NST_RVSN_STAN_RSCH_AREA_SCLS2_NM
+	        ,NST_RVSN_STAN_RSCH_AREA_LCLS3_CD,NST_RVSN_STAN_RSCH_AREA_LCLS3_NM,NST_RVSN_STAN_RSCH_AREA_MCLS3_CD,NST_RVSN_STAN_RSCH_AREA_MCLS3_NM,NST_RVSN_STAN_RSCH_AREA_SCLS3_CD
+	        ,NST_RVSN_STAN_RSCH_AREA_SCLS3_NM,APPL_AREA_CLS1_NM,APPL_AREA1_WEIGHT,APPL_AREA_CLS2_NM,APPL_AREA2_WEIGHT,APPL_AREA_CLS3_NM,APPL_AREA3_WEIGHT,GT_CLS_CD,GT_CLS_NM
+	        ,T6TECH_LCLS_CD,T6TECH_LCLS_NM,T6TECH_MCLS_CD,T6TECH_MCLS_NM,T6TECH_SCLS_CD,T6TECH_SCLS_NM,NAT_STRT_TECH_LCLS_CD,NAT_STRT_TECH_LCLS_NM,NAT_STRT_TECH_MCLS_CD
+	        ,NAT_STRT_TECH_MCLS_NM,NAT_STRT_TECH_SCLS_CD,NAT_STRT_TECH_SCLS_NM,KOR_KYWD,ENG_KYWD,MSTR_LCLS_NM,MSTR_MCLS_NM,MSTR_SCLS_NM,RND_PHASE_NM,RSCH_DATA_MGNT_PLAN_WRITE_TRGT_PJT_YN
+	        ,RND_CHRCT_SLCT_NM,RND_PJT_CHRCT_NM,DTL_PJT_SPPRT_TYPE_NM,A.PJT_PRFRM_ORG_NM,PJT_PRFRM_ORG_STD_NM,RSCH_EXEC_SUJ_NM,PRFRM_ORG_BNO,CLBS_CD,PJT_PRFRM_ORG_ADDR,GOV_IVT_RNDCO_AMT
+	        ,PRIV_RNDCO_LGOV_CASH_AMT,PRIV_RNDCO_LGOV_ACTL_AMT,PRIV_RNDCO_UNIV_CASH_AMT,PRIV_RNDCO_UNIV_ACTL_AMT,PRIV_RNDCO_ETC_CASH_AMT,PRIV_RNDCO_ETC_ACTL_AMT
+	        ,PRIV_RNDCO_LGENP_CASH_AMT,PRIV_RNDCO_LGENP_ACTL_AMT,PRIV_RNDCO_ENMS_CASH_AMT,PRIV_RNDCO_ENMS_ACTL_AMT,PRIV_RNDCO_SMENP_CASH_AMT,PRIV_RNDCO_SMENP_ACTL_AMT
+	        ,PRIV_RNDCO_HSPT_CASH_AMT,PRIV_RNDCO_HSPT_ACTL_AMT,PRIV_RNDCO_SUM_AMT,LBCST_CASH_AMT,LBCST_ACTL_AMT,DLCST_CASH_AMT,DLCST_ACTL_AMT,IDL_AMT,CM_RNDCO_AMT,MTCST_AMT
+	        ,PRIV_RNDCO_TOT_CASH_AMT,PRIV_RNDCO_TOT_ACTL_AMT,TOT_RNDCO_CACH_AMT,TOT_RNDCO_ACTL_AMT,REAL_TOT_RNDCO_AMT,RSCH_MNGR_NM,PRSCHER_GNDR_M_CNT,PRSCHER_GNDR_F_CNT
+	        ,PRTCP_DEGREE_PHD_CNT,PRSCHER_DEGREE_MS_PRSN_CNT,PRTCP_DEGREE_LTB_CNT,PRSCHER_MAJOR_NS_PRSN_CNT,PRTCP_MAJOR_ENGN_CNT,PRSCHER_MAJOR_AF_PRSN_CNT,PRTCP_MAJOR_MNH_CNT
+	        ,PRSCHER_MAJOR_HMSL_CNT,PRTCP_MAJOR_ETC_CNT, RND_PHASE_CD, RSCH_EXEC_SUJ_CD
+		<choose>
+			<when test ="applDataType.equals('paper')">
+				,D.DTL_RST_MGNT_NO,D.RST_ID,D.RST_OC_YR,D.DOI,D.ISSN,D.ISBN
+		        ,D.SCI_SLCT_NM,D.CO_PAPER_HM_NM,D.CONTRIBUTE_RT,D.PAPER_TYPE_SLCT_NM,D.PAPER_START_PG,D.PAPER_NM,D.PAPER_END_PG,D.PAPER_REGIST_NO
+		        ,D.PAPER_HM_NM,D.PRCD_HOST_NAT_CD,D.PRCD_HOST_NAT_NM,D.DMABR_SLCT_NM,D.PRCD_NM,D.PRCD_PST_DT,D.JRNL_NM,D.JRNL_VOL_NO,D.JRNL_IMPACT_FACTOR,D.JRNL_PUB_DT, D.SCI_SLCT_CD
+			</when>
+			<when test ="applDataType.equals('ipr')">
+				,D.DTL_RST_MGNT_NO,D.RST_ID,D.RST_OC_YR,D.CONTRIBUTE_RT,D.REGIST_NO,D.CLPR_NO,D.IPR_REGIST_TYPE_CD,D.IPR_REGIST_NAT_CD
+				,D.IPR_REGIST_DT,D.APLY_NO,D.IPR_APPLICANT_REGISTOR_NM,D.IPR_APPLICANT_REGISTOR_SSN,D.IPR_INVENTION_NM,D.IPR_FRGN_APP_YN, D.IPR_REGIST_TYPE_NM, D.IPR_REGIST_NAT_NM
+			</when>
+		</choose>
+		, CASE WHEN GOV_IVT_RNDCO_AMT <![CDATA[<]]> 50000000 then 'C1'
+		       WHEN GOV_IVT_RNDCO_AMT <![CDATA[>]]> 50000000 AND GOV_IVT_RNDCO_AMT <![CDATA[<]]> 100000000  then 'C2'
+		       WHEN GOV_IVT_RNDCO_AMT <![CDATA[>=]]> 100000000 AND GOV_IVT_RNDCO_AMT <![CDATA[<]]> 300000000  then 'C3'
+		       WHEN GOV_IVT_RNDCO_AMT <![CDATA[>=]]> 300000000 AND GOV_IVT_RNDCO_AMT <![CDATA[<]]> 500000000  then 'C4'
+		       WHEN GOV_IVT_RNDCO_AMT <![CDATA[>=]]> 500000000 AND GOV_IVT_RNDCO_AMT <![CDATA[<]]> 1000000000  then 'C5'
+		       WHEN GOV_IVT_RNDCO_AMT <![CDATA[>=]]> 1000000000 AND GOV_IVT_RNDCO_AMT <![CDATA[<]]> 5000000000  then 'C6'
+		       ELSE 'C7'
+		END as RNDCO_AMT
+		<choose>
+			<when test ="applDataType.equals('pjt')">
+				FROM AS_PJT_PROG_INFO A
+				WHERE 1=1
+			</when>
+			<when test ="applDataType.equals('paper')">
+				FROM AS_PJT_PROG_INFO A, AS_PAPER_INFO D
+		        WHERE 1 = 1
+		        AND A.PJT_ID = D.PJT_ID
+		        AND A.STRT_TECH_CD IS NULL
+			</when>
+			<when test ="applDataType.equals('ipr')">
+				FROM AS_PJT_PROG_INFO A, AS_IPR_INFO D
+		        WHERE 1 = 1
+		        AND A.PJT_ID = D.PJT_ID
+		        AND A.STRT_TECH_CD IS NULL
+			</when>
+		</choose>
+	</sql>
+	
+	<!-- 추출데이터 건수 컬럼명 -->
+	<sql id="applDataCndCntNm">
+	SELECT 
+		STAN_YR,PJT_PRFRM_ORG_STD_NM,RSCH_MGNT_ORG_NM, RNDCO_AMT
+	FROM(
+		SELECT 
+		A.PJT_ID,A.STAN_YR,PJT_PRFRM_ORG_STD_NM,RSCH_MGNT_ORG_NM
+		, CASE WHEN GOV_IVT_RNDCO_AMT <![CDATA[<]]> 50000000 then 'C1'
+		       WHEN GOV_IVT_RNDCO_AMT <![CDATA[>]]> 50000000 AND GOV_IVT_RNDCO_AMT <![CDATA[<]]> 100000000  then 'C2'
+		       WHEN GOV_IVT_RNDCO_AMT <![CDATA[>=]]> 100000000 AND GOV_IVT_RNDCO_AMT <![CDATA[<]]> 300000000  then 'C3'
+		       WHEN GOV_IVT_RNDCO_AMT <![CDATA[>=]]> 300000000 AND GOV_IVT_RNDCO_AMT <![CDATA[<]]> 500000000  then 'C4'
+		       WHEN GOV_IVT_RNDCO_AMT <![CDATA[>=]]> 500000000 AND GOV_IVT_RNDCO_AMT <![CDATA[<]]> 1000000000  then 'C5'
+		       WHEN GOV_IVT_RNDCO_AMT <![CDATA[>=]]> 1000000000 AND GOV_IVT_RNDCO_AMT <![CDATA[<]]> 5000000000  then 'C6'
+		       ELSE 'C7'
+		END as RNDCO_AMT
+		<choose>
+			<when test ="applDataType.equals('pjt')">
+				FROM AS_PJT_PROG_INFO A
+				WHERE 1=1
+			</when>
+			<when test ="applDataType.equals('paper')">
+				FROM AS_PJT_PROG_INFO A, AS_PAPER_INFO D
+		        WHERE 1 = 1
+		        AND A.PJT_ID = D.PJT_ID
+		        AND A.STRT_TECH_CD IS NULL
+			</when>
+			<when test ="applDataType.equals('ipr')">
+				FROM AS_PJT_PROG_INFO A, AS_IPR_INFO D
+		        WHERE 1 = 1
+		        AND A.PJT_ID = D.PJT_ID
+		        AND A.STRT_TECH_CD IS NULL
+			</when>
+		</choose>
+	</sql>
+			
+	
+	<!-- 추출조건 제목입력 -->
+	<update id="updateAppldataCnd" parameterType="map">
+		UPDATE AS_USER_APPLDATA_CND
+		SET
+			TITLE = #{title}
+			<if test="signStatCd != null and signStatCd != ''">
+			,SIGN_STAT_CD = #{signStatCd}
+			</if>
+			<if test="openYn != null and openYn != ''">
+			,OPEN_YN = #{openYn}
+			</if>
+			<if test="chkChart != null and chkChart != ''">
+			,CHK_CHART = #{chkChart}
+			</if>
+		WHERE SEQ = #{appldataCndSeq}
+	</update>
+	
+	<!-- 추출조건 제목입력 -->
+	<update id="updateAppldataCndViewCnt" parameterType="string">
+		UPDATE AS_USER_APPLDATA_CND
+		SET
+			VIEWCNT = VIEWCNT+1
+		WHERE SEQ = #{appldataCndSeq}
+	</update>
+	
+	<!-- myboard 조회 -->
+	<select id="selectAppldataCndInfo" parameterType="string" resultType="egovMap"> 
+	    SELECT * 
+		FROM AS_USER_APPLDATA_CND 
+		WHERE 1=1
+		AND SEQ = #{appldataCndSeq}
+	</select>
+	
+</mapper>

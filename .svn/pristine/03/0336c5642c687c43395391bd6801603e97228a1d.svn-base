@@ -1,0 +1,106 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+</head>
+<style>
+
+	#content{
+		    width: 80%;
+    		margin: 0 auto;
+			margin-bottom: 5%;
+			margin-top: 2%;
+	}
+</style>
+<body>
+
+<div id="content">
+	<h2>Write Post</h2>
+	<form class="form-horizontal" id="form" name="form" action="/distep/board/boardInsert.do"
+	method="post" enctype="multipart/form-data" onsubmit="return validateForm()"> <!--  여기에 onsubmit 추가 -->
+	<div class="bg-light rounded h-100 contcon">
+		<table class="table cmcrtb table-bordered">
+			<tbody class="contb">
+				<tr>
+					<th scope="row">1</th>
+					<td><code>*</code>Title</td>
+					<td><input type="text" name="title" maxlength="100"  class="updtcon" placeholder="Title"></td>
+				</tr>
+				<tr>
+					<th scope="row">3</th>
+					<td><code>*</code>Content</td>
+					<td><textarea rows="10" cols="50" maxlength="2000" class="updtcon" name="content" placeholder="content"></textarea></td>
+				</tr>
+				<tr>
+					<th scope="row">7</th>
+					<td>Upload File</td>
+					<td>
+						<input type="file" name="uploadFiles">	
+					</td>
+				</tr>
+				<input type="number" id="selectedEpck" name="entNo" value="" style="display:none">
+			</tbody>
+		</table>
+
+		<!-- 폼 안으로 버튼 이동 -->
+		<div style="margin-top:10px;">
+			<button type="submit" class="btn btn-primary btn-user">등록</button>
+			<a href="/distep/board/home.do" class="btn btn-success btn-user">목록</a>
+		</div>
+	</div>
+	</form> <!--  위치 수정 -->
+</body>
+
+<script type="text/javascript">
+
+function validateForm() {
+    var title = document.forms["form"]["title"].value.trim();
+    var content = document.forms["form"]["content"].value.trim();
+    var fileInput = document.forms["form"]["uploadFiles"];
+    var file = fileInput.files[0];
+
+    if (title === "") {
+        alert("제목을 입력해주세요.");
+        return false;
+    }
+    if (title.length > 100) {
+        alert("제목은 100자 이하로 입력해주세요.");
+        return false;
+    }
+
+    if (content === "") {
+        alert("내용을 입력해주세요.");
+        return false;
+    }
+    if (content.length < 10) {
+        alert("내용은 최소 10자 이상 입력해주세요.");
+        return false;
+    }
+    if (content.length > 2000) {
+        alert("내용은 2000자 이하로 입력해주세요.");
+        return false;
+    }
+
+    if (file) {
+        var allowedExt = ['jpg', 'png', 'pdf'];
+        var ext = file.name.split('.').pop().toLowerCase();
+        var maxSize = 20 * 1024 * 1024; // 20MB
+
+        if (!allowedExt.includes(ext)) {
+            alert("jpg, png, pdf 파일만 업로드할 수 있습니다.");
+            return false;
+        }
+        if (file.size > maxSize) {
+            alert("파일 크기는 20MB를 초과할 수 없습니다.");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+</script>
+</html>

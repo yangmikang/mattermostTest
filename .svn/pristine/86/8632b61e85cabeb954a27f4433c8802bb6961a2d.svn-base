@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.go.distep.main.service.impl.MainMapper">
+	
+	<select id="selectUserNm" parameterType="String" resultType="string">
+		SELECT	PSN_NM
+		FROM TH_MEMBER
+		WHERE	USER_ID = #{userId}
+	</select>
+	
+	<!-- 게시판 등록 -->
+	<insert id="insertKabBoard" parameterType="map" useGeneratedKeys="true" keyProperty="SEQ" keyColumn="SEQ">
+		<selectKey resultType="int" keyProperty="seq" order="BEFORE">
+			SELECT IFNULL(MAX(BBS_ID),0)+1 seq FROM KAB_BOARD
+		</selectKey>
+		INSERT INTO KAB_BOARD
+		( BBS_ID, TITLE, USER_ID, USER_NAME, CONTENTS, CREATE_DATE )
+		VALUES
+		( #{seq}, #{title}, #{userId}, #{userName}, #{contents}, NOW() )
+	</insert>
+	
+	<!-- 게시판 수정 -->
+	<update id="updateKabBoard" parameterType="map">
+		UPDATE KAB_BOARD SET TITLE = #{title}, CONTENTS = #{contents}, UPDATE_DATE= NOW()
+		WHERE BBS_ID = #{bbsId}
+	</update>
+	
+	<!-- 게시판 삭제 -->
+	<update id="deleteKabBoard" parameterType="map">
+		UPDATE KAB_BOARD SET DELETE_AT = 'Y', DELETE_DATE = NOW()
+		WHERE BBS_ID = #{bbsId}
+	</update>
+	
+	<!-- 게시글 목록 -->
+	<select id="selectBoardList" parameterType="map" resultType="egovMap">
+	/* MainMapper.selectBoardList */
+		SELECT * FROM
+		(
+			SELECT 
+					<if test="orderSort == 'bbsId'">
+						<if test="sort == 'DESC'">
+							ROW_NUMBER() OVER (ORDER BY A.BBS_ID DESC) as RNUM
+						</if>
+						<if test="sort == 'ASC'">
+							ROW_NUMBER() OVER (ORDER BY A.BBS_ID) as RNUM
+						</if>
+					</if>
+					<if test="orderSort == 'like'">
+						<if test="sort == 'DESC'">
+							ROW_NUMBER() OVER (ORDER BY (SELECT COUNT(*) FROM KAB_LIKE C WHERE C.BBS_ID = A.BBS_ID) DESC, A.BBS_ID DESC) as RNUM
+						</if>
+						<if test="sort == 'ASC'">
+							ROW_NUMBER() OVER (ORDER BY (SELECT COUNT(*) FROM KAB_LIKE C WHERE C.BBS_ID = A.BBS_ID), A.BBS_ID DESC) as RNUM
+						</if>
+					</if>
+					<if test="orderSort == 'hits'">
+						<if test="sort == 'DESC'">
+							ROW_NUMBER() OVER (ORDER BY HITS DESC) as RNUM
+						</if>
+						<if test="sort == 'ASC'">
+							ROW_NUMBER() OVER (ORDER BY HITS) as RNUM
+						</if>
+					</if>
+			      , A.BBS_ID
+			      , TITLE
+			      , A.USER_ID
+					<if test='isAdmin == "N"'>
+<!-- 						, substr(USER_NAME,1,1) CONCAT( lpad('*',length(USER_NAME)-2,'*') CONCAT( substr(USER_NAME, length(USER_NAME), 1) AS USER_NAME  -->
+					</if>
+					<if test='isAdmin == "Y"'>					
+						, USER_NAME
+					</if>	
+			      , IFNULL(A.UPDATE_DATE, A.CREATE_DATE) as BBS_DATE
+			      , HITS
+			      , (SELECT COUNT(*) FROM KAB_LIKE C WHERE C.BBS_ID = A.BBS_ID) as LIKE_CNT
+                  , B.ATTACH_FILE_SN  
+			FROM KAB_BOARD A, kab_attach_file B
+            WHERE A.BBS_ID = B.BBS_ID(+)
+            AND DELETE_AT = 'N'
+			<if test="searchType == 'all'">
+			AND (TITLE LIKE '%'CONCAT(#{searchKeyword}CONCAT('%' OR USER_NAME LIKE '%'CONCAT(#{searchKeyword}CONCAT('%' OR INSTR(CONTENTS, #{searchKeyword}) > 0)
+			</if>
+			<if test="searchType == 'title'">
+			AND TITLE LIKE '%'CONCAT(#{searchKeyword}CONCAT('%'
+			</if>
+			<if test="searchType == 'contents'">
+			AND INSTR(CONTENTS, #{searchKeyword}) > 0
+			</if>
+			<if test="searchType == 'titleAndContents'">
+			AND (TITLE LIKE '%'CONCAT(#{searchKeyword}CONCAT('%' OR INSTR(CONTENTS, #{searchKeyword}) > 0)
+			</if>
+		)
+		WHERE RNUM BETWEEN #{firstIndex} + 1 AND #{firstIndex} + #{recordCountPerPage}
+	</select>
+	
+	<!-- 게시글 Count -->
+	<select id="selectBoardListCount" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM KAB_BOARD
+		WHERE DELETE_AT = 'N'
+		<if test="searchType == 'all'">
+		AND (TITLE LIKE '%'CONCAT(#{searchKeyword}CONCAT('%' OR USER_NAME LIKE '%'CONCAT(#{searchKeyword}CONCAT('%' OR INSTR(CONTENTS, #{searchKeyword}) > 0)
+		</if>
+		<if test="searchType == 'title'">
+		AND TITLE LIKE '%'CONCAT(#{searchKeyword}CONCAT('%'
+		</if>
+		<if test="searchType == 'contents'">
+		AND INSTR(CONTENTS, #{searchKeyword}) > 0
+		</if>
+		<if test="searchType == 'titleAndContents'">
+		AND (TITLE LIKE '%'CONCAT(#{searchKeyword}CONCAT('%' OR INSTR(CONTENTS, #{searchKeyword}) > 0)
+		</if>
+		<if test="searchType == 'userName'">
+		AND USER_NAME LIKE '%'CONCAT(#{searchKeyword}CONCAT('%'
+		</if>
+	</select>
+	
+	<!-- 조회수 수정 -->
+	<update id="updateBbsHits" parameterType="java.lang.String">
+		UPDATE KAB_BOARD SET HITS = HITS+1
+		WHERE BBS_ID = #{bbsId}
+	</update>
+	
+	<!-- 게시글 상세 -->
+	<select id="selectBoardDetail" parameterType="map" resultType="egovMap">
+		SELECT BBS_ID
+			   ,TITLE
+		       ,USER_ID
+					<if test='isAdmin == "N"'>
+						, substr(USER_NAME,1,1) CONCAT( lpad('*',length(USER_NAME)-2,'*') CONCAT( substr(USER_NAME, length(USER_NAME), 1) AS USER_NAME 
+					</if>
+					<if test='isAdmin == "Y"'>					
+						, USER_NAME
+					</if>	
+		       ,IFNULL(UPDATE_DATE, CREATE_DATE) as BBS_DATE
+		       ,HITS
+		       ,CONTENTS
+		       ,(SELECT COUNT(*) FROM KAB_LIKE A WHERE A.BBS_ID = B.BBS_ID) as ALL_LIKE_CNT
+           	   ,(SELECT COUNT(*) FROM KAB_LIKE A WHERE A.BBS_ID = B.BBS_ID AND USER_ID = #{userId}) as USER_LIKE_CNT
+		FROM KAB_BOARD B
+		WHERE BBS_ID = #{bbsId}
+	</select>
+	
+	<!-- 덧글 목록 -->
+	<select id="selectCommentList" parameterType="map" resultType="egovMap">
+		SELECT COMMENT_ID
+		      ,BBS_ID
+		      ,USER_ID
+					<if test='isAdmin == "N"'>
+						, substr(USER_NAME,1,1) CONCAT( lpad('*',length(USER_NAME)-2,'*') CONCAT( substr(USER_NAME, length(USER_NAME), 1) AS USER_NAME 
+					</if>
+					<if test='isAdmin == "Y"'>					
+						, USER_NAME
+					</if>		      
+		      ,CONTENTS
+		      ,PARENT_COMMENT_ID
+		      ,IFNULL(UPDATE_DATE,CREATE_DATE) as COMMENT_DATE
+		      ,ROW_NUMBER() OVER(PARTITION BY PARENT_COMMENT_ID ORDER BY COMMENT_ID) as RNUM
+		FROM KAB_COMMENT
+		WHERE DELETE_AT = 'N'
+		AND BBS_ID = #{bbsId}
+		ORDER BY CASE WHEN PARENT_COMMENT_ID = 0 THEN COMMENT_ID ELSE PARENT_COMMENT_ID END
+		         ,CASE WHEN PARENT_COMMENT_ID = 0 THEN - COMMENT_ID ELSE COMMENT_ID END
+	</select>
+	<!-- 덧글 등록 -->
+	<insert id="insertComment" parameterType="map">
+		<selectKey resultType="int" keyProperty="commentId" order="BEFORE">
+				SELECT IFNULL(MAX(COMMENT_ID),0)+1 seq FROM KAB_COMMENT
+		</selectKey>
+		INSERT INTO 
+		KAB_COMMENT
+			(
+				COMMENT_ID
+				, BBS_ID
+				, USER_ID
+				, USER_NAME
+				, CONTENTS
+				, PARENT_COMMENT_ID
+				, CREATE_DATE
+				, DELETE_AT
+			)
+		VALUES
+			(
+				#{commentId}
+				,#{bbsId}
+				,#{userId}
+				,#{userName}
+				,#{contents}
+				,#{parentCommentId}
+				,NOW()
+				,'N'
+			)
+	</insert>
+	
+	<!-- 덧글 상태 삭제로 수정 -->
+	<update id="updateCommentDeleteAt" parameterType="java.lang.String">
+		UPDATE KAB_COMMENT SET
+			DELETE_AT = 'Y'
+			, DELETE_DATE = NOW()
+		WHERE COMMENT_ID = #{commentId}
+		OR PARENT_COMMENT_ID = #{commentId}
+	</update>
+	
+	<!-- 게시판 삭제시 덧글 상태 삭제로 수정 -->
+	<update id="updateCommentDeleteAll" parameterType="java.lang.String">
+		UPDATE KAB_COMMENT SET
+			DELETE_AT = 'Y'
+			, DELETE_DATE = NOW()
+		WHERE BBS_ID = #{bbsId}
+	</update>
+	
+	<!-- 덧글 수정 -->
+	<update id="updateComment" parameterType="map">
+		UPDATE KAB_COMMENT SET
+			CONTENTS = #{contents}
+			,UPDATE_DATE = NOW()
+		WHERE COMMENT_ID = #{commentId}
+	</update>
+	
+	<!-- 좋아요 등록 -->
+	<insert id="insertKabLike" parameterType="map">
+		<selectKey resultType="int" keyProperty="seq" order="BEFORE">
+			SELECT IFNULL(MAX(LIKE_ID),0)+1 seq FROM KAB_LIKE
+		</selectKey>
+		INSERT INTO KAB_LIKE
+		( LIKE_ID, BBS_ID, USER_ID, CREATE_DATE )
+		VALUES
+		( #{seq}, #{bbsId}, #{userId}, NOW() )
+	</insert>
+	
+	<!-- 좋아요 삭제 -->
+	<delete id="deleteKabLikeOne" parameterType="map">
+		DELETE KAB_LIKE
+		WHERE BBS_ID = #{bbsId}
+		AND USER_ID = #{userId}
+	</delete>
+	
+	<!-- 게시글 삭제에 따른 좋아요 삭제 -->
+	<delete id="deleteKabLikeAll" parameterType="map">
+		DELETE KAB_LIKE
+		WHERE BBS_ID = #{bbsId}
+	</delete>
+	
+	<!-- 좋아요 체크 -->
+	<select id="selectChkKabLike" parameterType="map" resultType="int">
+		SELECT COUNT(*) FROM KAB_LIKE
+		WHERE BBS_ID = #{bbsId}
+		AND USER_ID = #{userId}
+	</select>
+	
+	<!-- 첨부파일 등록 -->
+	<insert id="insertKabAttachFile" parameterType="map">
+		<selectKey resultType="int" keyProperty="seq" order="BEFORE">
+			SELECT IFNULL(MAX(ATTACH_FILE_SN),0)+1 seq FROM KAB_ATTACH_FILE
+		</selectKey>
+	  	INSERT INTO KAB_ATTACH_FILE (
+			ATTACH_FILE_SN
+			, BBS_ID
+			, SN
+			, ATTACH_FILE_NM
+			, ATTACH_FILE_SAVE_NM
+			, ATTACH_FILE_SZ
+			, USER_ID
+			, CREATE_DATE
+	  	) VALUES (
+	  		 #{seq}
+			,#{bbsId}
+			,#{sn}
+			,#{attachFileNm}
+			,#{attachFileSaveNm}
+			,#{attachFileSz}
+			,#{userId}
+			,NOW()
+	  	)
+	</insert>
+	
+	<!-- 첨부파일 목록 -->
+	<select id="selectKabAttachFileList" parameterType="java.lang.String" resultType="egovMap">
+		SELECT ATTACH_FILE_SN
+			, BBS_ID
+			, SN
+			, ATTACH_FILE_NM
+			, ATTACH_FILE_SAVE_NM
+			, ATTACH_FILE_SZ
+			, USER_ID
+			, CREATE_DATE
+		FROM KAB_ATTACH_FILE
+		WHERE BBS_ID = #{bbsId}
+	</select>
+	
+	<!-- 첨부파일 삭제 -->
+	<delete id="deleteKabAttachFile" parameterType="map">
+		DELETE KAB_ATTACH_FILE
+		WHERE BBS_ID = #{bbsId}
+	</delete>
+</mapper>

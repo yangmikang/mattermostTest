@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.go.distep.cmmn.service.impl.LogMapper">
+
+	<insert id="insertRequestLog" parameterType="kr.go.distep.cmmn.vo.LogVO">
+	    INSERT INTO request_log (log_id, user_id, ip_addr, method, request_uri, log_time, role,city_code)
+	    VALUES (#{logId}, #{userId}, #{ipAddr}, #{method}, #{requestUri}, #{logTime}, #{role}, #{cityCode} 
+	    )
+	</insert>
+    
+</mapper>

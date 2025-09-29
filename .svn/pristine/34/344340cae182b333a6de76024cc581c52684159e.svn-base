@@ -1,0 +1,656 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+	pageEncoding="EUC-KR"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script
+	src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales/ko.global.min.js"></script>
+<!--     <div id="calendar" style="max-width:900px; margin: 0 auto;"></div> -->
+
+<!--     <h3>Add Event</h3> -->
+<%--     <form action="\${pageContext.request.contextPath}/calendar/addEvent.do" method="post"> --%>
+<!--         Title: <input type="text" name="title" required><br> -->
+<!--         DateTime: <input type="datetime-local" name="eventDatetime" required><br> -->
+<!--         Description: <input type="text" name="description"><br> -->
+<!--         <button type="submit">Add</button> -->
+<!--     </form> -->
+
+<style>
+
+/* 공통 스타일 */
+.event-list-tit {
+  display: inline-block;
+  padding-left: 0;
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  background-position: left center;
+  font-weight: bold;
+  min-height: 20px;
+}
+
+/* 조직별 이미지 지정 */
+/* .organizer-gini {
+  background-image: url('${pageContext.request.contextPath}/img/component/common/ico-event-gini.png');
+}
+
+.organizer-daejeon {
+  background-image: url('${pageContext.request.contextPath}/img/component/common/ico_korea.svg');
+}
+
+.organizer-dortmund {
+  background-image: url('${pageContext.request.contextPath}/img/component/common/ico_germany.svg');
+}
+
+.organizer-malaga {
+  background-image: url('${pageContext.request.contextPath}/img/component/common/ico_spain.svg');
+}
+
+.organizer-montgomery {
+  background-image: url('${pageContext.request.contextPath}/img/component/common/ico_usa.svg');
+}
+
+
+.organizer-seattle {
+  background-image: url('${pageContext.request.contextPath}/img/component/common/ico_usa.svg');
+}
+
+.organizer-quebec {
+  background-image: url('${pageContext.request.contextPath}/img/component/common/ico_canada.svg');
+} */
+
+.organizer-default {
+  background-image: url('${pageContext.request.contextPath}/img/component/common/ico-event-gini.png');
+}
+
+.search-list .card-body .c-text:hover {
+	background-color: transparent !important;
+	box-shadow: none !important;
+	border: none !important;
+	outline: none !important;
+	text-decoration: none !important;
+}
+</style>
+<div id="container">
+	<!-- breadcrumb -->
+	<div class="page-title-wrap visual img-members">
+		<div class="visual-filter"></div>
+		<div class="inner">
+			<!-- breadcrumb -->
+			<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+				<ol class="breadcrumb">
+					<li class="home"><a href="#" class="txt">Home</a></li>
+					<li><a href="#" class="txt">Programs</a></li>
+					<!-- <li><a href="#" class="txt">Overview</a></li> -->
+				</ol>
+			</nav>
+			<!-- breadcrumb -->
+			<div class="visual-area">
+				<h2 class="h-tit">Events</h2>
+				<p>Schedule of Events</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- 컨텐츠 영역 -->
+	<div class="inner">
+		<!-- 페이지 타이틀 영역 -->
+		<!-- //페이지 타이틀 영역 -->
+		<!-- 행사 일정 캘린더 영역 시작 -->
+		<div class="Schedule-wrap">
+			<div id="calendar" class="Schedule-left-box">
+				<div class="calender-top_area"></div>
+				<div class="calender-bottom-area">달력 영역</div>
+			</div>
+			<div class="Schedule-right-box">
+				<div class="today-tit-wrap">
+					<h2>
+						<span id="todayFullDate" class="tit"></span> <span id="todayDay"
+							class="tit"></span> <span id="todayDate" class="tit-date"></span>
+					</h2>
+
+				</div>
+				<div class="event-list-wrap">
+					<div class="gini-cont-wrap clickCalendar"
+						style="display: block !important;">
+					</div>
+					<div class="gini-cont-wrap ongoingCont"
+						>
+						<h4 class="cont-tit-large green-circle text-line">Ongoing</h4>
+					</div>
+					<div class="event-list-box ongoing"></div>
+					<!-- 이벤트 없을 때  적용-->
+					<div class="no-event" style="display: none;">
+								<p class="no-event-ico">There are no event schedules.</p>
+							</div> 
+							
+								<!-- Ongoing 일정 없음 -->
+				<div class="no-event no-ongoing-event" style="display: none;">
+				  <p class="no-event-ico">There are no ongoing event schedules.</p>
+				</div> 
+				
+				<!-- Upcoming 일정 없음 -->
+				
+					<!-- //이벤트 없을 때  적용-->
+					<div class="gini-cont-wrap upcomingCont"
+						>
+						<h4 class="cont-tit-large light-green-circle text-line">Upcoming</h4>
+					</div>
+					<div class="event-list-box upcoming" ></div>
+					<div class="no-event no-upcoming-event" style="display: none;">
+				  <p class="no-event-ico">There are no upcoming event schedules.</p>
+				</div>
+				</div>
+				<div class="btn-wrap pc-only">
+					<c:if test="${userYn == 'Y' or userType == 'A'}">
+						<button type="button" class="btn primary"
+							onclick="location.href='${pageContext.request.contextPath}/calendarCreate.do'">Register</button>
+					</c:if>
+
+				</div>
+			</div>
+
+
+		</div>
+		<!-- //검색 결과 : 리스트 상단 -->
+
+		<!-- 한달 전체 행사 리스트  -->
+		<ul class="search-list type1">
+		</ul>
+		<!-- //한달 전체 행사 리스트 -->
+
+		<!-- paging : 웹 -->
+		<div class="pagination w-page paging">
+			<div class="row justify-content-center" id="divPagingArea"></div>
+		</div>
+		<!-- //paging : 웹 -->
+
+		<!-- paging : 모바일 -->
+		<div class="pagination m-page">
+			<div class="page-navis">
+				<a class="page-navi prev" href="#">이전</a> <a class="page-navi next"
+					href="#">다음</a>
+			</div>
+			<div class="page-links">
+				<a class="page-link" href="#">1</a> <span class="page-link link-dot"></span>
+				<a class="page-link" href="#">7</a> <a class="page-link active"
+					href="#">8</a> <a class="page-link" href="#">9</a> <span
+					class="page-link link-dot"></span> <a class="page-link" href="#">120</a>
+			</div>
+		</div>
+
+		</div>
+		<div id="modalOverlay"
+			style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; opacity: 0.5; z-index: 999;"></div>
+
+		<!-- //paging : 모바일 -->
+	</div>
+	<!-- //컨텐츠 영역 -->
+</div>
+<!-- 일정 수정 모달 -->
+
+
+<!-- //paging : 모바일 -->
+</div>
+<!-- //컨텐츠 영역 -->
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    
+	let calendar;
+	let allEvents = [];
+	let currentMonthStart = null;
+	let currentMonthEnd = null;
+	document.addEventListener("DOMContentLoaded", function() {
+		  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+		  const today = new Date();
+
+		  const year = today.getFullYear();
+		  const month = (today.getMonth() + 1).toString().padStart(2, '0');
+		  const date = today.getDate().toString().padStart(2, '0');
+		  const day = dayNames[today.getDay()];
+
+		  const fullDateStr = year + "." + month + "." + date + " (" + day + ")";
+		  document.getElementById("todayFullDate").textContent = fullDateStr;
+		});
+
+	function formatDateToYYYYMMDD(date) {
+		  const yyyy = date.getFullYear();
+		  const mm = (date.getMonth() + 1).toString().padStart(2, '0');
+		  const dd = date.getDate().toString().padStart(2, '0');
+		  return `\${yyyy}-\${mm}-\${dd}`;
+		}
+
+// date 포맷 함수 
+	function formatDateString(dateInput) {
+		  const date = new Date(dateInput);
+		  if (isNaN(date)) return "-";
+		  const year = date.getFullYear();
+		  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+		  const day = date.getDate().toString().padStart(2, "0");
+		  return `\${year}.\${month}.\${day}`; 
+		}
+		document.addEventListener('DOMContentLoaded', function () {
+			  const calendarEl = document.getElementById('calendar');
+	
+			  calendar = new FullCalendar.Calendar(calendarEl, {
+			    locale: 'en',
+			    initialView: 'dayGridMonth',
+			    selectable: false,
+			    editable: false,
+
+			    headerToolbar: {
+			      left: 'title',
+			      right: 'prev today next'
+			    },
+		    datesSet: function (info) {
+		    	  const viewDate = info.view.currentStart;
+
+		    	  const year = viewDate.getFullYear();
+		    	  const month = viewDate.getMonth(); 
+
+		    	  const start = new Date(year, month, 1);
+		    	  const end = new Date(year, month + 1, 0); 
+
+		    	  currentMonthStart = formatDateToYYYYMMDD(start);
+		    	  currentMonthEnd = formatDateToYYYYMMDD(end);
+
+		    	  console.log("날짜 범위 체킁", currentMonthStart, "-", currentMonthEnd); 
+		    	  loadCalendarList(1);
+		      
+		      
+		    },
+		    eventContent: function(arg) {
+		        return {
+		          html: `<span style="overflow: hidden;">\${arg.event.title}</span>`
+		        };
+		      },
+		    events: function (info, successCallback) {
+		      fetch('${pageContext.request.contextPath}/calendar/events.do')
+		        .then(function (response) {
+		          return response.json();
+		        })
+		        .then(function (data) {
+		            const today = new Date();
+		            today.setHours(0, 0, 0, 0);
+		            const mappedEvents = data.map(function (ev) {
+	                const startDate = new Date(ev.start);
+	                const endDate = new Date(ev.end);
+	                let status = "COMPLETED";
+
+	                if (startDate > today) {
+	                  status = "UPCOMING";
+	                } else if (startDate <= today && endDate >= today) {
+	                  status = "ONGOING";
+	                }
+	                
+	                let eventClass = "";
+	                if (status === "ONGOING") eventClass = "view-on";
+	                else if (status === "UPCOMING") eventClass = "view-up";
+	                else if (status === "COMPLETED") eventClass = "veiw-comp";
+
+	                console.log(`[\${status}] \${ev.title} (\${startDate.toLocaleDateString()} ~ \${endDate.toLocaleDateString()})`);
+
+		            const fileList = ev.vo.fileGroupVO && ev.vo.fileGroupVO.fileDetailVOList ? ev.vo.fileGroupVO.fileDetailVOList : [];
+		            console.log("fileList@#@#@#@#@#", ev);
+		            return {
+		              id: ev.id,
+		              title: ev.title,
+		              start: new Date(ev.start),
+		              end: new Date(ev.end),
+		              classNames: [eventClass], 
+		              extendedProps: {
+		                eventDescription: ev.description,
+		                organizer: ev.organizer,
+		                eventStatus: ev.eventStatus ? ev.eventStatus.toUpperCase() : "",
+		                location: ev.location,
+		                contact: ev.contact,
+		                fileDetailVOList: fileList,
+		                externalLink : ev.externalLink
+		              }
+		            };
+		          });
+
+		          allEvents = mappedEvents;
+		          successCallback(mappedEvents);
+		          displayTodayEvents();
+		        });
+		    }
+		  });
+
+		  calendar.render();
+		});
+
+		function loadCalendarListByMonth(startDateISO, endDateISO) {
+			  axios.post('${pageContext.request.contextPath}/calendar/listAjax.do', {
+			    startDate: startDateISO,
+			    endDate: endDateISO,
+			    currentPage: 1
+			  }).then(function(res) {
+			    console.log("월간 일정 조회 결과", res.data);
+			  }).catch(function(err) {
+			    console.error("loadCalendarListByMonth 오류:", err);
+			  });
+			}
+		function stripTime(date) {
+			  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+			}
+// 리스트 형태 일정 출력  함수  
+	function loadCalendarList(currentPage) {
+		  if (typeof currentPage === 'undefined') currentPage = 1;
+
+		  if (!currentMonthStart || !currentMonthEnd) return;
+		  var adjustedEnd = new Date(currentMonthEnd);
+		  adjustedEnd.setDate(adjustedEnd.getDate() - 1);
+		  var adjustedEndStr = adjustedEnd.toISOString().split("T")[0];
+		  
+		  var end = new Date(currentMonthEnd);
+		  end.setDate(end.getDate() - 1);
+		  var adjustedEndStr = end.toISOString().split("T")[0];
+
+		  const data = {
+		    currentPage: currentPage,
+		    startDate: currentMonthStart,
+		    endDate: currentMonthEnd
+		  };
+		  axios.post('${pageContext.request.contextPath}/calendar/listAjax.do', data)
+		    .then(function(response) {
+		      const res = response.data.list || response.data;
+		      const list = res.content;
+		      const container = document.querySelector(".search-list");
+		      container.innerHTML = '';
+
+		      if (!Array.isArray(list) || list.length === 0) {
+		    	  container.innerHTML = '<li class="li"><p>There are no registered schedules.</p></li>';
+		    	  
+		    	  document.querySelector("#divPagingArea").innerHTML = '';
+
+		    	  return;
+		    	}
+
+		      list.forEach(function(event) {
+		      const fileList = event.fileGroupVO && event.fileGroupVO.fileDetailVOList ? event.fileGroupVO.fileDetailVOList : [];
+		        console.log("fileList", fileList);
+		        let fileDownloadButton = "";
+		        if (fileList.length > 0) {
+		        	const fileInfoList = fileList.map(function(f) {
+		        		  return {
+		        		    name: f.fileOriginalName,
+		        		    path: f.fileSaveLocate
+		        		  };
+		        		});
+
+		          const encodedFileInfoList = encodeURIComponent(JSON.stringify(fileInfoList));
+		          fileDownloadButton =
+		      	    '<button type="button" class="btn sm btn-txt ico-down ico-before" ' +
+		      	    'title="Ayperlink download" onclick="fn_dw(this)" ' +
+		      	    'data-file-list="'+encodedFileInfoList+'">' +
+		      	    'Ayperlink</button>';
+		        }
+		        const startDateObj = new Date(event.startDatetime);
+		        const endDateObj = new Date(event.endDatetime);
+				const todayDateOnly = stripTime(new Date());
+				const startDateOnly = stripTime(startDateObj);
+				const endDateOnly = stripTime(endDateObj);
+		        const today = new Date();
+		        today.setHours(0, 0, 0, 0);
+
+				let status = "";
+				if (startDateOnly > todayDateOnly) {
+				  status = "UPCOMING";
+				} else if (startDateOnly <= todayDateOnly && endDateOnly >= todayDateOnly) {
+				  status = "ONGOING";
+				} else {
+				  status = "COMPLETED";
+				}
+
+		        let badgeClass = "";
+		        if (status === "ONGOING") {
+		          badgeClass = "bg3";
+		        } else if (status === "UPCOMING") {
+		          badgeClass = "";
+		        } else if (status === "COMPLETED") {
+		          badgeClass = "bg2";
+		        }
+
+		        const startDate = startDateObj.toLocaleDateString();
+		        const endDate = endDateObj.toLocaleDateString();
+		        const id = event.id;
+				console.log("listevent!!" , event)
+		        const li = document.createElement("li");
+		        li.className = "li";
+		        li.innerHTML =
+		            '<div class="in">' +
+		                '<div class="card-top">' +
+		                    '<span class="krds-badge ' + badgeClass + '">' + status + '</span>' +
+		                '</div>' +
+		                '<div class="card-body" style="cursor:pointer;">' +
+		                    '<div class="c-text">' +
+		                        '<p class="c-tit" onclick="location.href=\'' + '${pageContext.request.contextPath}' + '/calendar/detail.do?id=' + id + '\'">' +
+		                            '<span class="span">' + event.eventTitle + '</span>' +
+		                        '</p>' +
+		                        '<p class="c-txt">' + (event.eventDescription || '') + '</p>' +
+		                        '<p class="c-date">' +
+		                            '<strong class="key"></strong>' +
+		                            '<span class="value">' + startDate + ' - ' + endDate + '</span>' +
+		                        '</p>' +
+		                    '</div>' +
+		                    '<div class="card-btn">' +
+		                        fileDownloadButton +
+		                        '<button type="button" class="btn sm btn-txt ico-go ico-before" title="Hyperlink" onclick="location.href=\'' + event.externalLink + '\'">Hyperlink</button>' +
+		                    '</div>' +
+		                '</div>' +
+		            '</div>';
+
+		        container.appendChild(li);
+		      });
+
+		      document.querySelector("#divPagingArea").innerHTML = res.pagingArea;
+		      bindPagingEvents();
+		    })
+		    .catch(function(error) {
+		      console.error('일정 목록 불러오기 실패:', error);
+		    });
+		}
+
+	function buildEventTemplate(event) {
+		  const title = event.title;
+		  const start = event.start;
+		  const end = event.end;
+		  const id = event.id;
+		  const extendedProps = event.extendedProps || {};
+		  const description = extendedProps.eventDescription || "";
+		  const organizerRaw = (extendedProps.organizer || "").toLowerCase();
+		  const status = (extendedProps.eventStatus || "").toUpperCase();
+		  const fileList = extendedProps.fileDetailVOList || [];
+		  const link = extendedProps.externalLink || "";
+		  const contextPath = '${pageContext.request.contextPath}';
+
+		  let organizerClass = "";
+		  switch (organizerRaw) {
+		    case "gini": organizerClass = "organizer-gini"; break;
+		    case "city of daejeon": organizerClass = "organizer-daejeon"; break;
+		    case "city of dortmund": organizerClass = "organizer-dortmund"; break;
+		    case "city of malaga": organizerClass = "organizer-malaga"; break;
+		    case "county of montgomery, md": organizerClass = "organizer-montgomery"; break;
+		    case "city of seattle": organizerClass = "organizer-seattle"; break;
+		    case "province of quebec": organizerClass = "organizer-quebec"; break;
+		    default: organizerClass = "organizer-default"; break;
+		  }
+
+		  let fileDownloadButton = "";
+		  if (fileList.length > 0) {
+			  const fileInfoList = fileList.map(function(f) {
+				  return {
+				    name: f.fileOriginalName,
+				    path: f.fileSaveLocate
+				  };
+				});
+
+		    const encodedFileInfoList = encodeURIComponent(JSON.stringify(fileInfoList));
+		    fileDownloadButton =
+		      '<button type="button" class="btn xsm btn-txt ico-down ico-before" ' +
+		      'title="Ayperlink download" onclick="fn_dw(this)" ' +
+		      'data-file-list="' + encodedFileInfoList + '"></button>';
+		  }
+
+		  return (
+		    '<div class="event-list-box ' + status.toLowerCase() + ' top">' +
+		      '<div class="event-list upcoming top">' +
+		        '<p class="event-list-tit ' + organizerClass + '">' + organizerRaw + '</p>' +
+		        '<div class="event-icon-box card-btn">' +
+		          fileDownloadButton +
+		          '<button type="button" class="btn xsm btn-txt ico-go ico-before" title="Hyperlink" onclick="location.href=\'' + link + '\'"></button>' +
+		        '</div>' +
+		      '</div>' +
+		      '<div class="event-list ' + status.toLowerCase() + ' bottom" >' +
+		        '<div class="side-bg card-body">' +
+		          '<a href="#" class="c-text" style="cursor:pointer !important;" onclick="location.href=\'' + contextPath + '/calendar/detail.do?id=' + id + '\'">' +
+		            '<p class="c-tit"><span class="span">' + title + '</span></p>' +
+		            (description ? '<p class="c-txt">' + (description.length > 50 ? description.substring(0, 50) + '...' : description) + '</p>' : '') +
+		            '<p class="c-date"><strong class="value">' + formatDateString(start) + ' - ' + formatDateString(end) + '</strong></p>' +
+		          '</a>' +
+		        '</div>' +
+		      '</div>' +
+		    '</div>'
+		  );
+		}
+
+	function bindPagingEvents() {
+	  document.querySelectorAll(".clsPagingArea").forEach(function (el) {
+	    el.addEventListener("click", function (e) {
+	      e.preventDefault();
+	      const currentPage = parseInt(this.dataset.currentPage);
+	      loadCalendarList(currentPage);
+	    });
+	  });
+	}
+// 캘린더 우측  ongoing / upcomming 리스트 함수
+function displayTodayEvents() {
+  const onlistBox = document.querySelector(".ongoing");
+  const uplistBox = document.querySelector(".upcoming");
+  const ongoingCont = document.querySelector(".ongoingCont");
+  const upcomingCont = document.querySelector(".upcomingCont");
+  const clickCalendar = document.querySelector(".clickCalendar");
+
+  
+
+
+  const noOngoingBox = document.querySelector(".no-ongoing-event");
+  const noUpcomingBox = document.querySelector(".no-upcoming-event");
+
+  
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  onlistBox.innerHTML = '';
+  uplistBox.innerHTML = '';
+  //ongoingCont.style.setProperty('display', 'none', 'important');
+  //upcomingCont.style.setProperty('display', 'none', 'important');
+  clickCalendar.style.setProperty('display', 'none', 'important');
+  noOngoingBox.style.display = 'none';
+  noUpcomingBox.style.display = 'none';
+
+  let hasOngoing = false;
+  let hasUpcoming = false;
+  let anyRendered = false;
+  let nearestUpcoming = null;
+
+  allEvents.forEach(function (event) {
+	  const start = new Date(event.start);
+	  const end = new Date(event.end);
+	  const status = (event.extendedProps.eventStatus || "").toUpperCase();
+
+	  // UPCOMING: 가장 가까운 1개만 저장
+	  if (status === "UPCOMING" && start > today) {
+	    if (!nearestUpcoming || start < new Date(nearestUpcoming.start)) {
+	      nearestUpcoming = event;
+	    }
+	  }
+
+	  // ONGOING: 1개만 출력
+	  if (status === "ONGOING" && !hasOngoing) {
+	    const template = buildEventTemplate(event);
+	    onlistBox.insertAdjacentHTML("beforeend", template);
+	    hasOngoing = true;
+	  }
+	});
+
+    if (hasOngoing) {
+      ongoingCont.style.setProperty('display', 'block', 'important');
+    } else {
+      noOngoingBox.style.display = 'block';
+    }
+
+    if (nearestUpcoming) {
+      const template = buildEventTemplate(nearestUpcoming);
+      uplistBox.insertAdjacentHTML("beforeend", template);
+      upcomingCont.style.setProperty('display', 'block', 'important');
+      hasUpcoming = true;
+    }
+
+    if (!hasUpcoming) {
+      noUpcomingBox.style.display = 'block';
+    }
+  }
+
+
+	// 캘린더 렌더 자동 실행 
+	function waitForCalendarReady(callback) {
+	  function check() {
+	    if (typeof allEvents !== 'undefined' && Array.isArray(allEvents) && allEvents.length > 0) {
+	      callback();
+	    } else {
+	      setTimeout(check, 300);
+	    }
+	  }
+	  check();
+	}
+
+
+	document.addEventListener("DOMContentLoaded", function() {
+		  waitForCalendarReady(function() {
+		    displayTodayEvents();
+		  });
+		});
+	// 파일 다운로드 
+	function fn_dw(el) {
+		 const contextPath = '${pageContext.request.contextPath}';
+		  const fileListStr = el.dataset.fileList;
+		  if (!fileListStr) {
+		    alert("다운로드할 파일이 없습니다.");
+		    return;
+		  }
+
+		  let fileList;
+		  try {
+		    fileList = JSON.parse(decodeURIComponent(fileListStr));
+		  } catch (e) {
+		    alert("파일 정보 파싱 오류");
+		    console.error(e);
+		    return;
+		  }
+
+		  if (!Array.isArray(fileList) || fileList.length === 0) {
+		    alert("파일 정보가 없습니다.");
+		    return;
+		  }
+
+		  if (fileList.length >= 2) {
+		    const params = fileList.map(function(f) {
+		      return 'fileNames=' + encodeURIComponent(f.path);
+		    }).join("&");
+		    const url = contextPath + '/downloadMulti.do?' + params;
+		    location.href = url;
+		  } else {
+		    const file = fileList[0];
+		    const url = contextPath +
+		      '/download.do?fileName=' + encodeURIComponent(file.path) +
+		      '&originalName=' + encodeURIComponent(file.name);
+		    location.href = url;
+		  }
+		}
+
+
+</script>
+

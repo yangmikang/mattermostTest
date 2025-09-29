@@ -1,0 +1,132 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+<html>
+<!-- 컨테이너 영역 -->
+		<div id="container">
+
+			<div class="page-title-wrap visual img-members">
+				<div class="visual-filter"></div>
+				<div class="inner">
+					<!-- breadcrumb -->
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">Network</a></li>
+							<li><a href="#" class="txt">Malaga</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb -->
+					<!-- 페이지 타이틀 영역 -->
+					<div class="visual-area">
+						<h2 class="h-tit">Malaga</h2>
+						<p>Members</p>
+					</div>
+				<!-- //페이지 타이틀 영역 -->
+				</div>
+			</div>  
+			
+
+			<!-- 컨텐츠 영역 -->
+			<div class="inner">
+				
+				<!-- 섹션 컨텐츠 -->
+				 <div class="gini-cont-wrap gap20 cont-box cont-network">
+					<div class="gini-cont-box">
+						<h3 class="area-tit ico ico-location"><a href=""></a>City of Malaga</h3>
+						<!-- 독일 : ico-germ, 스페인 : ico-span, 미국 : ico-eng, 프랑스 : .ico-fren, 캐나다 : .ico-canada, 대만 : .ico-taiwan -->
+						<div class="row cont100">
+							<div class="cont-left cont50 memb_view">
+								<div class="city-view-box">
+									<div class="city-view-box-in">
+										<div class="city-view-ico">
+											<i class="item-ico ico-span"></i>
+										</div>
+										<div class="city-view-img-box">
+											<span class="city-view-img"><img src="${pageContext.request.contextPath}/img/component/common/membe_malaga_view.jpg" alt=""></span>  
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="cont-right cont50">
+								<div class="tbl_wrap">
+									<ul class="list-tableType type2">
+<!-- 								<li><span class="title">Area</span><span class="value">539.73㎢</span></li> -->
+								<li><span class="title">Population</span><span
+									class="value">591,637 (City), 1.75M (Province)</span></li>
+								<li><span class="title">GRDP</span><span class="value">€37.1
+										billion / €21,444 per capita (2022)</span></li>
+								<li><span class="title">Key Industries</span> <span
+									class="value"> Hospitality, Agriculture, Technology
+										(Digital Content, Cybersecurity, Microelectronics, IoT),
+										Maritime, Renewable Energy </span></li>
+								<li><span class="title">Transport</span> <span
+									class="value"> 3rd busiest airport in Spain: 150
+										destinations in 35 countries, high-speed train, commuter rail
+										& metro hub, 6th busiest cruise ship port in the Mediterranean
+								</span></li>
+								<li><span class="title">Innovative Ecosystem</span> <span
+									class="value"> Malaga TechPark with 687+ companies and
+										25,000+ jobs, 5 Universities, 4 Business Schools, 3 Tech
+										Vocational Schools, 14 incubators, Digital Content Hub, 2
+										Cybersecurity Centres, 4 IoT R&D Centres </span></li>
+								<li><span class="title">Notable Companies</span> <span
+									class="value"> Accenture, Citi Group, Dekra, DensoTen,
+										Ericsson, EY, Globant, Google, Mercedes-Benz, NTT Data,
+										Oracle, PWC, TDK & Vodafone </span></li>
+								<li><span class="title">Heritage</span> <span class="value">
+										3,000-year-old city with Roman & Moorish historical sites.
+										Birthplace of Pablo Picasso & Antonio Banderas. Home to 40
+										museums. </span></li>
+							</ul>
+								</div>
+							</div>	
+						</div>
+						<div class="bg-imgType type02">
+							<div class="bg-white">
+								<h4 class="sub-tit ico-bullet2">Strategic Industries</h4>
+								<ol class="list-num">
+									<li>Digital Content: Spain's 1st National Digital Content Hub (12,000 m2) with 25 training courses for 500 students, 224 entrepreneurial projects, and 29 indie video games accelerated from 23 countries in 2023.</li>
+									<li>Cybersecurity: Google Safety Engineering Centre (GSEC) & Andalusian Cybersecurity Center (€74 M) shape the future of cybersecurity.</li>
+									<li>Microelectronics: imec´s 300mm chip prototyping processes laboratory in Malaga is part of the €12.25 billion Spanish Semiconductor Investment Plan.</li>
+								</ol>
+							</div>
+						</div>
+						<div class="bg-color-box"> 
+							<div class="network-align gini-cont-box">  
+							<h4 class="sub-tit ico-bullet2">Malaga Valley Innovative Ecosystem</h4>
+							<div class="row cont100">
+								<div class="cont-left cont50">
+									<div class="img-box member-map">
+										<img src="${pageContext.request.contextPath}/img/component/common/membe_malaga.png" alt="malaga">
+										<!-- <img src="${pageContext.request.contextPath}/img/component/common/membe_dortmund.png" alt="dortmund 지도">
+										<img src="${pageContext.request.contextPath}/img/component/common/membe_malaga.png" alt="malaga 지도">
+										<img src="${pageContext.request.contextPath}/img/component/common/membe_montgomery.png" alt="montgomery 지도">
+										<img src="${pageContext.request.contextPath}/img/component/common/membe_seattle.png" alt="seattle 지도">
+										<img src="${pageContext.request.contextPath}/img/component/common/membe_quebec.png" alt="quebec 지도"> 
+										hisnchu는 자료 없음
+										-->
+										
+									</div>
+								</div>
+<!-- 								<div class="cont-right cont50"> -->
+<!-- 									<ul class="list-line"> -->
+<!-- 										<li><span class="title">Employee</span><span class="value">91,886</span></li> -->
+<!-- 										<li><span class="title">PhD Researchers</span><span class="value">17,604</span></li> -->
+<!-- 										<li><span class="title">Technology Transfer</span><span class="value">2,015</span></li> -->
+<!-- 										<li><span class="title">Government-funded Research Institutes</span><span class="value">26</span></li> -->
+<!-- 										<li><span class="title">Research Companies</span><span class="value">447</span></li> -->
+<!-- 										<li><span class="title">High-Tech Companies</span><span class="value">135</span></li> -->
+<!-- 									</ul> -->
+<!-- 								</div> -->
+							</div>
+						</div>
+						</div>
+					</div>
+				 </div>
+				<!-- //섹션 컨텐츠 -->
+			</div>
+			<!-- //컨텐츠 영역 -->
+		</div>
+		<!-- //컨테이너 영역 -->
+</html>

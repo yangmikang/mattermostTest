@@ -1,0 +1,308 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="apple-touch-icon" sizes="180x180" href="../../resources/img/guide/favicon_180.png">
+	<link rel="icon" type="image/png" sizes="512x512" href="../../resources/img/guide/favicon_512.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="../../resources/img/guide/favicon_192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../../resources/img/guide/favicon_32.png">
+	<title>GINI - Global Innopolis Network Initiative</title>
+	<link href="../../resources/css/swiper-bundle.min.css" type="text/css" rel="stylesheet" />
+	<link href="../../resources/css/pattern_css.css" type="text/css" rel="stylesheet" />
+	<link href="../../resources/css/output/p_common.css" type="text/css" rel="stylesheet" />
+	<link href="../../resources/css/output/p_content.css" type="text/css" rel="stylesheet" />
+	<link href="../../resources/css/output/p_layout.css" type="text/css" rel="stylesheet" />
+
+	 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css' rel='stylesheet' />
+	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales/ko.global.min.js"></script>
+
+</head>
+
+<style>
+.search-list .card-body {
+    display: flex
+;
+    align-items: normal !important;
+    justify-content: flex-start;
+    flex-direction: column !important;
+    gap: var(--krds-spacer-6);
+}
+.search-list .li {
+    position: relative;
+    display: flex
+;
+    align-items: normal !important;
+    justify-content: flex-start;
+    flex-direction: column !important;
+    gap: var(--krds-spacer-6) 0;
+    padding: var(--krds-spacer-6) !important;
+    overflow-x: auto;
+    box-sizing: border-box;
+    border-radius: var(--krds-rd-12);
+    border: 0.1rem solid var(--krds-gray-40);
+	.type1{
+		margin-bottom : 20px;
+	
+	}
+	#content{
+		    width: 80%;
+    		margin: 0 auto;
+			margin-bottom: 5%;
+			margin-top: 2%;
+	}
+	 
+	#btBox{
+		 display: flex
+;
+   		 justify-content: flex-end;
+   		 
+   		 margin:10px;
+	
+	}
+	.taxindate{
+	    align-items: center;
+		display: flex;
+	}
+
+	.topBox{
+	
+	    display: flex;
+	    align-items: center;
+	    justify-content: space-between;
+	}
+	
+</style>
+<body>
+<div id="wrap">
+
+		<div class="right ">
+			<!-- <button type="button" class="btn-navi sch" title="통합검색 레이어" onclick="common.popupEvent('#popTotalSch');">통합검색</button> -->
+		</div>
+			<!-- //모바일 : 전체메뉴 -->
+		<!-- //헤더 영역 -->
+
+		<!-- 컨테이너 영역 -->
+		<div id="container">
+			<!-- breadcrumb -->
+			<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+				<ol class="breadcrumb">
+					<li class="home"><a href="#" class="txt">Home</a></li>
+					<li><a href="#" class="txt">BOARD</a></li>
+				</ol>
+			</nav>
+			<!-- breadcrumb -->
+	<div class="inner">
+	<!-- <button type="button" onclick="thumOn()">썸네일 온~~~~</button>
+	<button type="button" onclick="listOn()">리스트 온~~~~</button> -->
+				<!-- 페이지 타이틀 영역 -->
+				<div class="page-title-wrap">
+					<h2 class="h-tit">News</h2>
+				</div>
+				<!-- //페이지 타이틀 영역 -->
+				<!-- 게시판목록 영역 -->
+				 <div class="board-box">
+					<!-- 검색 입력폼 -->
+					<div class="search-top-box">
+						<div class="sch-form-wrap flex">
+							<div class="sch-input">
+								<input type="text" class="form-control searchKeyword" placeholder="Enter Keyword" title="Enter Keyword"
+								name="searchKeyword" id="searchKeyword">
+								<button type="button" class="btn btn-ico ico-sch" id="search">
+									<span class="sr-only">검색</span>
+								</button>
+							</div>
+							<button type="button" class="btn btn-txt primary" style="width: 150px;" onclick="location.href='/distep/board/boardPage.do'">Write Post</button>
+						</div>
+					</div>
+					<!-- //검색 입력폼 -->
+					<!-- 검색 결과 : 리스트 상단 -->
+					 <div class="search-list-top type1">
+						<div class="sch-info" role="region" aria-live="polite">
+							전체 <span class="keyword">00</span>건
+						</div>
+					</div>
+					<!-- //검색 결과 : 리스트 상단 -->
+				<!-- 검색 결과 : 이미지 -->
+				 	<ul class="search-list type2" style="display:none; ">
+					
+					
+					</ul> 
+					<!-- 검색 결과 : 리스트 -->
+					<!-- //검색 결과 : 리스트 -->
+
+					
+
+					<!-- paging : 웹 -->
+					<div class="pagination w-page paging">
+						<div class="row justify-content-center" id="divPagingArea">
+					
+						</div>
+				</div>
+					</div>
+					</div>
+					<!-- //paging : 웹 -->
+
+	<!-- 레이어 : 검색필터 -->
+	<!-- //레이어 : 검색필터 -->
+
+	<!-- 스크립트 : 라이브러리 -->
+	<script src="../../resources/js/pattern/jquery.min.js"></script>
+	
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<!-- 스크립트 : 패턴 페이지 -->
+	
+	<script src="../../resources/js/pattern/ui-pattern-script.js"></script>
+	
+
+	<!-- 스크립트 : 컴포넌트 -->
+	<script src="../../resources/js/component/ui-script.js"></script>
+	<script>
+	
+	</script>
+
+	<script>
+	function listOn() {
+		let type2 = document.querySelector(".type2");
+
+		type2.style.display = 'none';
+		stb.style.display = 'grid';
+
+		localStorage.setItem("viewMode", "list");
+	}
+
+
+	
+	function thumOn(){
+		let type2 = document.querySelector(".type2")
+		type2.style.display = 'grid'; 
+		type2.style.gridTemplateColumns = '1fr 1fr 1fr'; 
+		type2.style.gridGap = 'var(--krds-spacer-6)'; 
+		
+		
+	}
+	document.getElementById("search").addEventListener("click", function () {
+		
+		  const keyword = document.getElementById("searchKeyword").value;
+			console.log("keyword",keyword)
+		  changeSort(1, keyword); // 검색 시 1페이지부터 다시 시작
+		});
+	document.addEventListener("DOMContentLoaded", function () {
+		const savedMode = localStorage.getItem("viewMode");
+
+		if (savedMode === "thumbnail") {
+			thumOn(); // 저장된 모드가 썸네일이면 자동 실행
+		}
+
+		changeSort(); // 목록 데이터 로드
+	});
+
+
+	changeSort()
+
+	function changeSort(currentPage = 1, keyword) {
+	  let data = { currentPage: currentPage, keyword:keyword };
+
+	  axios.post('/distep/board/listAjax.do', data)
+	    .then(function (res) {
+	      let type2 = document.querySelector(".type2");
+	      let Listdata = res.data.content;
+	      let tby = '';
+	      let tby3 = '';
+			let getTotal = res.data.total
+			console.log(getTotal)
+			
+
+			let flagIcon = '';
+
+			
+
+			let totalkeyword = document.querySelector(".keyword")
+			totalkeyword.innerText = getTotal
+	      for (let list of Listdata) {
+	    	  
+
+	    	  console.log("list",list)
+	    	  switch (list.cityCode) {
+			  case "01": // Daejeon
+			    flagIcon = 'ico_korea.svg'; // 🇰🇷 South Korea
+			    break;
+			  case '02': // Dortmund
+			    flagIcon = 'ico_germany.svg'; // 🇩🇪 Germany
+			    break;
+			  case '03': // Malaga
+			    flagIcon = 'ico_spain.svg'; // 🇪🇸 Spain
+			    break;
+			  case '04': // Montgomery County
+			    flagIcon = 'ico_usa.svg'; // 🇺🇸 United States
+			    break;
+			  case '05': // Seattle
+			    flagIcon = 'ico_usa.svg'; // 🇺🇸 United States
+			    break;
+			  case '06': // Quebec
+			    flagIcon = ''; // 🇨🇦 Canada
+			    break;
+			  case null : // Other City
+			    flagIcon = 'ico_germany.svg'; //  Other / Global
+			    break;
+			  default:
+			    flagIcon = ''; //  Unknown
+			}
+	    	  const contextPath = '${pageContext.request.contextPath}';
+
+	    	  tby += `
+	          <tr>
+	            <th><a href="/distep/board/detail.do?boardCode=\${list.boardCode}">\${list.title}</a></th>
+	            <td>\${list.content.length > 90 ? list.content.slice(0, 90) + '...' : list.content}</td>
+	            <td>\${list.regDate}</td>
+	            <td>\${list.userId}</td>
+	          </tr>`;
+	          
+	    	  tby3 += `
+	    		  <li class="li" >
+					<div class="card-img" style="background-image:url(/resources/img/component/common/bg_highLevelMeeing.jpg)" onclick="location.href='/distep/board/detail.do?boardCode=\${list.boardCode}'"></div>
+					<div class="card-body" onclick="location.href='/distep/board/detail.do?boardCode=\${list.boardCode}'">
+						<a href="#" class="c-text">
+							<p class="c-tit"><span class="span">\${list.title}</span></p>
+							<p class="c-txt">
+							\${list.content.length > 100 ? list.content.slice(0, 100) + '...' : list.content}
+							</p>
+							<p class="c-date">
+								<strong class="key">Created Date </strong>
+								<span class="value">\${list.regDate}</span>
+							</p>
+						</a>
+						<div class="c-btn">
+							<a href="#" class="btn md secondary" title="View Details" onclick="location.href='/distep/board/detail.do?boardCode=\${list.boardCode}'">View Details</a>
+						</div>
+					</div>
+				</li>
+				
+	    		  `;
+
+	          
+	      }
+	      content.innerHTML = tby2;
+	      type2.innerHTML = tby3;
+
+	      document.querySelector("#divPagingArea").innerHTML = res.data.pagingArea;
+	      bindPagingEvents(); //  새 페이징에 이벤트 다시 바인딩
+	    });
+	}
+	function bindPagingEvents() {
+		  document.querySelectorAll(".clsPagingArea").forEach(function (el) {
+		    el.addEventListener("click", function (e) {
+		      e.preventDefault();
+		      const currentPage = parseInt(this.dataset.currentPage);
+		      const keyword = this.dataset.keyword || '';
+		      console.log(":page",currentPage)
+		      changeSort(currentPage, keyword);
+		    });
+		  });
+		}
+	</script>
+
+</body>
+</html>

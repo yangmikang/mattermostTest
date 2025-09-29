@@ -1,0 +1,257 @@
+package kr.go.distep.cmmn.web;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+
+import com.initech.eam.nls.CookieManager;
+
+import kr.go.distep.cmmn.service.LogService;
+import kr.go.distep.cmmn.vo.LogVO;
+import kr.go.distep.main.service.MainService;
+import kr.go.distep.user.service.UserService;
+import kr.go.distep.user.vo.UserVO;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Component
+public class UserInterceptor extends HandlerInterceptorAdapter {
+	
+	//@Resource(name = "adminService")
+	//private AdminService adminService;
+	//  인증 체크가 필요 없는 URL 리스트  
+	List<String> urls;
+	public void setUrls(List urls) {
+		this.urls = new ArrayList<String>();
+		//for-loop 통한 전체 조회
+        for(Object object : urls) {            
+            this.urls.add((String) object);
+        }
+
+	}
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserInterceptor.class);
+    
+	@Autowired
+    private LogService logService;
+	
+	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+	@Resource(name="mainService")
+	private MainService mainService; 
+	
+	
+	@Autowired
+	private UserService userService; 
+	
+	/**
+	 * 컨트롤러 클래스를 호출하기전에 실행(세션확인을 위해 사용할 메소드다)
+	 * @throws IOException 
+	 * @throws Exception 
+	 */
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException, Exception {
+
+		HttpSession session = request.getSession(false);
+	    String userId = "anonymous";
+	    String userType = "";
+	    
+	    if (session != null) {
+	        Object userObj = session.getAttribute("loggedInUser");
+	        if (userObj != null) {
+	            userId = ((UserVO) userObj).getId();
+	            userType = ((UserVO) userObj).getRole();
+	        }
+	    }
+
+	    String ipAddr = request.getRemoteAddr();
+	    String method = request.getMethod();
+	    String requestUri = request.getRequestURI();
+	    String queryString = request.getQueryString();
+	    String fullUri = requestUri + (queryString != null ? "?" + queryString : "");
+	    String logTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+	    LogVO log = new LogVO();
+	    log.setUserId(userId);
+	    log.setIpAddr(ipAddr);
+	    log.setMethod(method);
+	    log.setRequestUri(fullUri);
+	    log.setLogTime(logTime);
+
+	    logService.insertRequestLog(log);
+	    
+	    String boardMasterCode = userService.getBoardMasterCodeByLink(fullUri);
+	    
+	    HashMap<String, String> param = new HashMap<>();
+        param.put("userType", userType);
+        param.put("boardMasterCode", boardMasterCode);
+        
+	    if(boardMasterCode!=null&&!boardMasterCode.equals("")) {
+	    	String authYn = userService.getBoardReadAuth(param);
+	    	if(authYn!=null) {
+		    	if(authYn.equals("N")) {
+		    		response.setContentType("text/html; charset=UTF-8");
+		            PrintWriter out = response.getWriter();
+		            out.println("<script>");
+		            out.println("alert('You do not have permission to access this page.');");
+		            out.println("location.href='" + request.getContextPath() + "/index.do';");
+		            out.println("</script>");
+		            out.close();
+		    		return false;
+		    	}	 
+	    	}
+	    }
+	    
+	    List<HashMap<String, Object>> menuList = mainService.getMenuList();
+        request.setAttribute("menuList", menuList);
+
+	    return true;
+	}
+
+	
+	
+	/**
+	 * 
+	 * 회원정보 조회(사용자ID, 항목명 )
+	 * 
+	 * @param userid
+	 * @param column
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @version Update History
+	 * <pre>
+	 * ---------------------------------------------------------------------------------------
+	 * - 정정일자 :
+	 * - 정 정 자 :
+	 * - 정정내용 :
+	 * ---------------------------------------------------------------------------------------
+	 * </pre>
+	 */
+	public static String getUserTHInfo(String userid, String column) throws IOException, Exception {
+    	String returnVal = "";
+		String authHost = "https://sso1.ntis.go.kr";
+		String authURL = "/3rdParty/sso/userInfoApi.jsp";
+		String reqStr = "user_id=" + userid + "&user_col=" + column;	
+		String returnString = "";    //querySSO(authHost, authURL, reqStr);
+		try {
+			System.setProperty("https.protocols", "TLSv1.2");
+			System.setProperty("jsse.enableSNIExtension", "false");
+			URL url = new URL(authHost + authURL + "?" + reqStr);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection(); 
+			con.setConnectTimeout(1000);
+			con.setReadTimeout(1000);
+			con.setRequestMethod("GET");
+			con.setDoOutput(false); 
+
+			StringBuilder sb = new StringBuilder();
+			String line;
+			if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+				BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
+				while ((line = br.readLine()) != null) {
+					sb.append(line);
+				}
+				br.close();
+			} else {
+				
+			}
+			returnString = sb.toString();
+			if(returnString != null && !"".equals(returnString)) { 
+				returnVal = CookieManager.decryptWithSEED(URLDecoder.decode(returnString, "UTF-8"));
+			}else {
+				returnVal = "";
+			}
+			
+			System.out.println("returnVal===R:" + returnVal);
+		}catch(IOException iee) {
+			System.out.println("returnVal===I:" + returnVal);
+			throw iee;
+		}catch(Exception ee) {
+			System.out.println("returnVal===E:" + returnVal);
+			throw ee;
+		}
+		return returnVal;
+	}
+	
+	/*
+	 * 관리자정보 테이블을 조회해서 관리자인지 확인
+	 * 
+	 * */
+	private String getCheckAdmin(String userId) {
+		String admYn = "N";
+		//관리자 아이디
+		if(userId.equals("kos7541")) {
+			admYn = "Y";
+		}else {
+			admYn = "N";
+		}
+		return admYn;
+	}
+	
+	//기간 체크
+	private boolean checkPsblPeriod(String startDt, String endDt) {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+
+        Date today = new Date();
+        Date sDt = null;
+        Date eDt = null;
+
+        try {
+            sDt = format.parse(startDt);
+            eDt = format.parse(endDt);
+        } catch (java.text.ParseException e) {
+            LOGGER.error("error = "+e);
+        }
+
+        if (today.compareTo(sDt) > 0 && eDt.compareTo(today) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+	/*
+	 * 관리자가 아닌 경우 특정URI를 접속을 할 수 없도록 URI 리스트 체크
+	 * */
+	private boolean getAdminUriList(String requestURI){
+		
+		List<String> uriList = new ArrayList<String>();
+		uriList.add("AdminMgnt");
+		uriList.add("selectDictionary");
+		uriList.add("selectLog");
+		
+		for(String uri : uriList){
+			if(requestURI.indexOf(uri) > -1){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+}

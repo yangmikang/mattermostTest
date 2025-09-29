@@ -1,0 +1,88 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+  <div id="container" class="sub-cont-bg">
+    <div class="page-title-wrap visual img-members">
+      <div class="visual-filter"></div>
+      <div class="inner">
+        <!-- breadcrumb -->
+        <nav class="breadcrumb-wrap" aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="home"><a href="#" class="txt">Home</a></li>
+            <li><a href="#" class="txt">Programs</a></li>
+            <li><a href="#" class="txt">Forums&Seminars</a></li>
+          </ol>
+        </nav>
+        <!-- breadcrumb -->
+        <div class="visual-area">
+          <h2 class="h-tit">Forums&Seminars</h2>
+          <p>Discussing solutions to common urban issue</p>
+        </div>
+      </div>
+    </div>
+    <div class="inner">
+      <div class="gini-cont-wrap">
+      	<div class="gini-cont-box">
+	        <h3 class="area-tit">Forums &amp; Seminars</h3>
+	          <div class="area-group">
+	            <h4 class="sub-tit">Global Innopolis Forum</h4>
+	            <p class="desc">GINI’s flagship forum brings together member cities and regions to provide a platform for urban leaders, experts, and innovators to exchange regional innovation policies, share best practices, and commit to joint actions.</p>
+	          </div>
+	        <div class="forum-info" style="margin-top:12px">
+	          <ul>
+	            <li><b>What takes place?</b> Keynotes, presentations, panel discussions, thematic workshops, and networking</li>
+	            <li><b>How often?</b> Every two years (same year as the High-Level Meeting)</li>
+	            <li><b>Who joins?</b> Representatives of GINI members, regional innovation stakeholders from industry-academia-research, plus anyone from the public interested in joining</li>
+	          </ul>
+	        </div>
+	        <div class="forum-cont-box">
+		        <div class="forums-hr">
+		          <span class="node left"></span>
+		          <span class="node right"></span>
+		        </div>
+		        <div class="timeline">
+		          <div>
+		            <div class="meta">October 2023</div>
+		            <div class="sub">Hosted by Daejeon, Korea</div>
+	          	        <div class="gallery" style="margin-top:10px">
+				          <article class="card">
+				            <div class="media">
+				              <img src="${pageContext.request.contextPath}/img/pattern/content/forum-2023.jpg" alt="Forum 2023"/>
+				              <div class="year">2023</div>
+				            </div>
+				          </article>
+			          </div>
+		          </div>
+		          <div>
+		            <div class="meta">September 2024</div>
+		            <div class="sub">Hosted by Daejeon, Korea</div>
+	       	        	<div class="gallery" style="margin-top:10px">
+				          <article class="card">
+				            <div class="media">
+				              <img src="${pageContext.request.contextPath}/img/pattern/content/forum-2024.jpg" alt="Forum 2024"/>
+				              <div class="year">2024</div>
+				            </div>
+				          </article>
+			          </div>
+		          </div>
+		        </div>
+	        </div>
+        </div>
+      </div>
+      <div class="gini-cont-wrap mgt40">    
+      	<div class="gini-cont-box">
+	        <h3>GINI Connect Seminar</h3>
+	        <p class="p">A Platform for Identifying Joint Action Initiatives<br/>
+	        The GINI Connect Seminar is a key program to facilitate collaborative project development among affiliated institutions—including universities, research institutes, and business support organizations—in member cities and regions.</p>
+	        <div class="forum-info" style="margin-top:12px">
+	          <ul>
+	            <li><b>Who joins?</b> Affiliated institutions in GINI member cities and regions, especially those supporting start-ups or SMEs through acceleration or scale-up programs</li>
+	            <li><b>How often?</b> Four online sessions per year</li>
+	          </ul>
+	        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</html>

@@ -1,0 +1,38 @@
+package kr.go.distep.main.service.vo;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import kr.go.distep.cmmn.file.vo.FileGroupVO;
+import lombok.Data;
+
+@Data
+public class BoardVo {
+	
+	private int boardCode;
+	
+	private String title;
+	
+	private String content;
+	
+	private String userId;
+	
+	private String regDate;
+	
+	private String username;
+	
+	private String status;
+	
+	private String cityCode;
+	
+	private String boardMasterCode;
+	
+	private MultipartFile[] uploadFiles;
+	
+	private FileGroupVO fileGroupVO;
+	
+	private long fileGroupNo;
+
+	public MultipartFile ThumbnailFile;
+
+
+}

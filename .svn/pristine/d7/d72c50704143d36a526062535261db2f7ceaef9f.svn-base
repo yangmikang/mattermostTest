@@ -1,0 +1,706 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!-- 컨테이너 영역 -->
+		<div id="container" class="main">
+			<!-- 비쥬얼 영역 -->
+			<div class="main-vban-wrap bg">
+				<div class="vb-swiper">
+					<div class="swiper">
+						<ul class="swiper-wrapper">
+							<li class="swiper-slide">
+								<div class="in">
+									<div class="inner">
+										<div class="text">
+											<h2 class="tit">GINI</h2>
+											<p class="txt">The Global Innopolis Network Initiative (GINI) is an international collaboration platform connecting cities and regions committed to leveraging science and technology to drive sustainable innovation, economic growth, and industrial development.</p>
+											<a href="${pageContext.request.contextPath}/overview.do" class="btn primary lg">Learn More</a>
+										</div>
+									</div>
+									<div class="im">
+										<img src="${pageContext.request.contextPath}/img/pattern/content/img_main_content_visual_1.jpg" alt="GINI City01">										
+									</div>
+								</div>
+							</li>
+							<li class="swiper-slide">
+								<div class="in">
+									<div class="inner">
+										<div class="text">
+											<h2 class="tit">GINI</h2>
+											<p class="txt">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding members: Daejeon (South Korea), Dortmund (Germany), Malaga (Spain), Montgomery County (MD, USA), and Seattle (USA).</p>
+											<a href="${pageContext.request.contextPath}/overview.do" class="btn primary lg">Learn More</a>
+										</div>
+									</div>
+									<div class="im">
+										<img src="${pageContext.request.contextPath}/img/pattern/content/img_main_content_visual_2.jpg" alt="GINI City02">										
+									</div>
+								</div>
+							</li>
+							<li class="swiper-slide">
+								<div class="in">
+									<div class="inner">
+										<div class="text">
+											<h2 class="tit">GINI</h2>
+											<p class="txt">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding members: Daejeon (South Korea), Dortmund (Germany), Malaga (Spain), Montgomery County (MD, USA), and Seattle (USA).</p>
+											<a href="${pageContext.request.contextPath}/overview.do" class="btn primary lg">Learn More</a>
+										</div>
+									</div>
+									<div class="im">
+										<img src="${pageContext.request.contextPath}/img/pattern/content/img_main_content_visual_3.jpg" alt="GINI City03">										
+									</div>
+								</div>
+							</li>
+						</ul>
+						<div class="slider-buttonBox">
+							<div class="inner">
+								<span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+								<button type="button" class="swiper-button-prev" tabindex="0" aria-label="Previous slide" aria-controls="swiper-wrapper-8d0d580115f4854d">
+								<span class="sr-only">이전</span>
+								</button>
+								<button type="button" class="swiper-button-next" tabindex="0" aria-label="Next slide" aria-controls="swiper-wrapper-8d0d580115f4854d">
+									<span class="sr-only">다음</span>
+								</button>
+							</div>
+						</div>
+						<div class="swiper-indicator text-center">
+							<div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 1"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 2"></span><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 3" aria-current="true"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 4"></span></div>
+						</div>
+					</div>
+				</div>
+
+				<!-- 멤버 배너 영역 -->
+				<div class="member-swiper-wrap">
+					<div class="member-swiper">
+						<div class="inner">
+							<div class="swiper">
+								<ul class="swiper-wrapper">
+									<li class="swiper-slide">
+										<div class="member-big-tit-box">
+											<h3 class="area-tit ico ico-location-dortmund">City of Dortmund</h3>
+											<a onclick="location.href='${pageContext.request.contextPath}/dortmund.do'" href="#" class="swiper-button-more" title="Read more"></a>
+										</div>
+<!-- 										<div class="member-txt-box">
+											<p class="desc">We are Dortmund - over 600,000 people from 180 nations. We are urban, green, colorful, digital, and full of life.</p>
+										</div> -->
+										<div class="member-swiper-box">
+											<div class="left-box">
+												<!-- <p class="sub-tit">City of Dortmund</p> -->
+												<div class="member-img-box">
+													<img src="${pageContext.request.contextPath}/img/component/common/membe_dort.jpg" alt="city of daejeon">
+												</div>
+											</div>
+											<div class="right-box">
+												<!-- <p class="sub-tit">Daedeok Innopolis</p> -->
+												<p class="desc">We are Dortmund - over 600,000 people from 180 nations. We are urban, green, colorful, digital, and full of life.</p>
+												<!-- <p class="sub-tit02">The Korea's Largest R&D Cluster</p> -->
+												<div class="member-img-box">
+													<%-- <img src="${pageContext.request.contextPath}/img/component/common/main_membe_daejeon01.png" alt="Daedeok Innopolis"> --%>
+													<%-- <img src="${pageContext.request.contextPath}/img/component/common/main_membe_daejeon02.png" alt="대전클러스터"> --%>
+													<div class="member-table">
+														<ul class="list-tableType type2">
+															<li><span class="title ico-area">Country</span><span class="value">Germany</span></li>
+															<li><span class="title ico-population">Population</span><span class="value">612,065+ (City)</span></li>
+															<li><span class="title ico-grdp">GRDP</span><span class="value">$28.51 billion+</span></li>
+															<li class="row"><span class="title ico-key-industries row">Industries</span><span class="value">ICT, Nanotechnology, Biomedicine, Logistics, Robotics, Hydrogen, Production technology</span></li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+									<li class="swiper-slide">
+										<div class="member-big-tit-box">
+											<h3 class="area-tit ico ico-location-dortmund">City of Dortmund</h3>
+											<a onclick="location.href='${pageContext.request.contextPath}/dortmund.do'" href="#" class="swiper-button-more" title="Read more"></a>
+										</div>
+<!-- 										<div class="member-txt-box">
+											<p class="desc">We are Dortmund - over 600,000 people from 180 nations. We are urban, green, colorful, digital, and full of life.</p>
+										</div> -->
+										<div class="member-swiper-box">
+											<div class="left-box">
+												<!-- <p class="sub-tit">City of Dortmund</p> -->
+												<div class="member-img-box">
+													<img src="${pageContext.request.contextPath}/img/component/common/membe_dort.jpg" alt="city of daejeon">
+												</div>
+											</div>
+											<div class="right-box">
+												<!-- <p class="sub-tit">Daedeok Innopolis</p> -->
+												<p class="desc">We are Dortmund - over 600,000 people from 180 nations. We are urban, green, colorful, digital, and full of life.</p>
+												<!-- <p class="sub-tit02">The Korea's Largest R&D Cluster</p> -->
+												<div class="member-img-box">
+													<%-- <img src="${pageContext.request.contextPath}/img/component/common/main_membe_daejeon01.png" alt="Daedeok Innopolis"> --%>
+													<%-- <img src="${pageContext.request.contextPath}/img/component/common/main_membe_daejeon02.png" alt="대전클러스터"> --%>
+													<div class="member-table">
+														<ul class="list-tableType type2">
+															<li><span class="title ico-area">Country</span><span class="value">Germany</span></li>
+															<li><span class="title ico-population">Population</span><span class="value">612,065+ (City)</span></li>
+															<li><span class="title ico-grdp">GRDP</span><span class="value">$28.51 billion+</span></li>
+															<li class="row"><span class="title ico-key-industries row">Industries</span><span class="value">ICT, Nanotechnology, Biomedicine, Logistics, Robotics, Hydrogen, Production technology</span></li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+<!--  							<button type="button" class="swiper-button-prev" tabindex="0" aria-label="Previous slide" aria-controls="swiper-wrapper-7393daf72971a12b">
+								<span class="sr-only">prev</span>
+							</button>
+							<button type="button" class="swiper-button-next" tabindex="0" aria-label="Next slide" aria-controls="swiper-wrapper-7393daf72971a12b">
+								<span class="sr-only">next</span>
+							</button>
+							<div class="swiper-indicator-box">
+								<div class="swiper-indicator text-center">
+									<div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal">
+										<span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 1"></span>
+										<span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 2"></span>
+										<span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 3" aria-current="true"></span>
+										<span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 4"></span>
+									</div>
+								</div>
+							</div> -->
+							<div class="swiper-indicator">
+								<div class="swiper-pagination swiper-pagination-fraction swiper-pagination-horizontal">
+									<span class="swiper-pagination-current">1</span> / <span class="swiper-pagination-total">6</span>
+								</div>
+								<div class="swiper-controller">
+									<button type="button" class="swiper-button-play" style="display: none;">
+										<span class="sr-only">슬라이드 재생</span>
+									</button>
+									<button type="button" class="swiper-button-stop">
+										<span class="sr-only">슬라이드 멈춤</span>
+									</button>
+								</div>
+								<div class="swiper-navigation">
+									<button type="button" class="swiper-button-prev" tabindex="0" aria-label="Previous slide" aria-controls="">
+										<span class="sr-only">이전</span>
+									</button>
+									<button type="button" class="swiper-button-next" tabindex="0" aria-label="Next slide" aria-controls="">
+										<span class="sr-only">다음</span>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //멤버 배너 영역 -->
+			</div>
+			<!-- //비쥬얼 영역 -->
+			<!-- notice 영역 -->
+			<div class="inner notice">
+				<!-- tab-news 영역 -->
+				<div class="left-box">
+					<!-- tab-button 영역 -->
+					<ul class="tab-round">
+						<li><button type="button" class="btn-round btn-news active" onclick="newsOn()"><span>news</span></button></li>
+						<li><button type="button" class="btn-round btn-event" onclick="mediaOn()"><span>media</span></button></li>
+					</ul>
+					<!-- //tab-button 영역 -->
+					<!-- tab-cont 영역 -->
+					<div class="tab-cont">
+						<div class="tab-cont-in01">
+							<div class="notice-swiper-wrap n-cont">
+								<div class="notice-swiper swiper">
+									<ul class="swiper-wrapper news-cont">
+
+									</ul>
+									<div class="swiper-indicator">
+										<div class="swiper-pagination swiper-pagination-fraction">
+											<span class="swiper-pagination-bullet"></span>
+											<span class="swiper-pagination-bullet"></span>
+											<span class="swiper-pagination-bullet"></span>
+											<span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 4" aria-current="true"></span>
+										</div>
+										<div class="swiper-navigation">
+											<button type="button" class="swiper-button-prev" tabindex="0" aria-label="Previous slide" aria-controls="">
+												<span class="sr-only">이전</span>
+											</button>
+											<button type="button" class="swiper-button-next" tabindex="0" aria-label="Next slide" aria-controls="">
+												<span class="sr-only">다음</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-cont-in02">
+							<div class="notice-swiper-wrap m-cont">
+								<div class="notice-swiper swiper">
+									<ul class="swiper-wrapper media-cont">
+
+									</ul>
+									<div class="swiper-indicator">
+										<div class="swiper-pagination swiper-pagination-fraction swiper-pagination-horizontal">
+											<span class="swiper-pagination-current">1</span> / <span class="swiper-pagination-total">4</span>
+										</div>
+										<div class="swiper-controller">
+											<button type="button" class="swiper-button-play" style="display: none;">
+												<span class="sr-only">슬라이드 재생</span>
+											</button>
+											<button type="button" class="swiper-button-stop">
+												<span class="sr-only">슬라이드 멈춤</span>
+											</button>
+										</div>
+										<div class="swiper-navigation">
+											<button type="button" class="swiper-button-prev" tabindex="0" aria-label="Previous slide" aria-controls="">
+												<span class="sr-only">이전</span>
+											</button>
+											<button type="button" class="swiper-button-next" tabindex="0" aria-label="Next slide" aria-controls="">
+												<span class="sr-only">다음</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- //tab-cont 영역 -->
+				</div>
+				<!-- //tab-news 영역 -->
+				<!-- news-list 영역 -->
+				<div class="right-box">
+					<div class="news-box nsTab-contents on">
+						<div class="news-list-wrap">
+							<div class="news-head">
+								<div class="news-head-date">
+									<strong class="date">19</strong>
+									<span class="month">2025.11</span> 
+								</div>	
+								<div class="news-head-txt">
+									<a href="">
+										<strong class="title" title="An update on the Global Innopolis Network Initiative (GINI) event."></strong>
+									</a>
+								</div>
+							</div>
+							<ul class="news-list">
+							</ul>
+						</div>
+						<!-- <a href="" class="news-more"> <span>새소식 더보기</span></a> -->
+					</div>
+				</div>
+				<!-- //news-list 영역 -->
+			</div>
+			<!-- //notice 영역 -->
+			<!-- members area 영역 -->
+			<div class="members-area-wrap">
+				<div class="inner members-area-box">
+					<div class="members-text-box">
+						<h3 class="area-tit">Members Area</h3>
+						<p class="txt">A space for GINI members and Action Groups to share and access resources.</p>
+					</div>
+					<div class="members-item-wrap">
+						<div class="item-m-box i-members" onclick="location.href='/distep/board/boardList.do?boardMasterCode=N05'">
+							<div class="txt-area">
+								<div class="m-tit">Members</div>
+								<p>Find important notices and resources for GINI Government Members.</p>
+							</div>
+							<div class="ico-main-members"></div>
+						</div>
+						<div class="item-m-box i-action" onclick="location.href='/distep/board/boardList.do?boardMasterCode=N06'">
+							<div class="txt-area">
+								<div class="m-tit">Action Group</div>
+								<p>Share and access documents related to joint initiatives here.</p>
+							</div>
+							<div class="ico-main-action"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- //members area 영역 -->
+			<div class="main-sect bgm">
+				<div class="inner">
+<%-- 					<div class="main-tit-wrap">
+						<h2 class="tit">Useful Links </h2>
+						<a onclick="location.href='${pageContext.request.contextPath}/networkMain.do'" href="#" class="swiper-button-more" title="Read more"></a>
+					</div> --%>
+					<div class="service-list">
+							<div class="service-swiper-in">
+								<div class="swiper">
+									<ul class="swiper-wrapper">
+										<li class="swiper-slide">
+											<a href="https://www.daejeon.go.kr/">
+												<div class="d-card line">
+													<div class="in">
+														<div class="service-list-img">
+															<img src="${pageContext.request.contextPath}/img/component/common/img-daejeong-logo.png" alt="https://www.daejeon.go.kr/">
+														</div>
+													</div>
+												</div>
+											</a>
+										</li>
+										<li class="swiper-slide">
+											<a href="https://www.dortmund.de/">
+												<div class="d-card line">
+													<div class="in">
+														<div class="service-list-img">
+															<img src="${pageContext.request.contextPath}/img/component/common/img-dortmund-logo.png" alt="https://www.dortmund.de/">
+														</div>
+													</div>
+												</div>
+											</a>
+										</li>
+										<li class="swiper-slide">
+											<a href="https://www.malaga.eu/">
+												<div class="d-card line">
+													<div class="in">
+														<div class="service-list-img">
+															<img src="${pageContext.request.contextPath}/img/component/common/img-malaga-logo.png" alt="https://www.malaga.eu/">
+														</div>
+													</div>
+												</div>
+											</a>
+										</li>
+										<li class="swiper-slide">
+											<a href="https://montgomerycountymd.gov/home.aspx">
+												<div class="d-card line">
+													<div class="in">
+														<div class="service-list-img">
+															<img src="${pageContext.request.contextPath}/img/component/common/img-montgomery-county-logo.png" alt="https://montgomerycountymd.gov/home.aspx">
+														</div>
+													</div>
+												</div>
+											</a>
+										</li>
+										<li class="swiper-slide">
+											<a href="https://www.investquebec.com/international/en/home.html">
+												<div class="d-card line">
+													<div class="in">
+														<div class="service-list-img">
+															<img src="${pageContext.request.contextPath}/img/component/common/img-quebec-county-logo.png" alt="https://www.investquebec.com/international/en/home.html">
+														</div>
+													</div>
+												</div>
+											</a>
+										</li>
+										<li class="swiper-slide">
+											<a href="https://www.seattle.gov">
+												<div class="d-card line">
+													<div class="in">
+														<div class="service-list-img">
+															<img src="${pageContext.request.contextPath}/img/component/common/img-seattle-gov.png" alt="https://www.seattle.gov">
+														</div>
+													</div>
+												</div>
+											</a>
+										</li>
+									</ul>
+									<div class="swiper-indicator">
+										<div class="swiper-pagination"></div>
+										<div class="swiper-controller">
+											<button type="button" class="swiper-button-play">
+												<span class="sr-only">슬라이드 재생</span>
+											</button>
+											<button type="button" class="swiper-button-stop">
+												<span class="sr-only">슬라이드 멈춤</span>
+											</button>
+										</div>
+										<div class="swiper-navigation">
+											<button type="button" class="swiper-button-prev">
+												<span class="sr-only">이전</span>
+											</button>
+											<button type="button" class="swiper-button-next">
+												<span class="sr-only">다음</span>
+											</button>
+										</div>
+										<a onclick="location.href='${pageContext.request.contextPath}/networkMain.do'" href="#" class="swiper-button-more" title="Read more"></a>
+									</div>
+								</div>
+							</div>
+						</div>
+				</div>
+			</div>
+		</div>
+<!-- 컨테이너 영역 -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			  newsOn();
+			  loadCalendarList()
+		});
+
+		// 캘린더 날짜 포맷
+		function formatDateToYYYYMMDD(date) {
+		  const yyyy = date.getFullYear();
+		  const mm = (date.getMonth() + 1).toString().padStart(2, '0');
+		  const dd = date.getDate().toString().padStart(2, '0');
+		  return `\${yyyy}-\${mm}-\${dd}`;
+		}
+		
+		// 캘린더 리스트 출력 함수
+		function loadCalendarList() {
+			// 오늘 날짜 
+		  const now = new Date();
+		 const todayDay = now.getDate().toString().padStart(2, '0');
+		 const todayMonth = `\${now.getFullYear()}.\${(now.getMonth() + 1).toString().padStart(2, '0')}`;
+		
+	  	document.querySelector(".news-head-date .date").textContent = todayDay;
+		document.querySelector(".news-head-date .month").textContent = todayMonth;
+
+		
+	     const todayStr = formatDateToYYYYMMDD(now);
+		  const startDateObj = new Date(now.getFullYear(), now.getMonth(), 1); 
+		  const endDateObj = new Date(now.getFullYear(), now.getMonth() + 1, 0); 
+		
+		  const startDateStr = formatDateToYYYYMMDD(startDateObj);
+		  const endDateStr = formatDateToYYYYMMDD(endDateObj);
+		
+		  const data =  {
+				  startDate: startDateStr,
+			      endDate: endDateStr
+	 			 }
+		  axios.post(`${pageContext.request.contextPath}/calendar/mainlistAjax.do`,data )
+		  .then(function(response) {
+		    const res = response.data
+		    const container = document.querySelector(".news-list");
+		    container.innerHTML = '';
+		    const todaycont = document.querySelector(".news-head-txt");
+		    todaycont.innerHTML = '';
+		    if (!Array.isArray(res) || res.length === 0) {
+		      container.innerHTML = '<li class="li"><p>There are no registered schedules.</p></li>';
+			  const text = 'There are no ongoing events.';
+	    	  const a = document.createElement("a");
+	    	  a.className = "a";
+	    	  a.innerHTML =
+	    	    '<a>' + text + '</a>';
+	    	  todaycont.appendChild(a);  
+		      return;
+		    }
+	
+		    const now = new Date();
+		    now.setHours(0, 0, 0, 0); 
+		    const nowStr = formatDateToYYYYMMDD(now);
+	
+		    const ongoingEvents = res.filter(function(event) {
+		      const start = new Date(event.startDatetime || event.start);
+		      const end = new Date(event.endDatetime || event.end);
+		      start.setHours(0, 0, 0, 0);
+		      end.setHours(0, 0, 0, 0);
+		      return start <= now && now <= end;
+		    });
+	
+		    //console.log("ongoingEvents", ongoingEvents);
+	
+		    if (ongoingEvents.length > 0) {
+		      const a = document.createElement("a");
+		      a.className = "a";
+		      a.innerHTML =
+		        '<a onclick="location.href=\'' + `${pageContext.request.contextPath}` + '/calendar/detail.do?id=' + ongoingEvents[0].id + '\'">' +
+		        ongoingEvents[0].eventTitle +
+		        '</a>';
+		      todaycont.appendChild(a);
+		    } else {
+		      const text = 'There are no ongoing events.';
+		      const a = document.createElement("a");
+		      a.className = "a";
+		      a.innerHTML = '<a>' + text + '</a>';
+		      todaycont.appendChild(a);
+		    }
+	
+		    //console.log("res res:", res.length);
+		    
+		    
+		    if(res.length > 0){
+		    	
+			    for (let i = 0; i < res.length && i < 4; i++) {
+			    	  const event = res[i];
+			    	  const li = document.createElement("li");
+			    	  li.className = "li";
+		
+			    	  //console.log("event", event);
+			    	  const startDate = new Date(event.startDatetime || event.start).toLocaleDateString();
+			    	  li.innerHTML =
+			    	    '<a onclick="location.href=\'' + '${pageContext.request.contextPath}' + '/calendar/detail.do?id=' + event.id + '\'">' +
+			    	    '<span class="one-line" title="' + event.eventTitle + '">' +
+			    	    event.eventTitle + '</span>' +
+			    	    '<span class="date">' + startDate + '</span>' +
+			    	    '</a>';
+		
+			    	  container.appendChild(li);
+			    	}
+		    	
+		    	
+		    }else{
+		    	 const li = document.createElement("news-list");
+		    	  li.className = "li";
+		    	  const text = 'There is no schedule'
+		    	  li.innerHTML =
+			    	    '<span class="one-line" title="">' +
+			    	    text + '</span>' ;
+		    }
+	
+		  })
+		  
+		  .catch(function(error) {
+		    console.error('일정 목록 불러오기 실패:', error);
+		  });
+		}
+
+		function newsOn(currentPage = 1, keyword = '') {
+			// 탭 콘텐츠 활성화 처리
+			document.querySelector(".tab-cont-in01").classList.add("active");
+			document.querySelector(".tab-cont-in02").classList.remove("active");
+
+			// 탭 버튼 활성화 처리
+			document.querySelector(".btn-news").classList.add("active");
+			document.querySelector(".btn-event").classList.remove("active");
+
+			  const boardMasterCode = window.boardMasterCode || 'N01';
+			  const data = { boardMasterCode: boardMasterCode };
+
+			  axios.post(`${pageContext.request.contextPath}/board/listAjax.do`, data)
+			    .then(function (res) {
+			    	
+			      const list = res.data.content;
+			      const contextPath = '${pageContext.request.contextPath}';
+
+			      // 리스트 초기화
+			      const swiperWrapper = document.querySelector(".news-cont"); 
+			      swiperWrapper.innerHTML = ''; 
+			  	//console.log("list" ,list)
+			      if (list.length === 0) {
+			        swiperWrapper.innerHTML = '<li class="swiper-slide"><p>There are no posts.</p></li>';
+			        return;
+			      }
+
+			      // 슬라이드 갯수 4개 제한
+			      const slicedList = list.slice(0, 4);
+
+			      slicedList.forEach(function(item) {
+			        const title = item.title || '';
+			        const regDate = item.regDate || '';
+			        const detailUrl = contextPath + "/board/detail.do?boardCode=" + item.boardCode;
+
+
+					// 썸네일 경로 
+					let thumbnailPath = '/img/component/common/cont_event.png';
+					if (item.fileGroupVO && item.fileGroupVO.fileDetailVOList) {
+					  const thumb = item.fileGroupVO.fileDetailVOList.find(function(f) {
+					    return f.fileType === 'THUMBNAIL';
+					  });
+					  if (thumb && thumb.fileSaveLocate) {
+					    thumbnailPath = contextPath + thumb.fileSaveLocate.replace(/\\/g, '/');
+					  }else{
+						  thumbnailPath = contextPath + '../../img/component/common/no-image-aa.png';
+					  }
+					}
+
+			        // 슬라이드  생성
+			        const slideHtml = 
+			          '<li class="swiper-slide">' +
+			            '<a class="" href="' + detailUrl + '">' +
+			              '<span class="tab-cont-txt">' +
+			                '<span class="cont-date">' + regDate + '</span>' +
+			                '<span class="cont-txt">' + title + '</span>' +
+			              '</span>' +
+			              '<span class="tab-cont-img"><img src="' + thumbnailPath + '" alt="지니행사"></span>' +
+			            '</a>' +
+			          '</li>';
+
+			        swiperWrapper.insertAdjacentHTML('beforeend', slideHtml);
+			        
+			        new Swiper(".tab-cont-in01 .notice-swiper", {
+			        	  slidesPerView: 1, // 한 번에 1개만 보여줌
+			        	  spaceBetween: 0,
+			        	  loop: false,
+			        	  pagination: {
+			        	    el: ".tab-cont-in01 .swiper-pagination",
+			        	    clickable: true,
+			        	  },
+			        	  navigation: {
+			        	    nextEl: ".tab-cont-in01 .swiper-button-next",
+			        	    prevEl: ".tab-cont-in01 .swiper-button-prev",
+			        	  },
+			        	});
+
+
+			      });
+
+
+			    });
+			}
+		
+		// 미디어 리스트 출력 함수 
+		function mediaOn(currentPage = 1, keyword = ''){
+			// 탭 콘텐츠 활성화 처리
+			document.querySelector(".tab-cont-in02").classList.add("active");
+			document.querySelector(".tab-cont-in01").classList.remove("active");
+
+			// 탭 버튼 활성화 처리
+			document.querySelector(".btn-event").classList.add("active");
+			document.querySelector(".btn-news").classList.remove("active");
+
+			  const boardMasterCode = window.boardMasterCode || 'N03';
+			  
+			  const data = { boardMasterCode: boardMasterCode };
+			  
+			  axios.post(`${pageContext.request.contextPath}/board/listAjax.do`, data)
+			    .then(function (res) {
+			    	
+			      const list = res.data.content;
+			      const contextPath = '${pageContext.request.contextPath}';
+
+			      // 리스트 초기화
+			      const swiperWrapper = document.querySelector(".media-cont");
+			      swiperWrapper.innerHTML = ''; 
+
+			      if (list.length === 0) {
+			        swiperWrapper.innerHTML = '<li class="swiper-slide"><p>There are no posts.</p></li>';
+			        return;
+			      }
+				//console.log("list" ,list)
+			      // 슬라이드 갯수 제한 4개 
+			      const slicedList = list.slice(0, 4);
+
+			      slicedList.forEach(function(item) {
+			        const title = item.title || '';
+			        const regDate = item.regDate || '';
+			        const detailUrl = contextPath + "/board/detail.do?boardCode=" + item.boardCode;
+
+
+					// 썸네일 경로 
+					let thumbnailPath = '/img/component/common/cont_event.png';
+					if (item.fileGroupVO && item.fileGroupVO.fileDetailVOList) {
+					  const thumb = item.fileGroupVO.fileDetailVOList.find(function(f) {
+					    return f.fileType === 'THUMBNAIL';
+					  });
+					  if (thumb && thumb.fileSaveLocate) {
+					    thumbnailPath = contextPath + thumb.fileSaveLocate.replace(/\\/g, '/');
+					  }
+					}
+
+
+			        // 슬라이드 생성
+			        const slideHtml =
+			          '<li class="swiper-slide">' +
+			            '<a class="" href="' + detailUrl + '">' +
+			              '<span class="tab-cont-txt">' +
+			                '<span class="cont-date">' + regDate + '</span>' +
+			                '<span class="cont-txt">' + title + '</span>' +
+			              '</span>' +
+			              '<span class="tab-cont-img"><img src="' + thumbnailPath + '" alt="지니행사"></span>' +
+			            '</a>' +
+			          '</li>';
+
+			        swiperWrapper.insertAdjacentHTML('beforeend', slideHtml);
+			        
+			        new Swiper(".tab-cont-in02 .notice-swiper", {
+			        	  slidesPerView: 1,
+			        	  spaceBetween: 0,
+			        	  loop: false,
+			        	  pagination: {
+			        	    el: ".tab-cont-in02 .swiper-pagination",
+			        	    clickable: true,
+			        	  },
+			        	  navigation: {
+			        	    nextEl: ".tab-cont-in02 .swiper-button-next",
+			        	    prevEl: ".tab-cont-in02 .swiper-button-prev",
+			        	  },
+			        	});
+
+
+			      });
+
+			    });
+			}
+		
+		
+	</script>

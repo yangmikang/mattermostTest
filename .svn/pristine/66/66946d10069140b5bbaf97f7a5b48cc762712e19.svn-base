@@ -1,0 +1,130 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/jsp/cmmn/tagLib.jsp" %>
+<script>
+$(function(){
+	$("#searchKeyword").keydown(function(){
+		 if (event.keyCode === 13) {
+			 searchBoard();
+			 return false;
+		 }
+	});
+});
+//페이지네이션
+function fn_boardPageReLoad(pageNo){
+	if(pageNo != null && pageNo != undefined){
+		$("#pageIndex").val(pageNo);
+	}
+	$("#boardForm").attr("action", "${contextPath}/index.do");
+	$('#boardForm').submit();
+}
+
+//게시글 상세
+function showDetail(bbsId){
+	$("#boardForm").attr("action", "${contextPath}/view.do");
+	$("#bbsId").val(bbsId);
+	
+	var pageNo = $("#currentPage").html();
+	$("#pageIndex").val(pageNo);
+	
+	$('#boardForm').submit();
+}
+
+//검색
+function searchBoard(){
+	var searchKeyword = $("#searchKeyword").val().trim();
+	
+	if(searchKeyword.indexOf("<") >= 0 || searchKeyword.indexOf(">") >= 0){
+		alert("사용할 수 없는 특수문자를 포함하고 있습니다.");
+		return false;
+	}
+	
+	$("#boardForm").attr("action", "${contextPath}/index.do");
+	$('#boardForm').submit();
+}
+</script>
+<style>
+	.search_wrap{padding-bottom:10px;display: flex;}
+	.searchInput{width: 22rem;}
+	.searchButton{background: #000;color: #FFF;padding: 8px 10px;}
+	.searchSelect{padding:2px 22px 1px 7px;height:34px;}
+</style>
+
+<!-- 테이블영역 -->
+   <div class="board_wrap">
+       <div class="board_title">
+           <strong>공지사항(Notice)</strong>
+       </div>
+       <div class="search_wrap">
+       	<div style="width: 100%;">
+	       	<form action="<c:url value='/index.do'/>" method="get" name="boardForm" id="boardForm">
+			   <input type="hidden" id="pageIndex" name="pageIndex" value="1" /> <!-- 페이지인덱스  -->	
+			   <input type="hidden" id="bbsId" name="bbsId" value="" /> <!-- 게시글 번호  -->	
+	       	   <div style="float: left;">
+	       	   <select class="searchSelect" name="searchType" id="searchType">
+	       	   	<option value="all" <c:if test="${searchType eq 'all' }">selected</c:if>>All</option>
+	       	   	<option value="title" <c:if test="${searchType eq 'title' }">selected</c:if>>Title</option>
+	       	   	<option value="contents" <c:if test="${searchType eq 'contents' }">selected</c:if>>Contents</option>
+	       	   	<option value="titleAndContents" <c:if test="${searchType eq 'titleAndContents' }">selected</c:if>>Title+Contents</option>
+	       	   	<%-- <option value="userName" <c:if test="${searchType eq 'userName' }">selected</c:if>>작성자</option> --%>
+	       	   </select>
+		       <input type="text" name="searchKeyword" id="searchKeyword" class="searchInput" value="<c:out value='${searchKeyword }'/>"/>
+		       <a href="javascript:searchBoard();" class="searchButton"><span>Search</span></a>
+			   <a href="<c:url value='/openWrite.do'/>" class="searchButton" style="background:#004C98;margin-left:3px;padding:8px 20px;">Write</a>
+		       </div>
+		        <div style="float: right;">
+		        <select class="searchSelect" name="orderSort" id="orderSort" onchange="searchBoard();">
+	       	   		<option value="like" <c:if test="${orderSort eq 'like' }">selected</c:if>>Likes</option>
+		        	<option value="bbsId" <c:if test="${orderSort eq 'bbsId' }">selected</c:if>>Newest</option>
+	       	   		<option value="hits" <c:if test="${orderSort eq 'hits' }">selected</c:if>>Views</option>
+	       	   	</select>
+	       	   	<select class="searchSelect" name="sort" id="sort" onchange="searchBoard();">
+	       	   		<option value="DESC" <c:if test="${sort eq 'DESC' }">selected</c:if>>Descending</option>
+	       	   		<option value="ASC" <c:if test="${sort eq 'ASC' }">selected</c:if>>Ascending</option>
+	       	   	</select>
+	       	   	</div>
+		    </form>
+	    </div>
+       </div>
+       <div class="board_list_wrap">
+           <div class="board_list">
+               <div class="top">
+                   <div class="num">번호<br>(Num)</div>
+                   <div class="title">제목<br>(Title)</div>
+                   <div class="writer">글쓴이<br>(Writer)</div>
+                   <div class="date">작성일<br>(Date Created)</div>
+                   <div class="count">조회<br>(Views)</div>
+                   <div class="like">좋아요<br>(Likes)</div>
+               </div>
+               <c:forEach items="${boardList }" var="board" varStatus="status">
+               	<div>
+               	   <div class="num"><c:out value="${board.bbsId}"/></div>
+                   <div class="title">
+	                   <a href="javascript:showDetail('${board.bbsId }');"><c:out value="${board.title }"/>
+	                   		<c:if test="${!empty board.attachFileSn }">
+	                   			<img src="<c:url value='/images/sub/ico_download.png'/>">
+	                   		</c:if>
+	                   </a>
+                   </div>
+                   <div class="writer"><c:out value="${board.userName }"/></div>
+                   <div class="date"><fmt:formatDate value="${board.bbsDate }" pattern="yyyy-MM-dd"/></div>
+                   <div class="count"><c:out value="${board.hits }"/></div>
+                   <div class="like"><c:out value="${board.likeCnt }"/></div>
+               	</div>
+               </c:forEach>
+               <c:if test="${fn:length(boardList) == 0}">
+               <div>
+               	<div style="width: 100%;text-align: center;">검색결과가 없습니다<br>(No results found)</div>
+               </div>
+               </c:if>
+           </div>
+           <div class="board_page">
+		     	<ui:pagination paginationInfo="${paginationInfo}" type="image" jsFunction="fn_boardPageReLoad"/>
+		   </div>
+		   <%--
+           <div class="bt_wrap">
+               <a href="<c:url value='/openWrite.do'/>" class="on">등록</a>
+           </div>
+           --%>
+       </div>
+   </div>
+<!-- //테이블영역 -->

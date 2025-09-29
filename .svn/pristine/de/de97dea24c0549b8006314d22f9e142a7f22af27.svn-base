@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="kr.go.distep.main.service.impl.FileGroupMapper">
+	
+	
+<resultMap id="boardResultMap" type="kr.go.distep.main.service.vo.BoardVo">
+    <result property="boardCode" column="BOARD_CODE"/>
+    <result property="title" column="TITLE"/>
+    <result property="content" column="CONTENT"/>
+    <result property="userId" column="USER_ID"/>
+    <result property="regDate" column="REG_DATE"/>
+    <result property="status" column="STATUS"/>
+    <result property="fileGroupNo" column="FILE_GROUP_NO"/>
+</resultMap>
+	
+    <!-- 파일 그룹 insert -->
+    <insert id="insertFileGroup" parameterType="kr.go.distep.cmmn.file.vo.FileGroupVO">
+        <selectKey resultType="long" order="BEFORE" keyProperty="fileGroupNo">
+            SELECT 
+                IFNULL(
+                    MAX(CAST(file_group_no AS UNSIGNED)), 
+                    CAST(DATE_FORMAT(NOW(), '%Y%m%d') AS UNSIGNED) * 1000
+                ) + 1
+            FROM file_group
+            WHERE SUBSTRING(file_group_no, 1, 8) = DATE_FORMAT(NOW(), '%Y%m%d')
+        </selectKey>
+
+        INSERT INTO file_group (file_group_no, file_reg_date)
+        VALUES (#{fileGroupNo}, NOW())
+    </insert>
+
+    <!-- 파일 상세 insert -->
+    <insert id="insertFileDetail" parameterType="kr.go.distep.cmmn.file.vo.FileDetailVO">
+        INSERT INTO file_detail (
+            file_sn, file_group_no, file_original_name, file_save_name, file_save_locate,
+            file_size, file_ext, file_mime, file_fancy_size, file_save_date, file_down_count
+        )
+        VALUES (
+            #{fileSn}, #{fileGroupNo}, #{fileOriginalName}, #{fileSaveName}, #{fileSaveLocate},
+            #{fileSize}, #{fileExt}, #{fileMime}, #{fileFancySize}, NOW(), #{fileDownCount}
+        )
+    </insert>
+  <!-- 그룹번호로 파일 목록 조회 -->
+    <select id="selectFilesByGroupNo" resultType="kr.go.distep.cmmn.file.vo.FileDetailVO">
+        SELECT 
+            file_sn AS fileSn,
+            file_group_no AS fileGroupNo,
+            file_original_name AS fileOriginalName,
+            file_save_name AS fileSaveName,
+            file_save_locate AS fileSaveLocate,
+            file_size AS fileSize,
+            file_ext AS fileExt,
+            file_mime AS fileMime,
+            file_fancy_size AS fileFancySize,
+            file_save_date AS fileSaveDate,
+            file_down_count AS fileDownCount
+        FROM file_detail
+        WHERE file_group_no = #{fileGroupNo}
+    </select>
+</mapper>

@@ -1,0 +1,13 @@
+package kr.go.distep.user.service.impl;
+
+import egovframework.rte.psl.dataaccess.mapper.Mapper;
+import kr.go.distep.user.vo.UserVO;
+
+@Mapper("userMapper")
+public interface UserMapper {
+	
+	public void insertUser(UserVO userVo);
+
+	public int checkUserId(String userId);
+
+}

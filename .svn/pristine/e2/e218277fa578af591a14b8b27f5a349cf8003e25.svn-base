@@ -1,0 +1,380 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<style>
+thead{
+background-color: #f9f9f9;
+    border: 1px solid #ddd !important;
+
+}
+tr{
+    padding: 12px;
+    text-align: center;
+    font-weight: 650;
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 11pt;
+    color:#4c4c4c !important;
+    border: 1px solid #ddd !important;
+    border-radius: 6px;
+    overflow: hidden;
+
+}
+tbody  th{
+    border: 1px solid #ddd !important;
+    font-weight: normal !important;
+}
+th{
+	padding: 5px;
+}
+.section-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin: 30px 0 20px;
+    position: relative;
+}
+
+.section-title::after {
+    content: "";
+    display: block;
+    width: 50px;
+    height: 3px;
+    background-color: #ddd;
+    margin: 8px auto 0;
+    border-radius: 2px;
+}
+.search-box{
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+}
+.datepicker {
+	width: 40%;
+}
+.select-box{
+	font-weight: 400 !important;
+	text-align: center;
+	height: 50px;
+	
+}
+.form-conts{
+display: flex;
+
+}
+</style>
+<body>
+<div id="container">
+	<div class="page-title-wrap visual img-joint">
+		<div class="visual-filter"></div>
+			<div class="inner">
+				<!-- breadcrumb -->  
+					<nav class="breadcrumb-wrap" aria-label="브레드크럼">
+						<ol class="breadcrumb">
+							<li class="home"><a href="#" class="txt">Home</a></li>
+							<li><a href="#" class="txt">User Usage Statistics</a></li>
+						</ol>
+					</nav>
+					<!-- breadcrumb --> 
+					<!-- 페이지 타이틀 영역 -->  
+					<div class="visual-area">
+						<h2 class="h-tit">User Usage Statistics</h2>
+					</div>  
+				<!-- //페이지 타이틀 영역 -->
+					
+				</div>
+			</div>
+<!-- 로그인 영역 -->
+<div class="inner">
+	<div class="conts-area">
+		<div class="conts-wrap">
+			<div class="box-white">
+			<div class="search-box">
+<div class="search-box" style="width: 100%; padding: 16px; border: 1px solid #ccc; border-radius: 6px; background: #fafafa;">
+  <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 24px;">
+
+    <!-- 통계 유형 -->
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <label for="statType" style="min-width: 140px;"><strong>Statistics Type</strong></label>
+      <select id="statType" class="form-select sm">
+        <option value="total">Total</option>
+        <option value="city">City</option>
+        <option value="role">Authority</option>
+      </select>
+    </div>
+
+    <!-- 연도 선택 -->
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <label for="yearSelect" style="min-width: 60px;"><strong>Year</strong></label>
+      <select id="yearSelect" class="form-select sm">
+        <option value="">Select year</option>
+        <c:forEach begin="2025" end="2025" var="y">
+          <option value="${y}">${y}</option>
+        </c:forEach>
+      </select>
+    </div>
+    <!-- 날짜 단위 선택 (radio) -->
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <label style="min-width: 80px;"><strong>Date Unit</strong></label>
+      <div class="form-check sm">
+        <input type="radio" name="dateUnit" id="Year" value="year" checked>
+        <label for="Year">Year</label>
+      </div>
+      <div class="form-check sm">
+        <input type="radio" name="dateUnit" id="Month" value="month">
+        <label for="Month">Month</label>
+      </div>
+      <div class="form-check sm">
+        <input type="radio" name="dateUnit" id="Day" value="day">
+        <label for="Day">Day</label>
+      </div>
+    </div>
+
+
+    <!-- 날짜 범위 -->
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <label style="min-width: 90px;"><strong>Date Range</strong></label>
+      <input type="date" id="startDateInput" class="form-select sm datepicker startdate flatpickr-input active" placeholder="Select date">
+      <span>~</span>
+      <input type="date" id="endDateInput" class="form-select sm datepicker startdate flatpickr-input active" placeholder="Select date">
+    </div>
+
+    <!-- 조회 버튼 -->
+    <div>
+      <button type="button" onclick="loadStatistics()" class="btn primary">statistics inquiry</button>
+    </div>
+
+  </div>
+</div>
+
+					</div>
+				<div class="chart-section" style="display:none;">
+						  <canvas id="usageChart" height="100"></canvas>
+						</div>
+				    <div class="tab-cont-box"> 
+				      <h2 class="section-title"> Usage Statistics </h2>
+				    	<table class="tbl col data">
+						   <thead>
+							  <tr>
+							    <th>No.</th>
+							    <th>Log Date</th>
+							    <th>Log Group</th>
+							    <th>Request Count</th>
+							  </tr>
+							</thead>
+
+						    <tbody id="monthlyByRoleTbody">
+						    <tr><td colspan="4" style="text-align:center;" class="select-box">Select the conditions for statistics.</td></tr>
+						    </tbody>
+						</table> 
+					
+						 
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+flatpickr("#startDateInput", {
+	  dateFormat: "Y-m-d",
+	});
+
+	flatpickr("#endDateInput", {
+	  dateFormat: "Y-m-d",
+	});
+
+
+</script>
+<script>
+let usageChart = null; 
+document.getElementById('startDateInput').addEventListener('change', () => {
+	  document.getElementById('yearSelect').value = '';
+	  document.getElementById('dateUnit').value = '';
+	});
+function loadStatistics() {
+	const dateUnit = document.querySelector('input[name="dateUnit"]:checked').value;
+	const chartS = document.querySelector('.chart-section')
+	chartS.style.display="block"
+	  const statType = document.getElementById('statType').value;
+	  const selectedYear = document.getElementById('yearSelect').value;
+	 // const selectedMonth = document.getElementById('monthSelect').value;
+	  const startDateInput = document.getElementById('startDateInput').value;
+	  const endDateInput = document.getElementById('endDateInput').value;
+
+	  let startDate = '';
+	  let endDate = '';
+	  const roleMap = {
+				'A': 'Administrator',
+				'C': 'Government',
+				'G': 'General',
+				'O': 'Institution',
+				'N': 'Anonymous',
+				'01': 'Daejeon',
+				'02': 'Dortmund',
+				'03': 'Malaga',
+				'04': 'Montgomery County',
+				'05': 'Seattle',
+				'06': 'Quebec',
+				'07': 'GINI Secretariat',
+				'99': 'Other City',
+			};
+
+	  if (dateUnit === 'year') {
+	    startDate = '2000-01-01';
+	    endDate = '2099-12-31 23:59:59'; // 전체 기간
+	  } else if (dateUnit === 'month') {
+	    if (!selectedYear) {
+	      alert("Please select a year for monthly statistics.");
+	      return;
+	    }
+	    startDate = `\${selectedYear}-01-01`;
+	    endDate = `\${selectedYear}-12-31 23:59:59`;
+	  } 
+	/*   else if (dateUnit === 'day') { */
+		  
+	/*     if (!startDateInput || !endDateInput) {
+	      alert("Please select start and end dates for daily statistics.");
+	      return;
+	    } */
+	    if (new Date(startDateInput) > new Date(endDateInput)) {
+	      alert("End date must be after start date.");
+	      return;
+	    }
+	  /* } */
+	const requestData = {
+	  statType,
+	  dateUnit
+	};
+	
+	// 직접 날짜를 입력한 경우만 날짜 조건 추가
+	if (startDateInput && endDateInput) {
+	  if (new Date(startDateInput) > new Date(endDateInput)) {
+	    alert("End date must be after start date.");
+	    return;
+	  }
+	
+	  requestData.dateUnit = 'day';
+	  requestData.startDate = startDateInput;
+	  requestData.endDate = `\${endDateInput} 23:59:59`;
+	}
+console.log("requestData",requestData)
+			  axios.post(`${contextPath}/getStatis.do`, requestData)
+			    .then(res => {
+			      const data = res.data;
+			      const tbody = document.querySelector("#monthlyByRoleTbody");
+			      tbody.innerHTML = '';
+			      let tby = '';
+
+			      if (data.length === 0) {
+			        tbody.innerHTML = '<tr><td colspan="4" class="select-box" style="text-align:center;">No data found</td></tr>';
+			        if (usageChart) usageChart.destroy();
+			        return;
+			      }
+			      const labels = [];
+			      const datasetMap = {};
+
+			      data.forEach(row => {
+			        const label = row.date_group;
+			        const key = row.group_key;
+			        const count = row.cnt;
+
+			        if (!labels.includes(label)) {
+			          labels.push(label);
+			        }
+
+			        if (!datasetMap[key]) {
+			          datasetMap[key] = Array(labels.length - 1).fill(0);
+			        }
+			        datasetMap[key].push(count);
+			      });
+
+			      Object.keys(datasetMap).forEach(key => {
+			        if (datasetMap[key].length < labels.length) {
+			          const diff = labels.length - datasetMap[key].length;
+			          datasetMap[key] = [...datasetMap[key], ...Array(diff).fill(0)];
+			        }
+			      });
+
+			      const chartDatasets = Object.entries(datasetMap).map(([key, values], idx) => ({
+			        label: roleMap[key] || key,
+			        data: values,
+			        borderWidth: 1
+			      }));
+/* 
+ */
+			      data.forEach((row, idx) => {
+			    	  const roleName = roleMap[row.group_key] || row.group_key;
+			    	  const displayKey = (row.group_key === null || row.group_key === '') ? 'Anonymous' : roleName;
+
+			    	  const label = row.date_group;
+
+			    	  // null이나 빈 문자열 -> 'Anonymous'
+			    	  const rawKey = row.group_key;
+			    	  const key = (rawKey === null || rawKey === '') ? 'Anonymous' : rawKey;
+
+			    	  const count = row.cnt;
+
+			    	  if (!labels.includes(label)) {
+			    	    labels.push(label);
+			    	  }
+
+			    	  if (!datasetMap[key]) {
+			    	    datasetMap[key] = Array(labels.length - 1).fill(0);
+			    	  }
+
+			    	  datasetMap[key].push(count);
+			        tby +=
+			          '<tr>' +
+			          '<th scope="row">' + row.rnum + '</th>' +
+			          '<th>' + row.date_group + '</th>' +
+			          '<th>' + displayKey + '</th>' +
+			          '<th>' + row.cnt.toLocaleString() + '</th>' +
+			          '</tr>';
+			       
+
+			      });
+
+			      tbody.innerHTML = tby;
+
+			      const ctx = document.getElementById('usageChart').getContext('2d');
+			      if (usageChart) usageChart.destroy();
+
+			      usageChart = new Chart(ctx, {
+			        type: 'bar',
+			        data: {
+			          labels: labels,
+			          datasets: chartDatasets
+			        },
+			        options: {
+			          responsive: true,
+			          plugins: {
+			            legend: {
+			              position: 'top',
+			            },
+			            title: {
+			              display: true,
+			              text: 'User Request Statistics'
+			            }
+			          }
+			        }
+			      });
+
+			    })
+			    .catch(err => {
+			      console.error('통계 조회 실패:', err);
+			    });
+		}
+
+
+
+</script>
+</body>

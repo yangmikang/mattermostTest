@@ -1,0 +1,289 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!-- 컨테이너 영역 -->
+		<div id="container" class="main">
+			<!-- 비쥬얼 영역 -->
+			<div class="main-vban-wrap bg">
+				<div class="vb-swiper">
+					<div class="swiper">
+						<ul class="swiper-wrapper">
+							<li class="swiper-slide">
+								<div class="in">
+									<div class="inner">
+										<div class="text">
+											<h2 class="tit">GINI</h2>
+											<p class="txt">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding members: Daejeon (South Korea), Dortmund (Germany), Malaga (Spain), Montgomery County (MD, USA), and Seattle (USA).The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding members: Daejeon (South Korea), Dortmund (Germany), Malaga (Spain), Montgomery County (MD, USA), and Seattle (USA).The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding members: Daejeon (South Korea), Dortmund (Germany), Malaga (Spain), Montgomery County (MD, USA), and Seattle (USA).The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding members: Daejeon (South Korea), Dortmund (Germany), Malaga (Spain), Montgomery County (MD, USA), and Seattle (USA).The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding members: Daejeon (South Korea), Dortmund (Germany), Malaga (Spain), Montgomery County (MD, USA), and Seattle (USA).The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding members: Daejeon (South Korea), Dortmund (Germany), Malaga (Spain), Montgomery County (MD, USA), and Seattle (USA).</p>
+											<a href="#" class="btn primary xlg">Learn More</a>
+										</div>
+									</div>
+									<div class="im">
+										<img src="${pageContext.request.contextPath}/img/pattern/content/img_main_content_visual_1.png" alt="GINI City01">										
+									</div>
+								</div>
+							</li>
+							<li class="swiper-slide">
+								<div class="in">
+									<div class="inner">
+										<div class="text">
+											<h2 class="tit">GINI</h2>
+											<p class="txt">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding members: Daejeon (South Korea), Dortmund (Germany), Malaga (Spain), Montgomery County (MD, USA), and Seattle (USA).</p>
+											<a href="#" class="btn primary xlg">Learn More</a>
+										</div>
+									</div>
+									<div class="im">
+										<img src="${pageContext.request.contextPath}/img/pattern/content/img_main_content_visual_2.png" alt="GINI City02">										
+									</div>
+								</div>
+							</li>
+							<li class="swiper-slide">
+								<div class="in">
+									<div class="inner">
+										<div class="text">
+											<h2 class="tit">GINI</h2>
+											<p class="txt">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding members: Daejeon (South Korea), Dortmund (Germany), Malaga (Spain), Montgomery County (MD, USA), and Seattle (USA).</p>
+											<a href="#" class="btn primary xlg">Learn More</a>
+										</div>
+									</div>
+									<div class="im">
+										<img src="${pageContext.request.contextPath}/img/pattern/content/img_main_content_visual_3.png" alt="GINI City03">										
+									</div>
+								</div>
+							</li>
+						</ul>
+						<div class="slider-buttonBox">
+							<div class="inner">
+								<span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+								<button type="button" class="swiper-button-prev" tabindex="0" aria-label="Previous slide" aria-controls="swiper-wrapper-8d0d580115f4854d">
+								<span class="sr-only">이전</span>
+								</button>
+								<button type="button" class="swiper-button-next" tabindex="0" aria-label="Next slide" aria-controls="swiper-wrapper-8d0d580115f4854d">
+									<span class="sr-only">다음</span> 
+								</button>
+							</div>
+						</div>
+						<div class="swiper-indicator text-center">
+							<div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 1"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 2"></span><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 3" aria-current="true"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 4"></span></div>
+						</div>
+					</div>
+				</div>
+				<!-- 멤버 배너 영역 -->
+				<div class="member-swiper-wrap">
+					<div class="member-swiper">
+						<div class="inner">
+							<div class="swiper">
+								<ul class="swiper-wrapper">
+									<li class="swiper-slide">
+										<div class="left-box">
+											<h2 class="tit ico ico-location">Daejeon</h2>
+											<p class="sub-tit">city of Daejeon</p>
+											<p class="desc">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding memb</p>
+										</div>
+										<div class="right-box">
+											<p class="sub-tit01">Daedeok Innopolis</p>
+											<p class="sub-tit02">The Korea's Largest R&D Cluster</p>
+											<div class="member-img-box">
+												<img src="${pageContext.request.contextPath}/img/component/common/main_membe_daejeon01.png" alt="대전클러스터">
+												<img src="${pageContext.request.contextPath}/img/component/common/main_membe_daejeon02.png" alt="대전클러스터">
+											</div>
+										</div>
+									</li>
+									<li class="swiper-slide">
+										<div class="left-box">
+											<h2 class="tit ico ico-location">Dortmund</h2>
+											<p class="sub-tit">city of Dortmund</p>
+											<p class="desc">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding memb</p>
+										</div>
+										<div class="right-box">
+											<p class="sub-tit01">Competence Centres</p>
+											<p class="sub-tit02">6 Competence Centers: Over 200 Companies, 100,000 Square meters Technology Centre</p>
+											<div class="member-img-box">
+												<img src="${pageContext.request.contextPath}/img/component/common/membe_dortmund.png" alt="Competence Centres">
+											</div>
+										</div>
+									</li>
+									<li class="swiper-slide">
+										<div class="left-box">
+											<h2 class="tit ico ico-location">Dortmund222</h2>
+											<p class="sub-tit">city of Dortmund</p>
+											<p class="desc">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding memb</p>
+										</div>
+										<div class="right-box">
+											<p class="sub-tit01">Competence Centres</p>
+											<p class="sub-tit02">6 Competence Centers: Over 200 Companies, 100,000 Square meters Technology Centre</p>
+											<div class="member-img-box">
+												<img src="${pageContext.request.contextPath}/img/component/common/membe_dortmund.png" alt="Competence Centres">
+											</div>
+										</div>
+									</li>
+									<li class="swiper-slide">
+										<div class="left-box">
+											<h2 class="tit ico ico-location">Dortmund333</h2>
+											<p class="sub-tit">city of Dortmund</p>
+											<p class="desc">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding memb</p>
+										</div>
+										<div class="right-box">
+											<p class="sub-tit01">Competence Centres</p>
+											<p class="sub-tit02">6 Competence Centers: Over 200 Companies, 100,000 Square meters Technology Centre</p>
+											<div class="member-img-box">
+												<img src="${pageContext.request.contextPath}/img/component/common/membe_dortmund.png" alt="Competence Centres">
+											</div>
+										</div>
+									</li>
+									<li class="swiper-slide">
+										<div class="left-box">
+											<h2 class="tit ico ico-location">Dortmund444</h2>
+											<p class="sub-tit">city of Dortmund</p>
+											<p class="desc">The Global lnnopolis Network Initiative (GINI) was formally established during the Leaders Assembly at its Inaugural Ceremony held in Daejeon, Republic of Korea, on September 3~4, 2024. Comprised of local government representatives and stakeholders from industry, academia, and business, GINI indudes five founding memb</p>
+										</div>
+										<div class="right-box">
+											<p class="sub-tit01">Competence Centres</p>
+											<p class="sub-tit02">6 Competence Centers: Over 200 Companies, 100,000 Square meters Technology Centre</p>
+											<div class="member-img-box">
+												<img src="${pageContext.request.contextPath}/img/component/common/membe_dortmund.png" alt="Competence Centres">
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="swiper-indicator-box">
+								<div class="swiper-indicator text-center">
+									<div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets swiper-pagination-horizontal"><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 1"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 2"></span><span class="swiper-pagination-bullet swiper-pagination-bullet-active" tabindex="0" role="button" aria-label="Go to slide 3" aria-current="true"></span><span class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="Go to slide 4"></span></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- //멤버 배너 영역 -->
+			</div>
+			<!-- //비쥬얼 영역 -->
+			<!-- notice 영역 -->
+			<div class="inner notice">
+				<!-- tab-news 영역 -->
+				<div class="left-box">
+					<!-- tab-button 영역 -->
+					<ul class="tab-round">
+						<li><button type="button" class="btn-round btn-news active"><span>news</span></button></li>
+						<li><button type="button" class="btn-round btn-event"><span>event</span></button></li>
+					</ul>
+					<!-- //tab-button 영역 -->
+					<!-- tab-cont 영역 -->
+					<div class="tab-cont">
+						<div class="tab-cont-in01 active">
+							<div class="notice-swiper-wrap">
+								<div class="notice-swiper">
+									<div class="inner">
+										<div class="swiper">
+											<ul class="swiper-wrapper">
+												<li class="swiper-slide">
+													<a href="">
+														<span class="tab-cont-txt">
+															<span class="cont-date">2025-05-09</span>
+															<span class="cont-txt">Discover the global smart cities of the future...Discover the global smart cities of the future...Discover the global smart cities of the future...Discover the global smart cities of the future...Discover the global smart cities of the future...</span>
+														</span>
+														<span class="tab-cont-img"><img src="${pageContext.request.contextPath}/img/component/common/cont_event.png" alt="지니행사"></span>
+													</a>
+												</li>
+												<li class="swiper-slide">
+													<a href="">
+														<span class="tab-cont-txt">
+															<span class="cont-date">2025-05-09</span>
+															<span class="cont-txt">222</span>
+														</span>
+														<span class="tab-cont-img"><img src="${pageContext.request.contextPath}/img/component/common/cont_event.png" alt="지니행사"></span>
+													</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-cont-in02">
+							<div class="notice-swiper-wrap">
+								<div class="notice-swiper">
+									<div class="inner">
+										<div class="swiper">
+											<ul class="swiper-wrapper">
+												<li class="swiper-slide">
+													<a href="">
+														<span class="tab-cont-txt">
+															<span class="cont-date">2025-05-09</span>
+															<span class="cont-txt">Discover the global smart cities of the future...</span>
+														</span>
+														<span class="tab-cont-img"><img src="${pageContext.request.contextPath}/img/component/common/cont_event.png" alt="지니행사"></span>
+													</a>
+												</li>
+												<li class="swiper-slide">
+													<a href="">
+														<span class="tab-cont-txt">
+															<span class="cont-date">2025-05-09</span>
+															<span class="cont-txt">222</span>
+														</span>
+														<span class="tab-cont-img"><img src="${pageContext.request.contextPath}/img/component/common/cont_event.png" alt="지니행사"></span>
+													</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- //tab-cont 영역 -->
+				</div>
+				<!-- //tab-news 영역 -->
+				<!-- news-list 영역 -->
+				<div class="right-box">
+					<div class="news-box nsTab-contents on">
+						<div class="news-list-wrap">
+							<div class="news-head">
+								<div class="news-head-date">
+									<strong class="date">19</strong>
+									<span class="month">2025.11</span> 
+								</div>	
+								<div class="news-head-txt">
+									<a href="">
+										<strong class="title" title="An update on the Global Innopolis Network Initiative (GINI) event.">An update on the Global Innopolis Network Initiative (GINI) event.</strong>
+									</a>
+								</div>
+							</div>
+							<ul class="news-list">
+								<li>
+									<a href="">
+										<span class="one-line" title="This is news regarding the Global Innopolis Network">
+													This is news regarding the Global Innopolis Network</span>
+										<span class="date">2025-11-10</span>
+									</a>
+								</li>
+								<li>
+									<a href="">
+										<span class="one-line" title="The Global Innopolis Network Initiative (GINI) event ... ">
+													The Global Innopolis Network Initiative (GINI) event ... </span>
+										<span class="date">2025-07-10</span>
+									</a>
+								</li>
+								<li>
+									<a href="">
+										<span class="one-line" title="Here's news about the Global Innopolis Network ...">
+													Here's news about the Global Innopolis Network ... </span>
+										<span class="date">2025-07-10</span>
+									</a>
+								</li>
+								<li>
+									<a href="">
+										<span class="one-line" title="News about the Global Innopolis Network Initiative... ">
+													News about the Global Innopolis Network Initiative... </span>
+										<span class="date">2025-07-10</span>
+									</a>
+								</li>								
+							</ul>
+						</div>
+						<!-- <a href="" class="news-more"> <span>새소식 더보기</span></a> -->
+					</div>
+				</div>
+				<!-- //news-list 영역 -->
+			</div>
+			<!-- notice 영역 -->
+		</div>
+		
+	</div>
+	<!-- //컨테이너 영역 -->

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.go.distep.statis.service.impl.StatisMapper">
+
+	<resultMap id="statisResultMap"
+		type="kr.go.distep.statis.vo.StatisVo">
+		<result column="rnum" property="rnum" />
+		<result column="log_date" property="logDate" />
+		<result column="log_month" property="logMonth" />
+		<result column="startDate" property="startDate" />
+		<result column="endDate" property="endDate" />
+		<result column="date_group" property="date_group" />
+		<result column="group_key" property="group_key" />
+		<result column="role" property="role" />
+		<result column="statType" property="statType" />
+		<result column="cnt" property="cnt" />
+	</resultMap>
+
+	<select id="getMonthlyTotalRequests" resultMap="statisResultMap"
+		parameterType="hashMap">
+		SELECT
+		ROW_NUMBER() OVER (ORDER BY log_month DESC) AS
+		rnum,
+		t.log_month,
+		t.request_count
+		FROM ( SELECT
+		DATE_FORMAT(log_time, '%Y-%m') AS log_month,
+		COUNT(*) AS request_count
+		FROM request_log
+		GROUP BY DATE_FORMAT(log_time, '%Y-%m')
+		) t
+		ORDER BY t.log_month DESC
+	</select>
+
+	<select id="getDailyTotalRequests" resultMap="statisResultMap"
+		parameterType="hashMap">
+		SELECT
+		ROW_NUMBER() OVER (ORDER BY DATE(log_time) DESC)
+		AS rnum,
+		DATE(log_time) AS log_date,
+		COUNT(*) AS request_count
+		FROM
+		request_log
+		GROUP BY log_date
+		ORDER BY log_date DESC
+	</select>
+
+	<select id="getStatis" resultMap="statisResultMap" parameterType="hashMap">
+  <choose>
+  
+    <!-- ✅ dateUnit이 day인 경우: 누락 날짜 0으로 채움 -->
+    <when test="dateUnit == 'day'">
+      <![CDATA[  WITH RECURSIVE calendar AS (
+        SELECT DATE(#{startDate}) AS log_date
+        UNION ALL
+        SELECT DATE_ADD(log_date, INTERVAL 1 DAY)
+        FROM calendar
+        WHERE log_date < DATE(#{endDate})
+      )
+	  ]]>
+      SELECT
+        ROW_NUMBER() OVER (ORDER BY calendar.log_date, IFNULL(log_group.group_key, 'Total')) AS rnum,
+        DATE_FORMAT(calendar.log_date, '%Y-%m-%d') AS date_group,
+        IFNULL(log_group.group_key, 'Total') AS group_key,
+        IFNULL(log_group.cnt, 0) AS cnt
+      FROM calendar
+      LEFT JOIN (
+        SELECT
+          DATE(log_time) AS log_date,
+
+          <!-- 그룹키 설정 -->
+          <choose>
+            <when test="statType == 'city'">
+              IFNULL(NULLIF(city_code, ''), 'N') AS group_key
+            </when>
+            <when test="statType == 'role'">
+              IFNULL(NULLIF(role, ''), 'N') AS group_key
+            </when>
+            <otherwise>
+              'Total' AS group_key
+            </otherwise>
+          </choose>,
+
+          COUNT(*) AS cnt
+        FROM request_log
+        <where>
+          log_time BETWEEN #{startDate} AND #{endDate}
+
+          <if test="monthRadio != null and monthRadio != '' and monthRadio != 'total'">
+            AND DATE_FORMAT(log_time, '%m') = #{monthRadio}
+          </if>
+
+          <if test="statType == 'role'">
+            AND IFNULL(NULLIF(role, ''), 'N') != 'A'
+          </if>
+        </where>
+        GROUP BY log_date, group_key
+      ) log_group
+      ON calendar.log_date = log_group.log_date
+    </when>
+
+    <!-- ✅ dateUnit이 year 또는 month일 때 기존 방식 사용 -->
+    <otherwise>
+      SELECT
+        ROW_NUMBER() OVER (ORDER BY date_group, group_key) AS rnum,
+        date_group,
+        group_key,
+        cnt
+      FROM (
+        SELECT
+          <!-- 날짜 단위별 그룹핑 -->
+          <choose>
+            <when test="dateUnit == 'year'">
+              DATE_FORMAT(log_time, '%Y') AS date_group
+            </when>
+            <when test="dateUnit == 'month'">
+              DATE_FORMAT(log_time, '%Y-%m') AS date_group
+            </when>
+            <otherwise>
+              DATE_FORMAT(log_time, '%Y') AS date_group
+            </otherwise>
+          </choose>,
+
+          <!-- 통계 유형별 그룹키 -->
+          <choose>
+            <when test="statType == 'city'">
+              IFNULL(NULLIF(city_code, ''), 'N') AS group_key
+            </when>
+            <when test="statType == 'role'">
+              IFNULL(NULLIF(role, ''), 'N') AS group_key
+            </when>
+            <otherwise>
+              'Total' AS group_key
+            </otherwise>
+          </choose>,
+
+          COUNT(*) AS cnt
+        FROM request_log
+        <where>
+          log_time BETWEEN #{startDate} AND #{endDate}
+          
+          <if test="dateUnit == 'month' and monthRadio != null and monthRadio != '' and monthRadio != 'total'">
+            AND DATE_FORMAT(log_time, '%m') = #{monthRadio}
+          </if>
+
+          <if test="statType == 'role'">
+            AND IFNULL(NULLIF(role, ''), 'N') != 'A'
+          </if>
+        </where>
+
+        GROUP BY
+          <choose>
+            <when test="dateUnit == 'year'">
+              DATE_FORMAT(log_time, '%Y')
+            </when>
+            <when test="dateUnit == 'month'">
+              DATE_FORMAT(log_time, '%Y-%m')
+            </when>
+            <otherwise>
+              DATE_FORMAT(log_time, '%Y')
+            </otherwise>
+          </choose>
+
+          <if test="statType != 'total'">
+            , <choose>
+                <when test="statType == 'city'">IFNULL(NULLIF(city_code, ''), 'N')</when>
+                <when test="statType == 'role'">IFNULL(NULLIF(role, ''), 'N')</when>
+              </choose>
+          </if>
+      ) stat
+    </otherwise>
+    
+  </choose>
+
+</select>
+
+
+
+</mapper>

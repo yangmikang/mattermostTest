@@ -1,0 +1,26 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+<head><title>ID Result</title></head>
+<body>
+
+<div id="container">
+	<div class="inner">
+		<div class="page-title-wrap">
+			<h2>Your ID</h2>
+		</div>
+		<div class="gini-cont-wrap">
+			<div class="gini-cont-box al_center">
+				<div class="cont50">
+					<p class="consult_name">Your ID is: <strong class="form-conts">${foundUserId}</strong></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+</body>
+</html>
