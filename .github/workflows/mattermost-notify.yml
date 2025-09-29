@@ -1,0 +1,71 @@
+name: Mattermost Notify
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+  issues:
+    types: [opened, edited, closed, reopened]
+  release:
+    types: [published, released, created]
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install jq
+        run: sudo apt-get update -y && sudo apt-get install -y jq
+
+      - name: Build message
+        id: build
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_JSON: ${{ toJson(github.event) }}
+        run: |
+          REPO="${{ github.repository }}"
+          ACTOR="${{ github.actor }}"
+          TEXT="Repository: ${REPO}\nEvent: ${EVENT_NAME}\nBy: ${ACTOR}"
+
+          case "$EVENT_NAME" in
+            push)
+              BR="${{ github.ref_name }}"
+              COMMITS=$(echo "$EVENT_JSON" | jq '.commits | length')
+              TEXT="Repository: ${REPO}\nBranch: ${BR}\nBy: ${ACTOR}\nCommits: ${COMMITS}"
+              ;;
+            pull_request)
+              NUM=$(echo "$EVENT_JSON" | jq -r '.pull_request.number')
+              TITLE=$(echo "$EVENT_JSON" | jq -r '.pull_request.title')
+              STATE=$(echo "$EVENT_JSON" | jq -r '.action')
+              PR_URL=$(echo "$EVENT_JSON" | jq -r '.pull_request.html_url')
+              TEXT="Repository: ${REPO}\nPull Request #${NUM}: ${TITLE}\nBy: ${ACTOR}\nState: ${STATE}\nLink: ${PR_URL}"
+              ;;
+            issues)
+              NUM=$(echo "$EVENT_JSON" | jq -r '.issue.number')
+              TITLE=$(echo "$EVENT_JSON" | jq -r '.issue.title')
+              STATE=$(echo "$EVENT_JSON" | jq -r '.action')
+              ISSUE_URL="https://github.com/${REPO}/issues/${NUM}"
+              TEXT="Repository: ${REPO}\nIssue #${NUM}: ${TITLE}\nBy: ${ACTOR}\nState: ${STATE}\nLink: ${ISSUE_URL}"
+              ;;
+            release)
+              NAME=$(echo "$EVENT_JSON" | jq -r '.release.name // .release.tag_name')
+              REL_URL=$(echo "$EVENT_JSON" | jq -r '.release.html_url')
+              ACTION=$(echo "$EVENT_JSON" | jq -r '.action')
+              TEXT="Repository: ${REPO}\nRelease: ${NAME}\nBy: ${ACTOR}\nState: ${ACTION}\nLink: ${REL_URL}"
+              ;;
+          esac
+
+          echo "TEXT<<EOF" >> $GITHUB_ENV
+          echo -e "$TEXT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Post to Mattermost
+        env:
+          HOOK: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
+          TEXT: ${{ env.TEXT }}
+        run: |
+          curl -i -X POST \
+            -H 'Content-Type: application/json' \
+            -d "$(jq -n --arg t "$TEXT" '{text:$t}')" \
+            "$HOOK"
